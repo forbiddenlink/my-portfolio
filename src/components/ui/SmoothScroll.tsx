@@ -6,8 +6,11 @@ export function SmoothScroll() {
   useEffect(() => {
     let rafId: number
     let scrollY = window.scrollY
+    let isMounted = true
     
     const smoothScroll = () => {
+      if (!isMounted) return
+      
       const targetY = window.scrollY
       scrollY += (targetY - scrollY) * 0.1
       
@@ -17,6 +20,7 @@ export function SmoothScroll() {
     }
     
     const handleScroll = () => {
+      if (!isMounted) return
       if (!rafId) {
         rafId = requestAnimationFrame(smoothScroll)
       }
@@ -25,6 +29,7 @@ export function SmoothScroll() {
     window.addEventListener('scroll', handleScroll, { passive: true })
     
     return () => {
+      isMounted = false
       window.removeEventListener('scroll', handleScroll)
       if (rafId) cancelAnimationFrame(rafId)
     }

@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import { DeepLinkHandler } from '@/components/ui/DeepLinkHandler'
-import { ProjectModal } from '@/components/ui/ProjectModal'
 import { KeyboardNavigation } from '@/components/ui/KeyboardNavigation'
 import { PerformanceMonitor } from '@/components/ui/PerformanceMonitor'
 import { KeyboardShortcutsHelp } from '@/components/ui/KeyboardShortcutsHelp'
@@ -15,16 +14,10 @@ import { RippleEffect } from '@/components/ui/RippleEffect'
 import { SoundManager } from '@/components/ui/SoundManager'
 import { TouchGestures } from '@/components/ui/TouchGestures'
 import { MagneticButton } from '@/components/ui/MagneticButton'
-import { MorphingShape } from '@/components/ui/MorphingShape'
 import { GlowOrb } from '@/components/ui/FloatingElement'
-import { SpotlightCursor } from '@/components/ui/SpotlightCursor'
-import { CommandPalette } from '@/components/ui/CommandPalette'
-import { ParticleTrail } from '@/components/ui/ParticleTrail'
 import { ShareViewButton } from '@/components/ui/ShareViewButton'
-import { ExplorationOverlay } from '@/components/ui/ExplorationOverlay'
 import { ContactSection } from '@/components/ui/ContactSection'
 import { ResumeDownload } from '@/components/ui/ResumeDownload'
-import { GalaxyGuide } from '@/components/ui/GalaxyGuide'
 import { Entrance } from '@/components/ui/Entrance'
 import { LoadingProgress } from '@/components/ui/LoadingProgress'
 
@@ -33,6 +26,15 @@ const GalaxyScene = dynamic(() => import('@/components/3d/GalaxyScene'), {
   ssr: false,
   loading: () => <LoadingProgress />,
 })
+// Lazy load heavy/modal components for better initial load
+const CommandPalette = dynamic(() => import('@/components/ui/CommandPalette').then(m => ({ default: m.CommandPalette })), { ssr: false })
+const ProjectModal = dynamic(() => import('@/components/ui/ProjectModal').then(m => ({ default: m.ProjectModal })), { ssr: false })
+const GalaxyGuide = dynamic(() => import('@/components/ui/GalaxyGuide').then(m => ({ default: m.GalaxyGuide })), { ssr: false })
+const ExplorationOverlay = dynamic(() => import('@/components/ui/ExplorationOverlay').then(m => ({ default: m.ExplorationOverlay })), { ssr: false })
+const SpotlightCursor = dynamic(() => import('@/components/ui/SpotlightCursor').then(m => ({ default: m.SpotlightCursor })), { ssr: false })
+const ParticleTrail = dynamic(() => import('@/components/ui/ParticleTrail').then(m => ({ default: m.ParticleTrail })), { ssr: false })
+const MorphingShape = dynamic(() => import('@/components/ui/MorphingShape').then(m => ({ default: m.MorphingShape })), { ssr: false })
+
 
 export default function HomePage() {
   return (
@@ -108,7 +110,7 @@ export default function HomePage() {
       <InteractiveParticles count={50} />
 
       {/* Header Overlay - Top Left */}
-      <header id="main-content" className="absolute top-4 left-4 md:top-10 md:left-10 z-10 pointer-events-none">
+      <header id="main-content" tabIndex={-1} className="absolute top-4 left-4 md:top-10 md:left-10 z-10 pointer-events-none">
         <div className="glass-card rounded-2xl p-4 md:p-8">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 tracking-tight text-white leading-tight drop-shadow-2xl">
             <AnimatedText type="chars" stagger={0.05}>

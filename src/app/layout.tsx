@@ -100,8 +100,6 @@ const jsonLd = {
     'https://linkedin.com/in/imkindageeky',
     'https://imkindageeky.com',
   ],
-  email: 'purplegumdropz@gmail.com',
-  telephone: '+1-724-812-2023',
 }
 
 export default function RootLayout({
