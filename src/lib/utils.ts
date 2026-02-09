@@ -57,7 +57,7 @@ export function generateProjectPosition(
   // Project positioning within galaxy (distribute in a sphere)
   const theta = rng() * Math.PI * 2
   const phi = Math.acos(2 * rng() - 1)
-  const radius = 3 + rng() * 7 // 3-10 units from galaxy center
+  const radius = 5 + rng() * 12 // 5-17 units from galaxy center
 
   const x = galaxyX + radius * Math.sin(phi) * Math.cos(theta)
   const y = radius * Math.sin(phi) * Math.sin(theta)

@@ -257,12 +257,12 @@ export function Entrance() {
                         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4"
                     >
                         <motion.div
-                            animate={{ y: [0, 5, 0] }}
+                            animate={{ y: [0, -5, 0] }}
                             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                            className="w-[1px] h-12 bg-gradient-to-b from-white/30 to-transparent"
+                            className="w-[1px] h-12 bg-gradient-to-b from-transparent to-white/30"
                         />
                         <span className="text-[10px] tracking-[0.4em] text-white/30 uppercase">
-                            Scroll to explore
+                            Click to enter
                         </span>
                     </motion.div>
                 </motion.div>

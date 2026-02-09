@@ -13,9 +13,7 @@ import { InteractiveParticles } from '@/components/ui/InteractiveParticles'
 import { RippleEffect } from '@/components/ui/RippleEffect'
 import { SoundManager } from '@/components/ui/SoundManager'
 import { TouchGestures } from '@/components/ui/TouchGestures'
-import { MagneticButton } from '@/components/ui/MagneticButton'
 import { GlowOrb } from '@/components/ui/FloatingElement'
-import { ShareViewButton } from '@/components/ui/ShareViewButton'
 import { ContactSection } from '@/components/ui/ContactSection'
 import { ResumeDownload } from '@/components/ui/ResumeDownload'
 import { Entrance } from '@/components/ui/Entrance'
@@ -133,18 +131,13 @@ export default function HomePage() {
 
       {/* Quick Actions - Bottom Left */}
       <FadeIn delay={1.2} direction="up" className="absolute bottom-4 left-4 right-4 md:bottom-10 md:left-10 md:right-auto z-10 flex flex-col md:flex-row flex-wrap gap-3 md:gap-4 items-stretch md:items-center">
-        <MagneticButton strength={0.3}>
-          <Link
-            href="/work"
-            className="ripple-button group w-full md:min-w-[200px] rounded-xl bg-white/15 backdrop-blur-xl border border-white/30 text-white font-semibold hover:bg-white/25 hover:border-white/40 transition-all duration-300 shadow-2xl hover:shadow-white/20 hover:scale-105 pointer-events-auto flex items-center justify-center gap-3 px-6 py-4 md:px-8"
-          >
-            <span className="whitespace-nowrap leading-none">View all work</span>
-            <span className="inline-block transition-transform group-hover:translate-x-1 leading-none">→</span>
-          </Link>
-        </MagneticButton>
-        <div className="pointer-events-auto hidden md:block">
-          <ShareViewButton />
-        </div>
+        <Link
+          href="/work"
+          className="ripple-button group w-full md:w-auto md:min-w-[200px] rounded-xl bg-white/15 backdrop-blur-xl border border-white/30 text-white font-semibold hover:bg-white/25 hover:border-white/40 transition-all duration-300 shadow-2xl hover:shadow-white/20 hover:scale-105 pointer-events-auto flex items-center justify-center gap-3 px-6 py-4 md:px-8"
+        >
+          <span className="whitespace-nowrap leading-none">View all work</span>
+          <span className="inline-block transition-transform group-hover:translate-x-1 leading-none">→</span>
+        </Link>
       </FadeIn>
 
       {/* AI Galaxy Guide */}

@@ -404,26 +404,6 @@ function RealisticPlanet({
     return (
       <group position={position}>
         <SupernovaEffect position={[0, 0, 0]} color={project.color} size={sizeMultiplier} />
-        <Text
-          position={[0, -sizeMultiplier * 5, 0]}
-          fontSize={0.6}
-          color="#ffffff"
-          anchorX="center"
-          anchorY="top"
-          outlineWidth={0.05}
-          outlineColor="#000000"
-        >
-          {project.metrics?.files || '64,806 files'}
-        </Text>
-        <Text
-          position={[0, -sizeMultiplier * 5 - 0.8, 0]}
-          fontSize={0.35}
-          color="#aaaaaa"
-          anchorX="center"
-          anchorY="top"
-        >
-          SUPERMASSIVE
-        </Text>
       </group>
     )
   }
