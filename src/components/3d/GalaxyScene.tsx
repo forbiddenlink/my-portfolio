@@ -200,14 +200,14 @@ function SceneContent({ isMobile, controlsRef }: { isMobile: boolean; controlsRe
       {isMobile ? (
         <EffectComposer enableNormalPass={false}>
           <Bloom
-            intensity={0.5}
-            luminanceThreshold={0.4}
+            intensity={0.6}
+            luminanceThreshold={0.35}
             luminanceSmoothing={0.9}
             mipmapBlur
           />
           <Vignette
-            offset={0.3}
-            darkness={0.6}
+            offset={0.25}
+            darkness={0.7}
             eskil={false}
             blendFunction={BlendFunction.NORMAL}
           />
@@ -215,15 +215,21 @@ function SceneContent({ isMobile, controlsRef }: { isMobile: boolean; controlsRe
       ) : (
         <EffectComposer enableNormalPass={false}>
           <Bloom
-            intensity={0.9}
-            luminanceThreshold={0.2}
+            intensity={1.2}
+            luminanceThreshold={0.15}
             luminanceSmoothing={0.9}
-            radius={0.85}
+            radius={0.9}
             mipmapBlur
           />
+          <ChromaticAberration
+            blendFunction={BlendFunction.NORMAL}
+            offset={new THREE.Vector2(0.0008, 0.0008)}
+            radialModulation={true}
+            modulationOffset={0.3}
+          />
           <Vignette
-            offset={0.25}
-            darkness={0.65}
+            offset={0.2}
+            darkness={0.7}
             eskil={false}
             blendFunction={BlendFunction.NORMAL}
           />

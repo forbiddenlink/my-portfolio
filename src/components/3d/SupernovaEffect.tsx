@@ -23,14 +23,14 @@ export function SupernovaEffect({ position, color, size }: SupernovaEffectProps)
   const particlesRef = useRef<THREE.Points>(null)
   const waveRefs = useRef<THREE.Mesh[]>([])
 
-  // Particle system for orbiting energy
+  // Particle system for orbiting energy - increased count for more dramatic effect
   const particleData = useMemo(() => {
-    const count = 150
+    const count = 250
     const positions = new Float32Array(count * 3)
     const scales = new Float32Array(count)
 
     for (let i = 0; i < count; i++) {
-      const radius = size * 2 + Math.random() * size * 2
+      const radius = size * 1.8 + Math.random() * size * 2.5
       const theta = Math.random() * Math.PI * 2
       const phi = Math.acos(2 * Math.random() - 1)
 
@@ -44,34 +44,38 @@ export function SupernovaEffect({ position, color, size }: SupernovaEffectProps)
     return { positions, scales, count }
   }, [size])
 
-  // Animate everything
+  // Animate everything with more dramatic effects
   useFrame((state) => {
     const time = state.clock.elapsedTime
 
-    // Animate core pulsing
+    // Animate core pulsing - more dramatic multi-frequency pulse
     if (coreRef.current) {
-      const scale = 1 + Math.sin(time * 2) * 0.08
+      const pulse1 = Math.sin(time * 2) * 0.08
+      const pulse2 = Math.sin(time * 3.7) * 0.04
+      const pulse3 = Math.sin(time * 0.8) * 0.06
+      const scale = 1 + pulse1 + pulse2 + pulse3
       coreRef.current.scale.setScalar(scale)
     }
 
-    // Rotate corona
+    // Rotate corona with varying speed
     if (coronaRef.current) {
-      coronaRef.current.rotation.z += 0.003
-      coronaRef.current.rotation.y += 0.002
+      coronaRef.current.rotation.z += 0.004
+      coronaRef.current.rotation.y += 0.003
+      coronaRef.current.rotation.x += Math.sin(time * 0.5) * 0.001
     }
 
-    // Animate expanding waves
+    // Animate expanding waves with varied timing
     waveRefs.current.forEach((wave, i) => {
       if (wave) {
-        const phase = (time * 0.4 + i * 0.33) % 1
-        const scale = 1 + phase * 3
+        const phase = (time * 0.5 + i * 0.33) % 1
+        const scale = 1 + phase * 4
         wave.scale.setScalar(scale)
         const material = wave.material as THREE.MeshBasicMaterial
-        material.opacity = (1 - phase) * 0.25
+        material.opacity = (1 - phase) * 0.3
       }
     })
 
-    // Animate orbiting particles
+    // Animate orbiting particles with more dynamic motion
     if (particlesRef.current) {
       const positions = particlesRef.current.geometry.attributes.position.array as Float32Array
 
@@ -79,11 +83,11 @@ export function SupernovaEffect({ position, color, size }: SupernovaEffectProps)
         const i3 = i * 3
         const x = positions[i3]
         const z = positions[i3 + 2]
-        const angle = 0.004 + particleData.scales[i] * 0.004
+        const angle = 0.005 + particleData.scales[i] * 0.005
 
         positions[i3] = x * Math.cos(angle) - z * Math.sin(angle)
         positions[i3 + 2] = x * Math.sin(angle) + z * Math.cos(angle)
-        positions[i3 + 1] += Math.sin(time * 2 + i) * 0.008
+        positions[i3 + 1] += Math.sin(time * 2.5 + i) * 0.01
       }
 
       particlesRef.current.geometry.attributes.position.needsUpdate = true
@@ -138,14 +142,14 @@ export function SupernovaEffect({ position, color, size }: SupernovaEffectProps)
         />
       </mesh>
 
-      {/* Corona rings */}
+      {/* Corona rings - enhanced with multiple rings */}
       <group ref={coronaRef}>
         <mesh rotation={[Math.PI / 2, 0, 0]}>
           <torusGeometry args={[size * 1.6, size * 0.1, 16, 48]} />
           <meshBasicMaterial
             color="#ffffff"
             transparent
-            opacity={0.5}
+            opacity={0.6}
             blending={THREE.AdditiveBlending}
           />
         </mesh>
@@ -154,6 +158,28 @@ export function SupernovaEffect({ position, color, size }: SupernovaEffectProps)
           <torusGeometry args={[size * 2.0, size * 0.08, 16, 48]} />
           <meshBasicMaterial
             color={color}
+            transparent
+            opacity={0.5}
+            blending={THREE.AdditiveBlending}
+          />
+        </mesh>
+
+        {/* Additional outer corona ring */}
+        <mesh rotation={[Math.PI / 4, -Math.PI / 4, 0]}>
+          <torusGeometry args={[size * 2.5, size * 0.06, 16, 48]} />
+          <meshBasicMaterial
+            color={color}
+            transparent
+            opacity={0.35}
+            blending={THREE.AdditiveBlending}
+          />
+        </mesh>
+
+        {/* Inner bright ring */}
+        <mesh rotation={[Math.PI / 2.2, 0, Math.PI / 8]}>
+          <torusGeometry args={[size * 1.3, size * 0.12, 16, 48]} />
+          <meshBasicMaterial
+            color="#ffffff"
             transparent
             opacity={0.4}
             blending={THREE.AdditiveBlending}
@@ -202,9 +228,11 @@ export function SupernovaEffect({ position, color, size }: SupernovaEffectProps)
         />
       </points>
 
-      {/* Point lights for illumination */}
-      <pointLight color="#ffffff" intensity={15} distance={50} decay={2} />
-      <pointLight color={color} intensity={10} distance={60} decay={1.5} />
+      {/* Point lights for illumination - enhanced for dramatic effect */}
+      <pointLight color="#ffffff" intensity={20} distance={60} decay={2} />
+      <pointLight color={color} intensity={15} distance={80} decay={1.5} />
+      {/* Additional ambient colored light */}
+      <pointLight color={color} intensity={8} distance={100} decay={1} />
     </group>
   )
 }

@@ -85,13 +85,13 @@ export function NebulaBackground() {
     void main() {
       vec2 uv = vUv;
 
-      // Multi-layer nebula colors (realistic astronomical nebulae)
-      vec3 deepPurple = vec3(0.12, 0.02, 0.35);   // Deep purple core
-      vec3 cosmicBlue = vec3(0.02, 0.1, 0.4);     // Dark blue
-      vec3 nebulaPink = vec3(0.3, 0.05, 0.25);    // Magenta emission
-      vec3 electricCyan = vec3(0.05, 0.2, 0.35);  // Cyan glow
-      vec3 royalPurple = vec3(0.15, 0.08, 0.4);   // Purple-blue mix
-      vec3 deepSpace = vec3(0.02, 0.02, 0.08);    // Near black void
+      // Enhanced multi-layer nebula colors with more vibrancy
+      vec3 deepPurple = vec3(0.15, 0.03, 0.42);   // Deep purple core - richer
+      vec3 cosmicBlue = vec3(0.03, 0.12, 0.48);   // Dark blue - more saturated
+      vec3 nebulaPink = vec3(0.38, 0.06, 0.32);   // Magenta emission - brighter
+      vec3 electricCyan = vec3(0.06, 0.25, 0.42); // Cyan glow - more visible
+      vec3 royalPurple = vec3(0.18, 0.1, 0.48);   // Purple-blue mix - enhanced
+      vec3 deepSpace = vec3(0.02, 0.02, 0.1);     // Near black void
 
       // Large-scale nebula structure with swirling motion
       vec2 swirl = uv - 0.5;
@@ -154,8 +154,8 @@ export function NebulaBackground() {
       color.b += cos(uv.y * 3.14159 + time * 0.08) * 0.02;
 
       // Overall brightness and contrast adjustment
-      color = pow(color, vec3(0.95)); // Slight gamma for richer darks
-      color *= 1.4; // Boost overall brightness
+      color = pow(color, vec3(0.92)); // Gamma for richer tones
+      color *= 1.6; // Boost overall brightness for more impact
 
       gl_FragColor = vec4(color, 1.0);
     }
