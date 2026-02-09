@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
@@ -9,18 +9,34 @@ interface TiltCardProps {
     className?: string
 }
 
+function usePrefersReducedMotion() {
+    const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+
+    useEffect(() => {
+        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+        setPrefersReducedMotion(mediaQuery.matches)
+
+        const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches)
+        mediaQuery.addEventListener('change', handler)
+        return () => mediaQuery.removeEventListener('change', handler)
+    }, [])
+
+    return prefersReducedMotion
+}
+
 export function TiltCard({ children, className }: TiltCardProps) {
     const ref = useRef<HTMLDivElement>(null)
     const [hovered, setHovered] = useState(false)
+    const prefersReducedMotion = usePrefersReducedMotion()
 
     const x = useMotionValue(0)
     const y = useMotionValue(0)
 
-    // Spring physics for smooth tilt
+    // Spring physics for smooth tilt (disabled if user prefers reduced motion)
     const springConfig = { damping: 15, stiffness: 150, mass: 0.5 }
-    const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [10, -10]), springConfig)
-    const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-10, 10]), springConfig)
-    const scale = useSpring(hovered ? 1.05 : 1, springConfig)
+    const rotateX = useSpring(useTransform(y, [-0.5, 0.5], prefersReducedMotion ? [0, 0] : [10, -10]), springConfig)
+    const rotateY = useSpring(useTransform(x, [-0.5, 0.5], prefersReducedMotion ? [0, 0] : [-10, 10]), springConfig)
+    const scale = useSpring(hovered && !prefersReducedMotion ? 1.05 : 1, springConfig)
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         if (!ref.current) return

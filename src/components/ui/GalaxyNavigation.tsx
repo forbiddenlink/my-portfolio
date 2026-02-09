@@ -16,7 +16,7 @@ export function GalaxyNavigation() {
   if (view === 'exploration' || isJourneyMode) return null
 
   return (
-    <div className="fixed left-6 top-[320px] z-40">
+    <div className="fixed left-6 top-[320px] z-40 hidden lg:block">
       {/* Animated border container */}
       <div className="relative rounded-2xl p-[1px] overflow-hidden">
         {/* Animated gradient border */}
@@ -55,7 +55,7 @@ export function GalaxyNavigation() {
             <button
               onClick={reset}
               className={cn(
-                'ripple-button group flex items-center gap-3 py-2 px-3 rounded-xl transition-all duration-300 relative overflow-hidden',
+                'ripple-button group flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 relative overflow-hidden min-h-[44px]',
                 view === 'universe'
                   ? 'bg-white/20 shadow-lg scale-105 backdrop-blur-sm'
                   : 'hover:bg-white/10 hover:scale-105'
@@ -79,7 +79,7 @@ export function GalaxyNavigation() {
                 key={galaxy.id}
                 onClick={() => zoomToGalaxy(galaxy.id)}
                 className={cn(
-                  'ripple-button group flex items-center gap-3 py-2 px-3 rounded-xl transition-all duration-300 relative overflow-hidden',
+                  'ripple-button group flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 relative overflow-hidden min-h-[44px]',
                   selectedGalaxy === galaxy.id
                     ? 'bg-white/20 shadow-lg scale-105 backdrop-blur-sm'
                     : 'hover:bg-white/10 hover:scale-105'
@@ -107,7 +107,7 @@ export function GalaxyNavigation() {
             {/* Take the Tour button */}
             <button
               onClick={startJourney}
-              className="ripple-button group flex items-center gap-3 py-2 px-3 rounded-xl transition-all duration-300 relative overflow-hidden hover:bg-gradient-to-r hover:from-indigo-500/20 hover:to-purple-500/20 hover:scale-105"
+              className="ripple-button group flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 relative overflow-hidden min-h-[44px] hover:bg-gradient-to-r hover:from-indigo-500/20 hover:to-purple-500/20 hover:scale-105"
               aria-label="Take the guided tour"
             >
               <div className="w-3 h-3 flex items-center justify-center">
