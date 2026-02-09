@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { Suspense } from 'react'
+import { useViewStore } from '@/lib/store'
 import { DeepLinkHandler } from '@/components/ui/DeepLinkHandler'
 import { KeyboardNavigation } from '@/components/ui/KeyboardNavigation'
 import { PerformanceMonitor } from '@/components/ui/PerformanceMonitor'
@@ -37,6 +38,8 @@ const MorphingShape = dynamic(() => import('@/components/ui/MorphingShape').then
 
 
 export default function HomePage() {
+  const isJourneyMode = useViewStore((state) => state.isJourneyMode)
+
   return (
     <main className="relative w-full h-screen overflow-hidden bg-black">
       {/* Skip Link for Accessibility */}
@@ -110,8 +113,8 @@ export default function HomePage() {
       {/* Interactive Particles Layer */}
       <InteractiveParticles count={50} />
 
-      {/* Header Overlay - Top Left */}
-      <header id="main-content" tabIndex={-1} className="absolute top-4 left-4 md:top-10 md:left-10 z-10 pointer-events-none">
+      {/* Header Overlay - Top Left (hidden during tour) */}
+      <header id="main-content" tabIndex={-1} className={`absolute top-4 left-4 md:top-10 md:left-10 z-10 pointer-events-none transition-opacity duration-500 ${isJourneyMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         <div className="glass-card rounded-2xl p-4 md:p-8">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 tracking-tight text-white leading-tight drop-shadow-2xl">
             <AnimatedText type="chars" stagger={0.05}>
@@ -133,8 +136,8 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Quick Actions - Bottom Left (offset on lg to avoid GalaxyNavigation) */}
-      <FadeIn delay={1.2} direction="up" className="absolute bottom-4 left-4 right-4 md:bottom-10 md:left-10 lg:left-[240px] md:right-auto z-10 flex flex-col md:flex-row flex-wrap gap-3 md:gap-4 items-stretch md:items-center">
+      {/* Quick Actions - Bottom Left (offset on lg to avoid GalaxyNavigation, hidden during tour) */}
+      <FadeIn delay={1.2} direction="up" className={`absolute bottom-4 left-4 right-4 md:bottom-10 md:left-10 lg:left-[240px] md:right-auto z-10 flex flex-col md:flex-row flex-wrap gap-3 md:gap-4 items-stretch md:items-center transition-opacity duration-500 ${isJourneyMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         <Link
           href="/work"
           className="ripple-button group w-full md:w-auto md:min-w-[200px] rounded-xl bg-white/15 backdrop-blur-xl border border-white/30 text-white font-semibold hover:bg-white/25 hover:border-white/40 transition-all duration-300 shadow-2xl hover:shadow-white/20 hover:scale-105 pointer-events-auto flex items-center justify-center gap-3 px-6 py-4 md:px-8"
@@ -147,8 +150,8 @@ export default function HomePage() {
       {/* AI Galaxy Guide */}
       <GalaxyGuide />
 
-      {/* Instructions - Bottom Right (hidden on mobile) */}
-      <FadeIn delay={1.4} direction="left" className="hidden md:block absolute bottom-10 right-10 z-10">
+      {/* Instructions - Bottom Right (hidden on mobile and during tour) */}
+      <FadeIn delay={1.4} direction="left" className={`hidden md:block absolute bottom-10 right-10 z-10 transition-opacity duration-500 ${isJourneyMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         <nav aria-label="Keyboard shortcuts" className="glass-card rounded-2xl p-6 text-right text-sm text-white space-y-3 font-medium max-w-xs">
           <p className="flex items-center justify-end gap-2.5">
             <span className="text-white/60 text-base" aria-hidden="true">✨</span>
