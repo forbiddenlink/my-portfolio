@@ -2,12 +2,40 @@ import type { Project } from '@/lib/types'
 import { formatDateRange } from '@/lib/utils'
 import { ExternalLink, Github } from 'lucide-react'
 import { GenerativeHero } from '@/components/ui/GenerativeHero'
+import Image from 'next/image'
+
+// Map project IDs to their screenshot paths
+// Screenshots should be 1280x720 PNG files in public/screenshots/
+const PROJECT_SCREENSHOTS: Record<string, string> = {
+  'flo-labs': '/screenshots/flo-labs.png',
+  'caipo-ai': '/screenshots/caipo-ai.png',
+  'finance-quest': '/screenshots/finance-quest.png',
+  'portfolio-pro': '/screenshots/portfolio-pro.png',
+  'stancestream': '/screenshots/stance-stream.png',
+  'explainthiscode': '/screenshots/explain-this-code.png',
+  'moodchanger-ai': '/screenshots/moodchanger-ai.png',
+  'hephaestus': '/screenshots/hephaestus.png',
+  'robocollective-ai': '/screenshots/robocollective-ai.png',
+  'tubedigest': '/screenshots/tubedigest.png',
+  'contradictme': '/screenshots/contradictme.png',
+  'create-surveys': '/screenshots/create-surveys.png',
+  'reprise': '/screenshots/reprise.png',
+  'componentcompass': '/screenshots/componentcompass.png',
+  'security-trainer': '/screenshots/security-trainer.png',
+  'goodstuff-foodtruck': '/screenshots/goodstuff-foodtruck.png',
+  'pollyglot': '/screenshots/pollyglot.png',
+  'guts-and-glory': '/screenshots/guts-and-glory.png',
+  'plant-therapy': '/screenshots/plant-therapy.png',
+  'timeslip-search': '/screenshots/timeslip-search.png',
+}
 
 interface ProjectCaseStudyProps {
   project: Project
 }
 
 export function ProjectCaseStudy({ project }: ProjectCaseStudyProps) {
+  const screenshotPath = PROJECT_SCREENSHOTS[project.id]
+
   return (
     <article className="max-w-5xl mx-auto px-6 md:px-8 py-12 md:py-16 space-y-12">
       {/* Header */}
@@ -102,16 +130,26 @@ export function ProjectCaseStudy({ project }: ProjectCaseStudyProps) {
         </div>
       )}
 
-      {/* Generative Schematic Showcase - if project has live URL */}
+      {/* Live Preview with Screenshot or Generative Schematic */}
       <div className="mb-16">
-        <h2 className="text-3xl font-semibold mb-8 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">System Architecture</h2>
+        <h2 className="text-3xl font-semibold mb-8 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+          {screenshotPath ? 'Live Preview' : 'System Architecture'}
+        </h2>
         <div className="rounded-2xl overflow-hidden border border-white/10 bg-black/40 backdrop-blur-sm relative group">
-
           <div className="aspect-video relative overflow-hidden">
-            {/* Generative Background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-black to-gray-900">
-              <GenerativeHero name={project.title} color={project.color} />
-            </div>
+            {screenshotPath ? (
+              <Image
+                src={screenshotPath}
+                alt={`Screenshot of ${project.title}`}
+                fill
+                className="object-cover object-top"
+                sizes="(max-width: 768px) 100vw, 896px"
+              />
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-black to-gray-900">
+                <GenerativeHero name={project.title} color={project.color} />
+              </div>
+            )}
 
             {/* Overlay Content */}
             <div className="absolute inset-0 flex items-center justify-center p-8 bg-black/20 group-hover:bg-black/40 transition-colors duration-500">
@@ -133,7 +171,7 @@ export function ProjectCaseStudy({ project }: ProjectCaseStudyProps) {
                 )}
 
                 <p className="mt-4 text-xs font-mono text-white/40 tracking-widest uppercase">
-                  Generative Data Visualization
+                  {screenshotPath ? 'Live Site Preview' : 'Generative Data Visualization'}
                 </p>
               </div>
             </div>
