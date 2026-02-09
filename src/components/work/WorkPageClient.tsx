@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
+import { ExternalLink, Github } from 'lucide-react'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
 import { SplitWords } from '@/components/ui/SplitText'
 import { TiltCard } from '@/components/ui/TiltCard'
@@ -9,6 +10,30 @@ import { RandomProjectButton } from '@/components/ui/RandomProjectButton'
 import { GalaxyFilter } from '@/components/ui/GalaxyFilter'
 import { formatDateRange, cn } from '@/lib/utils'
 import type { Galaxy, Project } from '@/lib/types'
+
+function ProjectLinks({ project }: { project: Project }) {
+  if (!project.links) return null
+  const hasLive = !!project.links.live
+  const hasGithub = !!project.links.github
+  if (!hasLive && !hasGithub) return null
+
+  return (
+    <div className="flex items-center gap-2 text-white/30">
+      {hasLive && (
+        <span className="flex items-center gap-1 text-[10px]" title="Live demo available">
+          <ExternalLink className="w-3 h-3" />
+          <span className="sr-only">Live demo</span>
+        </span>
+      )}
+      {hasGithub && (
+        <span className="flex items-center gap-1 text-[10px]" title="Source code available">
+          <Github className="w-3 h-3" />
+          <span className="sr-only">Source code</span>
+        </span>
+      )}
+    </div>
+  )
+}
 
 interface WorkPageClientProps {
   galaxies: Galaxy[]
@@ -137,8 +162,9 @@ export function WorkPageClient({ galaxies }: WorkPageClientProps) {
                       ))}
                     </div>
 
-                    <div className="text-[11px] text-white/30 font-mono mt-auto pt-3 border-t border-white/5">
-                      {formatDateRange(project.dateRange)}
+                    <div className="flex items-center justify-between text-[11px] text-white/30 font-mono mt-auto pt-3 border-t border-white/5">
+                      <span>{formatDateRange(project.dateRange)}</span>
+                      <ProjectLinks project={project} />
                     </div>
                   </Link>
                 </TiltCard>
@@ -179,8 +205,9 @@ export function WorkPageClient({ galaxies }: WorkPageClientProps) {
                       )}
                     </div>
 
-                    <div className="text-[11px] text-white/30 font-mono mt-auto pt-3 border-t border-white/5">
-                      {formatDateRange(project.dateRange)}
+                    <div className="flex items-center justify-between text-[11px] text-white/30 font-mono mt-auto pt-3 border-t border-white/5">
+                      <span>{formatDateRange(project.dateRange)}</span>
+                      <ProjectLinks project={project} />
                     </div>
                   </Link>
                 </TiltCard>
