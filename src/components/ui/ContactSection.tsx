@@ -31,8 +31,9 @@ export function ContactSection() {
           rel="noopener noreferrer"
           className="p-5 bg-white/15 backdrop-blur-xl border border-white/30 hover:bg-white/25 hover:border-white/40 rounded-xl transition-all duration-300 hover:scale-110"
           title="LinkedIn"
+          aria-label="Connect on LinkedIn"
         >
-          <Linkedin className="w-5 h-5 text-white/80 hover:text-white" />
+          <Linkedin className="w-5 h-5 text-white/80 hover:text-white" aria-hidden="true" />
         </a>
 
         <a
@@ -41,8 +42,9 @@ export function ContactSection() {
           rel="noopener noreferrer"
           className="p-5 bg-white/15 backdrop-blur-xl border border-white/30 hover:bg-white/25 hover:border-white/40 rounded-xl transition-all duration-300 hover:scale-110"
           title="GitHub"
+          aria-label="View GitHub profile"
         >
-          <Github className="w-5 h-5 text-white/80 hover:text-white" />
+          <Github className="w-5 h-5 text-white/80 hover:text-white" aria-hidden="true" />
         </a>
       </div>
     </div>

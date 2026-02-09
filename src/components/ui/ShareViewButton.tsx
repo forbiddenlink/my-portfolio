@@ -38,8 +38,8 @@ export function ShareViewButton() {
         // Reset after 2 seconds
         setTimeout(() => setCopied(false), 2000)
       }
-    } catch (err) {
-      console.error('Failed to share:', err)
+    } catch {
+      // Silently fail if share/copy fails
     }
   }
 
@@ -130,8 +130,8 @@ export function CameraRestorer() {
           duration: 2,
           ease: 'power2.inOut',
         })
-      } catch (err) {
-        console.error('Failed to restore camera:', err)
+      } catch {
+        // Invalid camera data in URL - ignore
       }
     }
   }, [camera])

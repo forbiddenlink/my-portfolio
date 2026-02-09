@@ -142,6 +142,7 @@ export function ProjectCaseStudy({ project }: ProjectCaseStudyProps) {
                 src={screenshotPath}
                 alt={`Screenshot of ${project.title}`}
                 fill
+                priority
                 className="object-cover object-top"
                 sizes="(max-width: 768px) 100vw, 896px"
               />
