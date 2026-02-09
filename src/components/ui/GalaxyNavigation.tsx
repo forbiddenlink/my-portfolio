@@ -16,7 +16,7 @@ export function GalaxyNavigation() {
   if (view === 'exploration' || isJourneyMode) return null
 
   return (
-    <div className="fixed left-6 top-1/3 z-40">
+    <div className="fixed left-6 top-[200px] z-40">
       {/* Animated border container */}
       <div className="relative rounded-2xl p-[1px] overflow-hidden">
         {/* Animated gradient border */}
@@ -36,7 +36,7 @@ export function GalaxyNavigation() {
             background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(10, 5, 30, 0.7) 100%)',
             backdropFilter: 'blur(20px) saturate(180%)',
             boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
-            padding: '1.5rem'
+            padding: '1rem'
           }}
         >
           {/* Glass morphism inner glow */}
@@ -50,12 +50,12 @@ export function GalaxyNavigation() {
             }}
           />
 
-          <nav className="flex flex-col gap-3 relative z-10">
+          <nav className="flex flex-col gap-1.5 relative z-10">
             {/* Universe view */}
             <button
               onClick={reset}
               className={cn(
-                'ripple-button group flex items-center gap-3 py-3.5 px-4 rounded-xl transition-all duration-300 relative overflow-hidden',
+                'ripple-button group flex items-center gap-3 py-2 px-3 rounded-xl transition-all duration-300 relative overflow-hidden',
                 view === 'universe'
                   ? 'bg-white/20 shadow-lg scale-105 backdrop-blur-sm'
                   : 'hover:bg-white/10 hover:scale-105'
@@ -71,7 +71,7 @@ export function GalaxyNavigation() {
               </span>
             </button>
 
-            <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-0.5" />
+            <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-0" />
 
             {/* Galaxy buttons */}
             {galaxies.map((galaxy) => (
@@ -79,7 +79,7 @@ export function GalaxyNavigation() {
                 key={galaxy.id}
                 onClick={() => zoomToGalaxy(galaxy.id)}
                 className={cn(
-                  'ripple-button group flex items-center gap-3 py-3.5 px-4 rounded-xl transition-all duration-300 relative overflow-hidden',
+                  'ripple-button group flex items-center gap-3 py-2 px-3 rounded-xl transition-all duration-300 relative overflow-hidden',
                   selectedGalaxy === galaxy.id
                     ? 'bg-white/20 shadow-lg scale-105 backdrop-blur-sm'
                     : 'hover:bg-white/10 hover:scale-105'
@@ -102,12 +102,12 @@ export function GalaxyNavigation() {
               </button>
             ))}
 
-            <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-0.5" />
+            <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-0" />
 
             {/* Take the Tour button */}
             <button
               onClick={startJourney}
-              className="ripple-button group flex items-center gap-3 py-3.5 px-4 rounded-xl transition-all duration-300 relative overflow-hidden hover:bg-gradient-to-r hover:from-indigo-500/20 hover:to-purple-500/20 hover:scale-105"
+              className="ripple-button group flex items-center gap-3 py-2 px-3 rounded-xl transition-all duration-300 relative overflow-hidden hover:bg-gradient-to-r hover:from-indigo-500/20 hover:to-purple-500/20 hover:scale-105"
               aria-label="Take the guided tour"
             >
               <div className="w-3 h-3 flex items-center justify-center">
