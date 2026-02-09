@@ -281,7 +281,7 @@ export default function AboutPage() {
                 <Github className="w-6 h-6" />
               </a>
               <a
-                href="https://linkedin.com/in/elizabeth-stein"
+                href="https://linkedin.com/in/imkindageeky"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white/50 hover:text-white transition-colors"
@@ -309,7 +309,7 @@ export default function AboutPage() {
               <Github className="w-5 h-5" />
             </a>
             <a
-              href="https://linkedin.com/in/elizabeth-stein"
+              href="https://linkedin.com/in/imkindageeky"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-white transition-colors"
