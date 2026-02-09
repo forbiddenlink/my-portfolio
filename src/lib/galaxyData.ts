@@ -401,7 +401,7 @@ export const galaxies: Galaxy[] = [
         brightness: 1.5,
         size: 'medium',
         galaxy: 'devtools',
-        links: { github: 'https://github.com/forbiddenlink/accessibiliy-checker' },
+        links: { github: 'https://github.com/forbiddenlink/accessibility-checker' },
         featured: true,
         dateRange: '2024',
       },
