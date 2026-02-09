@@ -133,8 +133,8 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Quick Actions - Bottom Left */}
-      <FadeIn delay={1.2} direction="up" className="absolute bottom-4 left-4 right-4 md:bottom-10 md:left-10 md:right-auto z-10 flex flex-col md:flex-row flex-wrap gap-3 md:gap-4 items-stretch md:items-center">
+      {/* Quick Actions - Bottom Left (offset on lg to avoid GalaxyNavigation) */}
+      <FadeIn delay={1.2} direction="up" className="absolute bottom-4 left-4 right-4 md:bottom-10 md:left-10 lg:left-[240px] md:right-auto z-10 flex flex-col md:flex-row flex-wrap gap-3 md:gap-4 items-stretch md:items-center">
         <Link
           href="/work"
           className="ripple-button group w-full md:w-auto md:min-w-[200px] rounded-xl bg-white/15 backdrop-blur-xl border border-white/30 text-white font-semibold hover:bg-white/25 hover:border-white/40 transition-all duration-300 shadow-2xl hover:shadow-white/20 hover:scale-105 pointer-events-auto flex items-center justify-center gap-3 px-6 py-4 md:px-8"
