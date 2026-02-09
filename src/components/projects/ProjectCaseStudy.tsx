@@ -70,7 +70,7 @@ export function ProjectCaseStudy({ project }: ProjectCaseStudyProps) {
           {project.description}
         </p>
 
-        {/* Add more detailed sections based on project type */}
+        {/* Challenge & Solution - use custom text if provided, otherwise generate from context */}
         <div className="grid md:grid-cols-2 gap-6 mt-8">
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 hover:border-white/20">
             <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
@@ -78,10 +78,10 @@ export function ProjectCaseStudy({ project }: ProjectCaseStudyProps) {
               <span>Challenge</span>
             </h3>
             <p className="text-white/70 leading-relaxed">
-              {project.metrics?.files ?
+              {project.challenge || (project.metrics?.files ?
                 `Building and maintaining a large-scale application with ${project.metrics.files.toLocaleString()} files${project.metrics.team ? ` across a team of ${project.metrics.team} developers` : ''}.` :
-                `Developing a robust solution for ${project.company || 'the client'} that meets complex business requirements and delivers exceptional user experience.`
-              }
+                `Building a production-ready application that delivers real value while maintaining code quality and user experience.`
+              )}
             </p>
           </div>
 
@@ -91,12 +91,10 @@ export function ProjectCaseStudy({ project }: ProjectCaseStudyProps) {
               <span>Solution</span>
             </h3>
             <p className="text-white/70 leading-relaxed">
-              {project.tags.includes('React') || project.tags.includes('Next.js') ?
-                'Architected a modern, performant application using cutting-edge web technologies and best practices.' :
-                project.tags.includes('AI') || project.tags.includes('Machine Learning') ?
-                  'Integrated advanced AI capabilities to enhance functionality and user experience.' :
-                  'Delivered a comprehensive solution leveraging the latest tools and frameworks in the ecosystem.'
-              }
+              {project.solution || (project.tags.includes('AI') ?
+                `Built with ${project.tags.filter(t => ['Next.js', 'React', 'TypeScript', 'Supabase', 'OpenAI', 'Claude'].includes(t)).join(', ') || 'modern web technologies'}, integrating AI capabilities for enhanced functionality.` :
+                `Architected with ${project.tags.slice(0, 3).join(', ')}, focusing on performance, accessibility, and maintainability.`
+              )}
             </p>
           </div>
         </div>

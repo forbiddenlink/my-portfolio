@@ -25,6 +25,8 @@ export const galaxies: Galaxy[] = [
         metrics: { files: 64806 },
         featured: true,
         dateRange: '2023-2024',
+        challenge: 'Navigating a massive 64,806-file enterprise codebase while contributing meaningful features to an aviation resource management platform used in real operations.',
+        solution: 'Focused on understanding existing patterns before making changes. Contributed to architecture decisions, implemented core features with comprehensive testing, and maintained strict type safety across the monorepo.',
       },
       {
         id: 'flo-labs',
@@ -40,6 +42,8 @@ export const galaxies: Galaxy[] = [
         links: { live: 'https://flolabs.international' },
         featured: true,
         dateRange: '2024',
+        challenge: 'Leading a team of 3-4 developers across 6+ production sites while establishing consistent design patterns and development workflows.',
+        solution: 'Built a unified design system and component library. Implemented modern Next.js 16 architecture with Strapi CMS, established code review processes, and mentored junior developers on best practices.',
       },
       {
         id: 'caipo-ai',
@@ -123,6 +127,8 @@ export const galaxies: Galaxy[] = [
         links: { live: 'https://stancestream.vercel.app', github: 'https://github.com/forbiddenlink/stancestream' },
         featured: true,
         dateRange: '2024',
+        challenge: 'Coordinating multiple AI agents in real-time while maintaining response coherence and handling concurrent user sessions.',
+        solution: 'Built a Redis-backed orchestration layer that manages agent state, queues responses, and streams results. Implemented sentiment analysis to track debate dynamics and visualize argument flow in real-time.',
       },
       {
         id: 'codebase-onboarding-tool',
@@ -152,6 +158,8 @@ export const galaxies: Galaxy[] = [
         metrics: { tests: 702 },
         featured: true,
         dateRange: '2024',
+        challenge: 'Creating an engaging financial education platform that actually helps users retain knowledge long-term, with full WCAG 2.1 AA accessibility compliance.',
+        solution: 'Implemented the SM-2 spaced repetition algorithm to optimize learning retention (85% rate). Built 30+ interactive calculators, AI-powered coaching, and gamification elements. Wrote 702 tests to ensure reliability.',
       },
       {
         id: 'explainthiscode',
@@ -166,6 +174,8 @@ export const galaxies: Galaxy[] = [
         links: { live: 'https://explainthiscode.vercel.app', github: 'https://github.com/forbiddenlink/explainthiscode' },
         featured: true,
         dateRange: '2024',
+        challenge: 'Building a full SaaS platform from scratch with AI-powered code analysis, subscription billing, and team collaboration features.',
+        solution: 'Integrated GPT-4 with skill-level adaptation to explain code at the user\'s level. Added security vulnerability scanning, performance profiling, Stripe subscriptions, and built the entire UI with 47 Radix components.',
       },
       {
         id: 'dev-assistant-pro',
@@ -194,6 +204,8 @@ export const galaxies: Galaxy[] = [
         links: { live: 'https://tube-digest-ivory.vercel.app' },
         featured: true,
         dateRange: '2024',
+        challenge: 'Processing long-form YouTube content into useful, searchable summaries while preserving key insights and enabling knowledge management.',
+        solution: 'Built a pipeline using Claude Sonnet 4.5 for intelligent summarization with topic extraction. Added mind map visualization for exploring connections, full-text search across all summaries, and GitHub sync for backup.',
       },
       {
         id: 'autodocs-ai',
@@ -221,6 +233,8 @@ export const galaxies: Galaxy[] = [
         metrics: { tests: 400 },
         featured: true,
         dateRange: '2025',
+        challenge: 'Building an AI that creates art with genuine personality rather than just generating images on demand - an agent that has moods, preferences, and learns over time.',
+        solution: 'Implemented episodic and semantic memory systems, a mood model that influences artistic choices, ReAct-style visible thinking, and adaptive learning via multi-armed bandit. LoRA fine-tuning for style development. 400+ tests ensure reliability.',
       },
       {
         id: 'autonomous-artist',
@@ -273,6 +287,8 @@ export const galaxies: Galaxy[] = [
         metrics: { tests: 111 },
         featured: true,
         dateRange: '2023-2024',
+        challenge: 'Creating a comprehensive AI development learning platform with interactive coding, subscription management, and custom tooling.',
+        solution: 'Built 205 lessons across 111 projects with Monaco Editor for live coding. Integrated custom MCP servers, Stripe subscriptions with multiple tiers, and achieved 87% test coverage with a 9.3/10 quality score.',
       },
       {
         id: 'create-surveys',
@@ -706,6 +722,8 @@ export const galaxies: Galaxy[] = [
         metrics: { files: 420000 },
         featured: true,
         dateRange: '2025',
+        challenge: 'Indexing and searching 420,000+ cultural records spanning 60+ years of music, movies, and economic data while making it feel like time travel.',
+        solution: 'Built a conversational search interface with Algolia, aggregated data from Billboard, TMDB, FRED, and Wikimedia APIs. Added voice search, achievement system, personal "Time Capsule Wrapped" analytics, and a retro CRT-style interface.',
       },
       {
         id: 'apoc-bnb',

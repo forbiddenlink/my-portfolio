@@ -264,6 +264,13 @@ export function Entrance() {
                         <span className="text-[10px] tracking-[0.4em] text-white/30 uppercase">
                             Click to enter
                         </span>
+                        {/* Skip intro for recruiters */}
+                        <button
+                            onClick={handleEnter}
+                            className="text-[10px] tracking-[0.2em] text-white/20 hover:text-white/50 transition-colors uppercase mt-2"
+                        >
+                            Skip to portfolio →
+                        </button>
                     </motion.div>
                 </motion.div>
             )}

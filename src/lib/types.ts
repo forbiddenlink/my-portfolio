@@ -24,6 +24,8 @@ export interface Project {
   }
   featured: boolean // For homepage highlights
   dateRange: string // "2023-2024", "2022", etc.
+  challenge?: string // Custom challenge text for case study page
+  solution?: string // Custom solution text for case study page
 }
 
 export interface Galaxy {

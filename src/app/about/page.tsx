@@ -82,7 +82,7 @@ export default function AboutPage() {
               <p>
                 I work best in small, shippable steps, with clear commits and documentation so future me
                 (and teammates) don't suffer. Currently pursuing my B.S. in Software Development at Capella University
-                with a 3.98 GPA while working as Design Team Lead at Flo Labs.
+                (graduating March 2026) with a 3.98 GPA while working as Design Team Lead at Flo Labs.
               </p>
             </div>
           </section>
@@ -204,7 +204,7 @@ export default function AboutPage() {
             <div className="space-y-4">
               <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:bg-white/[0.07] transition-all hover:translate-x-2">
                 <p className="text-white/80">
-                  ✨ Built and deployed 40+ production projects including enterprise SaaS platforms,
+                  ✨ Built and deployed 50+ production projects including enterprise SaaS platforms,
                   AI-powered applications, and educational tools with 1,200+ automated tests
                 </p>
               </div>
