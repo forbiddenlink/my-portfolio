@@ -92,14 +92,23 @@ export async function POST(req: Request) {
     if (!response.ok) {
         const errorText = await response.text()
         console.error('MiniMax API Error:', response.status, errorText)
-        throw new Error(`MiniMax API Error: ${response.status}`)
+        // Return a helpful fallback instead of throwing
+        return NextResponse.json({
+          role: 'assistant',
+          content: `I'm having trouble connecting to the galaxy databanks (API Error ${response.status}). Elizabeth's portfolio features ${allProjects.length} projects across ${galaxies.length} galactic sectors! Try asking me about specific technologies like React, AI, or TypeScript.`
+        })
     }
 
     const data = await response.json()
-    
-    // MiniMax response format parsing
-    // Usually data.choices[0].message.content or data.reply
-    const replyContent = data.choices?.[0]?.message?.content || data.reply || "I seem to be having trouble reaching the databanks."
+    console.log('MiniMax API Response:', JSON.stringify(data, null, 2))
+
+    // MiniMax response format parsing - handle multiple possible formats
+    const replyContent =
+      data.choices?.[0]?.messages?.[0]?.text ||  // MiniMax v2 format
+      data.choices?.[0]?.message?.content ||      // OpenAI-style format
+      data.reply ||                               // Simple reply format
+      data.choices?.[0]?.text ||                  // Alternative format
+      "I'm here to help you explore Elizabeth's portfolio! Ask me about her projects, skills, or technologies."
 
     return NextResponse.json({ role: 'assistant', content: replyContent })
 
