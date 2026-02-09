@@ -4,8 +4,9 @@ import { Analytics } from '@/components/Analytics'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { NebulaCursor } from '@/components/ui/NebulaCursor'
 import { WarpTransition } from '@/components/ui/WarpTransition'
-import { StarryBackground } from '@/components/ui/StarryBackground' // Imported as per instruction
+import { StarryBackground } from '@/components/ui/StarryBackground'
 import { SmoothScroll } from '@/components/ui/SmoothScroll'
+import { SITE, CONTACT } from '@/lib/constants'
 import '@/app/globals.css'
 
 const spaceGrotesk = Space_Grotesk({
@@ -23,42 +24,28 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Elizabeth Stein | Full-Stack Developer & AI Integration Specialist',
-  description: 'Full-stack development, AI integration, design systems, and enterprise-scale applications. Explore 40+ projects across 6 galaxies with 1,200+ automated tests.',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://elizabethstein.com'),
+  title: SITE.fullTitle,
+  description: SITE.description,
+  metadataBase: new URL(SITE.url),
   icons: {
     icon: '/favicon.svg',
     shortcut: '/favicon.svg',
     apple: '/favicon.svg',
   },
-  keywords: [
-    'Full-Stack Developer',
-    'AI Integration',
-    'React',
-    'Next.js',
-    'TypeScript',
-    'Three.js',
-    'Claude AI',
-    'OpenAI GPT-4',
-    'Design Systems',
-    'Enterprise Applications',
-    'Web Development',
-    'Supabase',
-    'Portfolio',
-  ],
-  authors: [{ name: 'Elizabeth Stein' }],
-  creator: 'Elizabeth Stein',
+  keywords: [...SITE.keywords],
+  authors: [{ name: SITE.name }],
+  creator: SITE.name,
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    siteName: 'Elizabeth Stein Portfolio',
-    title: 'Elizabeth Stein | Full-Stack Developer & AI Integration Specialist',
-    description: 'Full-stack development, AI integration, design systems, and enterprise-scale applications. Explore 40+ projects across 6 galaxies with 1,200+ automated tests.',
+    siteName: `${SITE.name} Portfolio`,
+    title: SITE.fullTitle,
+    description: SITE.description,
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Elizabeth Stein | Full-Stack Developer & AI Integration Specialist',
-    description: 'Full-stack development, AI integration, design systems, and enterprise-scale applications.',
+    title: SITE.fullTitle,
+    description: SITE.shortDescription,
   },
   robots: {
     index: true,
@@ -76,28 +63,14 @@ export const metadata: Metadata = {
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
-  name: 'Elizabeth Stein',
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://elizabethstein.com',
-  jobTitle: 'Full-Stack Developer & AI Integration Specialist',
-  description: 'Full-stack developer specializing in AI integration, design systems, and enterprise-scale applications.',
-  knowsAbout: [
-    'Full-Stack Development',
-    'AI Integration',
-    'Claude AI',
-    'OpenAI GPT-4',
-    'Stable Diffusion',
-    'React',
-    'Next.js',
-    'TypeScript',
-    'Three.js',
-    'Design Systems',
-    'Enterprise Applications',
-    'Supabase',
-    'PostgreSQL',
-  ],
+  name: SITE.name,
+  url: SITE.url,
+  jobTitle: SITE.title,
+  description: SITE.shortDescription,
+  knowsAbout: [...SITE.knowsAbout],
   sameAs: [
-    'https://github.com/forbiddenlink',
-    'https://linkedin.com/in/imkindageeky',
+    CONTACT.github,
+    CONTACT.linkedin,
     'https://imkindageeky.com',
   ],
 }

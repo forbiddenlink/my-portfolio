@@ -1,8 +1,9 @@
 'use client'
 
+import Link from 'next/link'
 import { useViewStore } from '@/lib/store'
 import { getProjectById } from '@/lib/galaxyData'
-import { ExternalLink, Github, X } from 'lucide-react'
+import { ExternalLink, Github, X, FileText } from 'lucide-react'
 
 export function HolographicProjectPanel({ show }: { show: boolean }) {
   const selectedProject = useViewStore((state) => state.selectedProject)
@@ -86,36 +87,43 @@ export function HolographicProjectPanel({ show }: { show: boolean }) {
           </div>
 
           {/* Links */}
-          {project.links && (
-            <div className="flex gap-4 pointer-events-auto">
-              {project.links.live && (
-                <a
-                  href={project.links.live}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:bg-white/10 transition-all duration-200"
-                  style={{
-                    borderColor: project.color,
-                    color: project.color
-                  }}
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  <span className="font-mono text-sm">VIEW LIVE</span>
-                </a>
-              )}
-              {project.links.github && (
-                <a
-                  href={project.links.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg border hover:bg-white/10 transition-all duration-200 border-white/30 text-white/70 hover:text-white"
-                >
-                  <Github className="w-4 h-4" />
-                  <span className="font-mono text-sm">SOURCE</span>
-                </a>
-              )}
-            </div>
-          )}
+          <div className="flex flex-wrap gap-4 pointer-events-auto">
+            {/* Case Study Link - Always show */}
+            <Link
+              href={`/work/${project.id}`}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white text-black hover:bg-white/90 transition-all duration-200 font-semibold"
+            >
+              <FileText className="w-4 h-4" />
+              <span className="font-mono text-sm">CASE STUDY</span>
+            </Link>
+
+            {project.links?.live && (
+              <a
+                href={project.links.live}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg border-2 hover:bg-white/10 transition-all duration-200"
+                style={{
+                  borderColor: project.color,
+                  color: project.color
+                }}
+              >
+                <ExternalLink className="w-4 h-4" />
+                <span className="font-mono text-sm">VIEW LIVE</span>
+              </a>
+            )}
+            {project.links?.github && (
+              <a
+                href={project.links.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg border hover:bg-white/10 transition-all duration-200 border-white/30 text-white/70 hover:text-white"
+              >
+                <Github className="w-4 h-4" />
+                <span className="font-mono text-sm">SOURCE</span>
+              </a>
+            )}
+          </div>
 
           {/* Footer hint */}
           <div className="mt-6 pt-4 border-t border-white/10">

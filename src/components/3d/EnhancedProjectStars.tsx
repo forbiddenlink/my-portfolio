@@ -399,11 +399,24 @@ function RealisticPlanet({
     }
   })
   
-  // For supernova, render the special effect
+  // For supernova, render the special effect with clickable area
   if (isSupernova) {
     return (
       <group position={position}>
         <SupernovaEffect position={[0, 0, 0]} color={project.color} size={sizeMultiplier} />
+        {/* Invisible clickable sphere for the supernova */}
+        <mesh
+          onClick={onPlanetClick}
+          onPointerEnter={() => {
+            document.body.style.cursor = 'pointer'
+          }}
+          onPointerLeave={() => {
+            document.body.style.cursor = 'auto'
+          }}
+        >
+          <sphereGeometry args={[sizeMultiplier * 2.5, 32, 32]} />
+          <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+        </mesh>
       </group>
     )
   }
