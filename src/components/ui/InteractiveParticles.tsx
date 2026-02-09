@@ -157,6 +157,7 @@ export function InteractiveParticles({ count = 40 }: InteractiveParticlesProps) 
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none z-5 opacity-30"
       style={{ mixBlendMode: 'screen' }}
+      aria-hidden="true"
     />
   )
 }

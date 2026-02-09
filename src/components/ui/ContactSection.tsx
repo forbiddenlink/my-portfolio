@@ -30,7 +30,7 @@ export function ContactSection() {
           href={CONTACT.linkedin}
           target="_blank"
           rel="noopener noreferrer"
-          className="p-5 bg-white/15 backdrop-blur-xl border border-white/30 hover:bg-white/25 hover:border-white/40 rounded-xl transition-all duration-300 hover:scale-110"
+          className="min-h-[44px] min-w-[44px] p-3 flex items-center justify-center bg-white/15 backdrop-blur-xl border border-white/30 hover:bg-white/25 hover:border-white/40 rounded-xl transition-all duration-300 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
           title="LinkedIn"
           aria-label="Connect on LinkedIn"
         >
@@ -41,7 +41,7 @@ export function ContactSection() {
           href={CONTACT.github}
           target="_blank"
           rel="noopener noreferrer"
-          className="p-5 bg-white/15 backdrop-blur-xl border border-white/30 hover:bg-white/25 hover:border-white/40 rounded-xl transition-all duration-300 hover:scale-110"
+          className="min-h-[44px] min-w-[44px] p-3 flex items-center justify-center bg-white/15 backdrop-blur-xl border border-white/30 hover:bg-white/25 hover:border-white/40 rounded-xl transition-all duration-300 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
           title="GitHub"
           aria-label="View GitHub profile"
         >

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
+import { usePrefersReducedMotion } from '@/lib/store'
 
 interface MagneticButtonProps {
   children: React.ReactNode
@@ -13,9 +14,9 @@ interface MagneticButtonProps {
   glowOnHover?: boolean
 }
 
-export function MagneticButton({ 
-  children, 
-  className = '', 
+export function MagneticButton({
+  children,
+  className = '',
   strength = 0.4,
   onClick,
   href,
@@ -25,11 +26,26 @@ export function MagneticButton({
   const buttonRef = useRef<HTMLButtonElement | HTMLAnchorElement>(null)
   const magneticAreaRef = useRef<HTMLDivElement>(null)
   const [isHovered, setIsHovered] = useState(false)
+  const prefersReducedMotion = usePrefersReducedMotion()
 
   useEffect(() => {
     const button = buttonRef.current
     const magneticArea = magneticAreaRef.current
     if (!button || !magneticArea) return
+
+    // Skip magnetic effect if user prefers reduced motion
+    if (prefersReducedMotion) {
+      const handleMouseEnter = () => setIsHovered(true)
+      const handleMouseLeave = () => setIsHovered(false)
+
+      magneticArea.addEventListener('mouseenter', handleMouseEnter)
+      magneticArea.addEventListener('mouseleave', handleMouseLeave)
+
+      return () => {
+        magneticArea.removeEventListener('mouseenter', handleMouseEnter)
+        magneticArea.removeEventListener('mouseleave', handleMouseLeave)
+      }
+    }
 
     const handleMouseMove = (e: MouseEvent) => {
       const { left, top, width, height } = magneticArea.getBoundingClientRect()
@@ -84,7 +100,7 @@ export function MagneticButton({
       magneticArea.removeEventListener('mouseenter', handleMouseEnter)
       magneticArea.removeEventListener('mouseleave', handleMouseLeave)
     }
-  }, [strength, tiltStrength])
+  }, [strength, tiltStrength, prefersReducedMotion])
 
   const Component = href ? 'a' : 'button'
 
@@ -98,10 +114,10 @@ export function MagneticButton({
     >
       <Component
         ref={buttonRef as any}
-        className={`${className} ${isHovered && glowOnHover ? 'magnetic-glow' : ''}`}
+        className={`${className} ${isHovered && glowOnHover ? 'magnetic-glow' : ''} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black`}
         onClick={onClick}
         href={href}
-              style={{
+        style={{
           transformStyle: 'preserve-3d',
           transition: glowOnHover ? 'box-shadow 0.3s ease' : 'none'
         }}

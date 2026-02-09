@@ -3,6 +3,7 @@
 import { useRef, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
+import { usePrefersReducedMotion } from '@/lib/store'
 
 interface ShootingStar {
   position: THREE.Vector3
@@ -24,6 +25,12 @@ export function ShootingStars({ count = 5 }: { count?: number }) {
   const starsRef = useRef<ShootingStar[]>([])
   const meshRefs = useRef<(THREE.Mesh | null)[]>([])
   const trailObjectsRef = useRef<THREE.Line[]>([])
+  const prefersReducedMotion = usePrefersReducedMotion()
+
+  // Don't render shooting stars if user prefers reduced motion
+  if (prefersReducedMotion) {
+    return null
+  }
 
   // Initialize shooting stars and trail objects
   useEffect(() => {
