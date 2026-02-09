@@ -18,6 +18,8 @@ import { ContactSection } from '@/components/ui/ContactSection'
 import { ResumeDownload } from '@/components/ui/ResumeDownload'
 import { Entrance } from '@/components/ui/Entrance'
 import { LoadingProgress } from '@/components/ui/LoadingProgress'
+import { StatsBar } from '@/components/ui/StatsBar'
+import { ScreenReaderAnnouncer } from '@/components/ui/ScreenReaderAnnouncer'
 
 // Lazy load 3D scene - critical for < 200KB landing bundle
 const GalaxyScene = dynamic(() => import('@/components/3d/GalaxyScene'), {
@@ -85,6 +87,7 @@ export default function HomePage() {
         <ProjectModal />
       </Suspense>
       <KeyboardNavigation />
+      <ScreenReaderAnnouncer />
       <PerformanceMonitor />
       <KeyboardShortcutsHelp />
 
@@ -125,6 +128,7 @@ export default function HomePage() {
             >
               More about me →
             </Link>
+            <StatsBar />
           </FadeIn>
         </div>
       </header>
