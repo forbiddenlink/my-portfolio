@@ -16,13 +16,19 @@ export function InteractiveParticles({ count = 40 }: InteractiveParticlesProps) 
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    // Set canvas size
+    // Set canvas size with debounced resize
     const resize = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
     }
     resize()
-    window.addEventListener('resize', resize)
+
+    let resizeTimeout: ReturnType<typeof setTimeout>
+    const debouncedResize = () => {
+      clearTimeout(resizeTimeout)
+      resizeTimeout = setTimeout(resize, 150)
+    }
+    window.addEventListener('resize', debouncedResize)
 
     // Particle class
     class Particle {
@@ -140,7 +146,8 @@ export function InteractiveParticles({ count = 40 }: InteractiveParticlesProps) 
     animate()
 
     return () => {
-      window.removeEventListener('resize', resize)
+      clearTimeout(resizeTimeout)
+      window.removeEventListener('resize', debouncedResize)
       window.removeEventListener('mousemove', handleMouseMove)
     }
   }, [count])
