@@ -55,12 +55,11 @@ export function GalaxyNavigation() {
             <button
               onClick={reset}
               className={cn(
-                'ripple-button group flex items-center gap-3 rounded-xl transition-all duration-300 relative overflow-hidden',
+                'ripple-button group flex items-center gap-3 py-3.5 px-4 rounded-xl transition-all duration-300 relative overflow-hidden',
                 view === 'universe'
                   ? 'bg-white/20 shadow-lg scale-105 backdrop-blur-sm'
                   : 'hover:bg-white/10 hover:scale-105'
               )}
-              style={{ padding: '0.875rem 1rem' }}
               aria-label="View all galaxies"
             >
               <div className={cn(
@@ -80,12 +79,11 @@ export function GalaxyNavigation() {
                 key={galaxy.id}
                 onClick={() => zoomToGalaxy(galaxy.id)}
                 className={cn(
-                  'ripple-button group flex items-center gap-3 rounded-xl transition-all duration-300 relative overflow-hidden',
+                  'ripple-button group flex items-center gap-3 py-3.5 px-4 rounded-xl transition-all duration-300 relative overflow-hidden',
                   selectedGalaxy === galaxy.id
                     ? 'bg-white/20 shadow-lg scale-105 backdrop-blur-sm'
                     : 'hover:bg-white/10 hover:scale-105'
                 )}
-                style={{ padding: '0.875rem 1rem' }}
                 aria-label={`View ${galaxy.name}`}
               >
                 <div
@@ -109,8 +107,7 @@ export function GalaxyNavigation() {
             {/* Take the Tour button */}
             <button
               onClick={startJourney}
-              className="ripple-button group flex items-center gap-3 rounded-xl transition-all duration-300 relative overflow-hidden hover:bg-gradient-to-r hover:from-indigo-500/20 hover:to-purple-500/20 hover:scale-105"
-              style={{ padding: '0.875rem 1rem' }}
+              className="ripple-button group flex items-center gap-3 py-3.5 px-4 rounded-xl transition-all duration-300 relative overflow-hidden hover:bg-gradient-to-r hover:from-indigo-500/20 hover:to-purple-500/20 hover:scale-105"
               aria-label="Take the guided tour"
             >
               <div className="w-3 h-3 flex items-center justify-center">

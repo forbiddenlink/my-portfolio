@@ -16,8 +16,7 @@ export function ContactSection() {
       <MagneticButton strength={0.3} tiltStrength={10}>
       <a
         href="mailto:purplegumdropz@gmail.com"
-        className="group flex items-center gap-3 bg-white/15 backdrop-blur-xl border border-white/30 hover:bg-white/25 hover:border-white/40 rounded-xl transition-all duration-300"
-        style={{ padding: '1.25rem 2rem' }}
+        className="group flex items-center gap-3 py-5 px-8 bg-white/15 backdrop-blur-xl border border-white/30 hover:bg-white/25 hover:border-white/40 rounded-xl transition-all duration-300"
         title="Send me an email"
       >
         <Mail className="w-5 h-5 text-white/80 group-hover:text-white" />
@@ -30,8 +29,7 @@ export function ContactSection() {
           href="https://linkedin.com/in/imkindageeky"
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-white/15 backdrop-blur-xl border border-white/30 hover:bg-white/25 hover:border-white/40 rounded-xl transition-all duration-300 hover:scale-110"
-          style={{ padding: '1.25rem' }}
+          className="p-5 bg-white/15 backdrop-blur-xl border border-white/30 hover:bg-white/25 hover:border-white/40 rounded-xl transition-all duration-300 hover:scale-110"
           title="LinkedIn"
         >
           <Linkedin className="w-5 h-5 text-white/80 hover:text-white" />
@@ -41,8 +39,7 @@ export function ContactSection() {
           href="https://github.com/forbiddenlink"
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-white/15 backdrop-blur-xl border border-white/30 hover:bg-white/25 hover:border-white/40 rounded-xl transition-all duration-300 hover:scale-110"
-          style={{ padding: '1.25rem' }}
+          className="p-5 bg-white/15 backdrop-blur-xl border border-white/30 hover:bg-white/25 hover:border-white/40 rounded-xl transition-all duration-300 hover:scale-110"
           title="GitHub"
         >
           <Github className="w-5 h-5 text-white/80 hover:text-white" />

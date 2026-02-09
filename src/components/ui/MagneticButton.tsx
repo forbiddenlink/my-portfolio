@@ -91,9 +91,8 @@ export function MagneticButton({
   return (
     <div 
       ref={magneticAreaRef}
-      className="inline-block"
-      style={{ 
-        padding: '20px',
+      className="inline-block p-5"
+            style={{
         perspective: '1000px'
       }}
     >
@@ -102,7 +101,7 @@ export function MagneticButton({
         className={`${className} ${isHovered && glowOnHover ? 'magnetic-glow' : ''}`}
         onClick={onClick}
         href={href}
-        style={{
+              style={{
           transformStyle: 'preserve-3d',
           transition: glowOnHover ? 'box-shadow 0.3s ease' : 'none'
         }}

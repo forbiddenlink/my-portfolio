@@ -210,7 +210,7 @@ export function CommandPalette() {
                 setIsOpen(false)
                 setSearch('')
               }}
-              className="text-gray-400 hover:text-white transition-colors"
+              className="p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/10"
               title="Close command palette"
               aria-label="Close command palette"
             >

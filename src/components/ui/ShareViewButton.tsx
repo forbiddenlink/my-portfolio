@@ -46,8 +46,7 @@ export function ShareViewButton() {
   return (
     <div
       onClick={handleShare}
-      className="flex items-center justify-center gap-3 min-w-[200px] rounded-xl bg-black/30 backdrop-blur-xl border border-white/20 text-white/80 hover:bg-black/40 hover:text-white hover:border-white/30 transition-all duration-300 shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
-      style={{ padding: '1.25rem 2rem' }}
+      className="flex items-center justify-center gap-3 py-5 px-8 min-w-[200px] rounded-xl bg-black/30 backdrop-blur-xl border border-white/20 text-white/80 hover:bg-black/40 hover:text-white hover:border-white/30 transition-all duration-300 shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
       title="Share this view"
       role="button"
       tabIndex={0}
