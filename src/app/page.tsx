@@ -1,0 +1,187 @@
+'use client'
+
+import dynamic from 'next/dynamic'
+import Link from 'next/link'
+import { Suspense } from 'react'
+import { DeepLinkHandler } from '@/components/ui/DeepLinkHandler'
+import { ProjectModal } from '@/components/ui/ProjectModal'
+import { KeyboardNavigation } from '@/components/ui/KeyboardNavigation'
+import { PerformanceMonitor } from '@/components/ui/PerformanceMonitor'
+import { KeyboardShortcutsHelp } from '@/components/ui/KeyboardShortcutsHelp'
+import { CustomCursor } from '@/components/ui/CustomCursor'
+import { AnimatedText, FadeIn } from '@/components/ui/AnimatedText'
+import { InteractiveParticles } from '@/components/ui/InteractiveParticles'
+import { RippleEffect } from '@/components/ui/RippleEffect'
+import { SoundManager } from '@/components/ui/SoundManager'
+import { TouchGestures } from '@/components/ui/TouchGestures'
+import { MagneticButton } from '@/components/ui/MagneticButton'
+import { MorphingShape } from '@/components/ui/MorphingShape'
+import { GlowOrb } from '@/components/ui/FloatingElement'
+import { SpotlightCursor } from '@/components/ui/SpotlightCursor'
+import { CommandPalette } from '@/components/ui/CommandPalette'
+import { ParticleTrail } from '@/components/ui/ParticleTrail'
+import { ShareViewButton } from '@/components/ui/ShareViewButton'
+import { ExplorationOverlay } from '@/components/ui/ExplorationOverlay'
+import { ContactSection } from '@/components/ui/ContactSection'
+import { ResumeDownload } from '@/components/ui/ResumeDownload'
+import { GalaxyGuide } from '@/components/ui/GalaxyGuide'
+import { Entrance } from '@/components/ui/Entrance'
+import { LoadingProgress } from '@/components/ui/LoadingProgress'
+
+// Lazy load 3D scene - critical for < 200KB landing bundle
+const GalaxyScene = dynamic(() => import('@/components/3d/GalaxyScene'), {
+  ssr: false,
+  loading: () => <LoadingProgress />,
+})
+
+export default function HomePage() {
+  return (
+    <main className="relative w-full h-screen overflow-hidden bg-black">
+      {/* Skip Link for Accessibility */}
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:text-black focus:rounded-lg focus:font-medium">
+        Skip to main content
+      </a>
+
+      {/* Fullscreen 3D Scene - MUST BE FIRST for proper z-index */}
+      <div className="absolute inset-0 z-0" aria-hidden="true">
+        <GalaxyScene />
+      </div>
+
+      {/* Custom Cursor - Decorative */}
+      <div aria-hidden="true">
+        <CustomCursor />
+      </div>
+
+      {/* Decorative Visual Effects */}
+      <div aria-hidden="true">
+        <SpotlightCursor />
+        <ParticleTrail />
+      </div>
+
+      {/* Ripple Effect */}
+      <RippleEffect />
+
+      {/* Sound Manager */}
+      <SoundManager />
+
+      {/* Touch Gestures */}
+      <TouchGestures />
+
+      {/* Command Palette (CMD+K) */}
+      <CommandPalette />
+
+      {/* Exploration Mode Overlay */}
+      <ExplorationOverlay />
+
+      {/* Contact & Social Links */}
+      <ContactSection />
+
+      {/* Resume Download */}
+      <ResumeDownload />
+
+      {/* Hidden handlers */}
+      <Suspense fallback={null}>
+        <DeepLinkHandler />
+        <ProjectModal />
+      </Suspense>
+      <KeyboardNavigation />
+      <PerformanceMonitor />
+      <KeyboardShortcutsHelp />
+
+      {/* Decorative Background Elements */}
+      <div aria-hidden="true">
+        <MorphingShape />
+        {/* Ambient Glow Orbs - Responsive sizing */}
+        <div className="hidden md:block">
+          <GlowOrb color="#6366F1" size={300} x={20} y={30} />
+          <GlowOrb color="#A855F7" size={250} x={80} y={60} />
+          <GlowOrb color="#EC4899" size={200} x={50} y={80} />
+        </div>
+        <div className="md:hidden">
+          <GlowOrb color="#6366F1" size={120} x={15} y={25} />
+          <GlowOrb color="#A855F7" size={100} x={85} y={55} />
+          <GlowOrb color="#EC4899" size={80} x={50} y={80} />
+        </div>
+      </div>
+
+      {/* Interactive Particles Layer */}
+      <InteractiveParticles count={50} />
+
+      {/* Header Overlay - Top Left */}
+      <header id="main-content" className="absolute top-4 left-4 md:top-10 md:left-10 z-10 pointer-events-none">
+        <div className="glass-card rounded-2xl p-4 md:p-8">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 tracking-tight text-white leading-tight drop-shadow-2xl">
+            <AnimatedText type="chars" stagger={0.05}>
+              Elizabeth Stein
+            </AnimatedText>
+          </h1>
+          <FadeIn delay={0.8} direction="up">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/95 max-w-xl leading-relaxed mb-4 drop-shadow-lg">
+              Full-stack developer + design systems + AI integration
+            </p>
+            <Link
+              href="/about"
+              className="pointer-events-auto inline-block text-sm text-white/70 hover:text-white transition-colors duration-200 underline underline-offset-4 drop-shadow-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/50 rounded"
+            >
+              More about me →
+            </Link>
+          </FadeIn>
+        </div>
+      </header>
+
+      {/* Quick Actions - Bottom Left */}
+      <FadeIn delay={1.2} direction="up" className="absolute bottom-4 left-4 right-4 md:bottom-10 md:left-10 md:right-auto z-10 flex flex-col md:flex-row flex-wrap gap-3 md:gap-4 items-stretch md:items-center">
+        <MagneticButton strength={0.3}>
+          <Link
+            href="/work"
+            className="ripple-button group w-full md:min-w-[200px] rounded-xl bg-white/15 backdrop-blur-xl border border-white/30 text-white font-semibold hover:bg-white/25 hover:border-white/40 transition-all duration-300 shadow-2xl hover:shadow-white/20 hover:scale-105 pointer-events-auto flex items-center justify-center gap-3 px-6 py-4 md:px-8"
+          >
+            <span className="whitespace-nowrap leading-none">View all work</span>
+            <span className="inline-block transition-transform group-hover:translate-x-1 leading-none">→</span>
+          </Link>
+        </MagneticButton>
+        <MagneticButton strength={0.25}>
+          <Link
+            href="/work"
+            className="ripple-button w-full md:min-w-[200px] rounded-xl bg-black/30 backdrop-blur-xl border border-white/20 text-white/80 hover:bg-black/40 hover:text-white hover:border-white/30 transition-all duration-300 shadow-xl pointer-events-auto flex items-center justify-center px-6 py-4 md:px-8"
+          >
+            <span className="whitespace-nowrap leading-none">Traditional view</span>
+          </Link>
+        </MagneticButton>
+        <div className="pointer-events-auto hidden md:block">
+          <ShareViewButton />
+        </div>
+      </FadeIn>
+
+      {/* AI Galaxy Guide */}
+      <GalaxyGuide />
+
+      {/* Instructions - Bottom Right (hidden on mobile) */}
+      <FadeIn delay={1.4} direction="left" className="hidden md:block absolute bottom-10 right-10 z-10">
+        <nav aria-label="Keyboard shortcuts" className="glass-card rounded-2xl p-6 text-right text-sm text-white space-y-3 font-medium max-w-xs">
+          <p className="flex items-center justify-end gap-2.5">
+            <span className="text-white/60 text-base" aria-hidden="true">✨</span>
+            <span className="drop-shadow-md">Click stars to explore projects</span>
+          </p>
+          <p className="flex items-center justify-end gap-2.5">
+            <span className="text-white/60 text-base" aria-hidden="true">⌨️</span>
+            <span className="drop-shadow-md">Arrow keys to navigate</span>
+          </p>
+          <p className="flex items-center justify-end gap-2.5">
+            <kbd className="text-white/60 text-xs bg-white/10 px-1.5 py-0.5 rounded">1-6</kbd>
+            <span className="drop-shadow-md">Jump to galaxy</span>
+          </p>
+          <p className="flex items-center justify-end gap-2.5">
+            <kbd className="text-white/60 text-xs bg-white/10 px-1.5 py-0.5 rounded">ESC</kbd>
+            <span className="drop-shadow-md">Zoom out</span>
+            <span className="text-white/40">•</span>
+            <kbd className="text-white/60 text-xs bg-white/10 px-1.5 py-0.5 rounded">H</kbd>
+            <span className="drop-shadow-md">Home</span>
+          </p>
+        </nav>
+      </FadeIn>
+      {/* Entrance Overlay - MUST BE LAST to sit on top of everything until dismissed */}
+      <Entrance />
+    </main>
+  )
+}

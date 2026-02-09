@@ -1,0 +1,22 @@
+# Dependencies
+node_modules
+
+# Build outputs
+.next/
+.vercel
+tsconfig.tsbuildinfo
+
+# Environment variables
+.env
+.env.local
+.env*.local
+
+# Editor/IDE
+.history/
+.vscode/
+
+# Testing
+.playwright-mcp/
+
+# VS Code AI rules
+.github/instructions/codacy.instructions.md
