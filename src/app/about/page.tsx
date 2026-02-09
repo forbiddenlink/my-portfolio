@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { Code2, Palette, Cpu, Sparkles } from 'lucide-react'
+import { Code2, Palette, Cpu, Sparkles, Github, Linkedin } from 'lucide-react'
 import { StarryBackground } from '@/components/ui/StarryBackground'
 
 export const metadata: Metadata = {
@@ -270,14 +270,54 @@ export default function AboutPage() {
                 View My Work
               </Link>
             </div>
+            <div className="flex justify-center gap-6 mt-8">
+              <a
+                href="https://github.com/forbiddenlink"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/50 hover:text-white transition-colors"
+                aria-label="GitHub Profile"
+              >
+                <Github className="w-6 h-6" />
+              </a>
+              <a
+                href="https://linkedin.com/in/elizabeth-stein"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/50 hover:text-white transition-colors"
+                aria-label="LinkedIn Profile"
+              >
+                <Linkedin className="w-6 h-6" />
+              </a>
+            </div>
           </section>
         </div>
       </div>
 
       {/* Footer */}
       <footer className="border-t border-white/10 py-8 relative z-10 bg-black/20 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-6 text-center text-white/40 text-sm">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-white/40 text-sm">
           <p>© {new Date().getFullYear()} Elizabeth Stein. Built with Next.js, React, Three.js, and a lot of coffee.</p>
+          <div className="flex items-center gap-4">
+            <a
+              href="https://github.com/forbiddenlink"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors"
+              aria-label="GitHub"
+            >
+              <Github className="w-5 h-5" />
+            </a>
+            <a
+              href="https://linkedin.com/in/elizabeth-stein"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors"
+              aria-label="LinkedIn"
+            >
+              <Linkedin className="w-5 h-5" />
+            </a>
+          </div>
         </div>
       </footer>
     </main>
