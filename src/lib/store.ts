@@ -64,7 +64,7 @@ export const useViewStore = create<ViewStore>((set, get) => ({
   enter: () => set({ hasEntered: true }),
 
   reset: () =>
-    set({ view: 'universe', selectedGalaxy: null, selectedProject: null, isLanding: false, hasEntered: false }),
+    set({ view: 'universe', selectedGalaxy: null, selectedProject: null, isLanding: false }),
 
   // Navigation with state transitions
   zoomToGalaxy: (galaxyId) => {
