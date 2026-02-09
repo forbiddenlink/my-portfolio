@@ -2,16 +2,17 @@
 
 import { useViewStore } from '@/lib/store'
 import { getProjectById } from '@/lib/galaxyData'
-import { ExternalLink, Github } from 'lucide-react'
+import { ExternalLink, Github, X } from 'lucide-react'
 
 export function HolographicProjectPanel({ show }: { show: boolean }) {
   const selectedProject = useViewStore((state) => state.selectedProject)
+  const reset = useViewStore((state) => state.reset)
   const project = selectedProject ? getProjectById(selectedProject) : null
 
   if (!show || !project) return null
 
   return (
-    <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 pointer-events-none animate-in fade-in zoom-in-95 duration-500">
+    <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 pointer-events-auto animate-in fade-in zoom-in-95 duration-500">
       <div
         className="relative bg-black/40 backdrop-blur-2xl border-2 rounded-2xl p-8 max-w-2xl"
         style={{
@@ -24,6 +25,15 @@ export function HolographicProjectPanel({ show }: { show: boolean }) {
         <div className="absolute inset-0 pointer-events-none opacity-10">
           <div className="h-full w-full bg-gradient-to-b from-transparent via-white to-transparent animate-pulse" style={{ backgroundSize: '100% 4px' }} />
         </div>
+
+        {/* Close button */}
+        <button
+          onClick={reset}
+          className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 pointer-events-auto"
+          aria-label="Close project panel"
+        >
+          <X className="w-5 h-5 text-white/70 hover:text-white" />
+        </button>
 
         {/* Content */}
         <div className="relative z-10">
