@@ -3,6 +3,7 @@
 import { Mail, Linkedin, Github } from 'lucide-react'
 import { MagneticButton } from './MagneticButton'
 import { useViewStore } from '@/lib/store'
+import { CONTACT } from '@/lib/constants'
 
 export function ContactSection() {
   const isJourneyMode = useViewStore((state) => state.isJourneyMode)
@@ -15,7 +16,7 @@ export function ContactSection() {
     <div className="fixed top-auto bottom-32 right-6 z-20 flex flex-col gap-3 md:top-[28rem] md:bottom-auto">
       <MagneticButton strength={0.3} tiltStrength={10}>
       <a
-        href="mailto:purplegumdropz@gmail.com"
+        href={`mailto:${CONTACT.email}`}
         className="group flex items-center gap-3 py-5 px-8 bg-white/15 backdrop-blur-xl border border-white/30 hover:bg-white/25 hover:border-white/40 rounded-xl transition-all duration-300"
         title="Send me an email"
       >
@@ -26,7 +27,7 @@ export function ContactSection() {
 
       <div className="flex gap-2">
         <a
-          href="https://linkedin.com/in/imkindageeky"
+          href={CONTACT.linkedin}
           target="_blank"
           rel="noopener noreferrer"
           className="p-5 bg-white/15 backdrop-blur-xl border border-white/30 hover:bg-white/25 hover:border-white/40 rounded-xl transition-all duration-300 hover:scale-110"
@@ -37,7 +38,7 @@ export function ContactSection() {
         </a>
 
         <a
-          href="https://github.com/forbiddenlink"
+          href={CONTACT.github}
           target="_blank"
           rel="noopener noreferrer"
           className="p-5 bg-white/15 backdrop-blur-xl border border-white/30 hover:bg-white/25 hover:border-white/40 rounded-xl transition-all duration-300 hover:scale-110"

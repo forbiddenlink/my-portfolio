@@ -1,11 +1,12 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { STATS } from '@/lib/constants'
 
 const stats = [
-  { label: 'Projects', value: '40+' },
-  { label: 'Tests', value: '1,200+' },
-  { label: 'Years', value: '6+' },
+  { label: 'Projects', value: STATS.projectCount },
+  { label: 'Tests', value: STATS.testCount },
+  { label: 'Years', value: STATS.yearsExperience },
 ]
 
 export function StatsBar() {
