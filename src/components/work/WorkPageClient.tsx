@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
-import { ExternalLink, Github } from 'lucide-react'
+import { ExternalLink, Github, Search, X } from 'lucide-react'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
 import { SplitWords } from '@/components/ui/SplitText'
 import { TiltCard } from '@/components/ui/TiltCard'
@@ -41,13 +41,29 @@ interface WorkPageClientProps {
 
 export function WorkPageClient({ galaxies }: WorkPageClientProps) {
   const [selectedGalaxy, setSelectedGalaxy] = useState<string | null>(null)
+  const [searchQuery, setSearchQuery] = useState('')
 
   const allProjects = useMemo(() => galaxies.flatMap(g => g.projects), [galaxies])
 
   const filteredGalaxies = useMemo(() => {
-    if (!selectedGalaxy) return galaxies
-    return galaxies.filter(g => g.id === selectedGalaxy)
-  }, [galaxies, selectedGalaxy])
+    let filtered = selectedGalaxy
+      ? galaxies.filter(g => g.id === selectedGalaxy)
+      : galaxies
+
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase()
+      filtered = filtered.map(galaxy => ({
+        ...galaxy,
+        projects: galaxy.projects.filter(p =>
+          p.title.toLowerCase().includes(query) ||
+          p.description.toLowerCase().includes(query) ||
+          p.tags.some(tag => tag.toLowerCase().includes(query))
+        )
+      })).filter(g => g.projects.length > 0)
+    }
+
+    return filtered
+  }, [galaxies, selectedGalaxy, searchQuery])
 
   const projectCount = useMemo(() => {
     return filteredGalaxies.reduce((acc, g) => acc + g.projects.length, 0)
@@ -87,9 +103,32 @@ export function WorkPageClient({ galaxies }: WorkPageClientProps) {
         </ScrollReveal>
       </header>
 
-      {/* Filter */}
+      {/* Search and Filter */}
       <ScrollReveal direction="up" delay={0.7}>
-        <div className="mb-12">
+        <div className="mb-12 space-y-4">
+          {/* Search Input */}
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+            <input
+              type="text"
+              placeholder="Search projects, technologies..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-10 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/30 focus:outline-none focus:border-white/20 focus:bg-white/10 transition-all text-sm"
+              aria-label="Search projects"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/60 transition-colors"
+                aria-label="Clear search"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+          {/* Galaxy Filter */}
           <GalaxyFilter
             galaxies={galaxies.map(g => ({ id: g.id, name: g.name, color: g.color }))}
             selectedGalaxy={selectedGalaxy}
@@ -97,6 +136,22 @@ export function WorkPageClient({ galaxies }: WorkPageClientProps) {
           />
         </div>
       </ScrollReveal>
+
+      {/* No Results Message */}
+      {filteredGalaxies.length === 0 && (
+        <div className="text-center py-16">
+          <p className="text-white/50 text-lg mb-4">No projects found for "{searchQuery}"</p>
+          <button
+            onClick={() => {
+              setSearchQuery('')
+              setSelectedGalaxy(null)
+            }}
+            className="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white/70 hover:bg-white/15 hover:text-white transition-all text-sm"
+          >
+            Clear filters
+          </button>
+        </div>
+      )}
 
       {/* Projects by Galaxy - Bento Grid */}
       {filteredGalaxies.map((galaxy, galaxyIdx) => {
