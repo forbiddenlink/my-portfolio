@@ -444,26 +444,26 @@ function RealisticPlanet({
         />
       </mesh>
       
-      {/* Atmosphere glow */}
-      <mesh ref={atmosphereRef} scale={1.15}>
+      {/* Atmosphere glow - reduced size to prevent overlap */}
+      <mesh ref={atmosphereRef} scale={1.1}>
         <sphereGeometry args={[sizeMultiplier, 32, 32]} />
         <meshBasicMaterial
           color={project.color}
           transparent
-          opacity={hovered ? 0.35 : 0.2}
+          opacity={hovered ? 0.3 : 0.15}
           side={THREE.BackSide}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
         />
       </mesh>
-      
-      {/* Outer atmosphere haze */}
-      <mesh scale={1.25}>
+
+      {/* Outer atmosphere haze - reduced size */}
+      <mesh scale={1.18}>
         <sphereGeometry args={[sizeMultiplier, 24, 24]} />
         <meshBasicMaterial
           color={project.color}
           transparent
-          opacity={hovered ? 0.2 : 0.1}
+          opacity={hovered ? 0.15 : 0.08}
           side={THREE.BackSide}
           blending={THREE.AdditiveBlending}
           depthWrite={false}

@@ -16,6 +16,7 @@ interface ProjectPosition {
 }
 
 export function MinimapNavigator() {
+  // ALL hooks must be called before any early returns to follow React's rules of hooks
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const projectPositionsRef = useRef<ProjectPosition[]>([])
   const [isExpanded, setIsExpanded] = useState(false)
@@ -25,13 +26,12 @@ export function MinimapNavigator() {
   const isJourneyMode = useViewStore((state) => state.isJourneyMode)
   const view = useViewStore((state) => state.view)
 
-  // Hide during journey mode and exploration mode
-  if (isJourneyMode || view === 'exploration') return null
-
   const size = isExpanded ? 300 : 180
   const padding = 20
 
   useEffect(() => {
+    // Skip effect when hidden
+    if (isJourneyMode || view === 'exploration') return
     const canvas = canvasRef.current
     if (!canvas) return
 
@@ -128,7 +128,10 @@ export function MinimapNavigator() {
     ctx.arc(offsetX, offsetY, 2, 0, Math.PI * 2)
     ctx.fill()
 
-  }, [size, selectedProject, hoveredProject])
+  }, [size, selectedProject, hoveredProject, isJourneyMode, view])
+
+  // Hide during journey mode and exploration mode - AFTER all hooks are called
+  if (isJourneyMode || view === 'exploration') return null
 
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current
@@ -181,7 +184,7 @@ export function MinimapNavigator() {
   }
 
   return (
-    <div className="fixed top-32 right-6 z-10 group">
+    <div className="fixed top-32 right-6 z-10 group hidden md:block">
       <div className="relative">
         {/* Canvas */}
         <canvas

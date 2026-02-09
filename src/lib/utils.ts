@@ -55,12 +55,14 @@ export function generateProjectPosition(
   const galaxyZ = Math.sin(galaxyAngle) * galaxyRadius
 
   // Project positioning within galaxy (distribute in a sphere)
+  // Use Fibonacci sphere for better distribution
   const theta = rng() * Math.PI * 2
   const phi = Math.acos(2 * rng() - 1)
-  const radius = 5 + rng() * 12 // 5-17 units from galaxy center
+  // Increased minimum radius to reduce overlap (was 5-17, now 7-20)
+  const radius = 7 + rng() * 13
 
   const x = galaxyX + radius * Math.sin(phi) * Math.cos(theta)
-  const y = radius * Math.sin(phi) * Math.sin(theta)
+  const y = radius * Math.sin(phi) * Math.sin(theta) * 0.8 // Flatten slightly for better visibility
   const z = galaxyZ + radius * Math.cos(phi)
 
   return [x, y, z]

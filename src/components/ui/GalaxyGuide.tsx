@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
-import { Send, Sparkles, X, MessageSquare, User, Bot, Loader2 } from 'lucide-react'
+import { Send, Sparkles, X, User, Bot, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useViewStore } from '@/lib/store'
 
@@ -11,11 +11,9 @@ interface Message {
 }
 
 export function GalaxyGuide() {
+    // ALL hooks must be called before any early returns to follow React's rules of hooks
     const isJourneyMode = useViewStore((state) => state.isJourneyMode)
     const view = useViewStore((state) => state.view)
-
-    // Hide during journey mode and exploration mode
-    if (isJourneyMode || view === 'exploration') return null
     const [isOpen, setIsOpen] = useState(false)
     const [messages, setMessages] = useState<Message[]>([
         { role: 'assistant', content: "Greetings! I am your Galaxy Guide. How can I assist you in navigating Elizabeth's universe of code today?" }
@@ -38,6 +36,9 @@ export function GalaxyGuide() {
             inputRef.current.focus()
         }
     }, [isOpen])
+
+    // Hide during journey mode and exploration mode - AFTER all hooks are called
+    if (isJourneyMode || view === 'exploration') return null
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
