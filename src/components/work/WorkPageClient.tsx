@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
+import { motion } from 'framer-motion'
 import { ExternalLink, Github, Search, X } from 'lucide-react'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
 import { SplitWords } from '@/components/ui/SplitText'
@@ -11,6 +12,21 @@ import { GalaxyFilter } from '@/components/ui/GalaxyFilter'
 import { formatDateRange, cn } from '@/lib/utils'
 import type { Galaxy, Project } from '@/lib/types'
 
+// Stagger animation variants for project cards
+const cardVariants = {
+  hidden: { opacity: 0, y: 20, filter: 'blur(4px)' },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: {
+      delay: i * 0.06,
+      duration: 0.4,
+      ease: [0.22, 1, 0.36, 1] as const,
+    },
+  }),
+}
+
 function ProjectLinks({ project }: { project: Project }) {
   if (!project.links) return null
   const hasLive = !!project.links.live
@@ -18,17 +34,23 @@ function ProjectLinks({ project }: { project: Project }) {
   if (!hasLive && !hasGithub) return null
 
   return (
-    <div className="flex items-center gap-2 text-white/30">
+    <div className="flex items-center gap-2">
       {hasLive && (
-        <span className="flex items-center gap-1 text-[10px]" title="Live demo available">
+        <span
+          className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400/80 text-[10px] border border-emerald-500/20 group-hover:bg-emerald-500/20 group-hover:border-emerald-500/30 transition-all"
+          title="Live demo available"
+        >
           <ExternalLink className="w-3 h-3" />
-          <span className="sr-only">Live demo</span>
+          <span className="hidden sm:inline">Live demo</span>
         </span>
       )}
       {hasGithub && (
-        <span className="flex items-center gap-1 text-[10px]" title="Source code available">
+        <span
+          className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400/80 text-[10px] border border-purple-500/20 group-hover:bg-purple-500/20 group-hover:border-purple-500/30 transition-all"
+          title="Source code available"
+        >
           <Github className="w-3 h-3" />
-          <span className="sr-only">Source code</span>
+          <span className="hidden sm:inline">Source code</span>
         </span>
       )}
     </div>
@@ -173,34 +195,63 @@ export function WorkPageClient({ galaxies }: WorkPageClientProps) {
               <p className="text-white/40 mb-6 text-sm">{galaxy.description}</p>
             </ScrollReveal>
 
-            {/* Bento Grid */}
-            <div className="grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {/* Bento Grid with stagger animation */}
+            <motion.div
+              className="grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-50px' }}
+            >
               {/* Featured projects span 2 columns */}
               {featured.map((project, idx) => (
-                <TiltCard key={project.id} className={cn("h-full", idx === 0 && featured.length > 0 && "md:col-span-2")}>
+                <motion.div
+                  key={project.id}
+                  custom={idx}
+                  variants={cardVariants}
+                  className={cn("h-full", idx === 0 && featured.length > 0 && "md:col-span-2")}
+                >
+                <TiltCard className="h-full">
                   <Link
                     href={`/work/${project.id}`}
                     className={cn(
-                      'group block h-full rounded-xl border transition-all duration-200',
-                      'border-white/10 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/20',
+                      'group block h-full rounded-xl border transition-all duration-300 relative overflow-hidden',
+                      'border-white/10 bg-gradient-to-br from-white/[0.03] to-transparent',
+                      'hover:border-white/25 hover:from-white/[0.08] hover:to-white/[0.02]',
+                      'hover:shadow-[0_0_40px_var(--glow-color)]',
                       'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/30',
                       idx === 0 && featured.length > 0 ? 'p-8' : 'p-5'
                     )}
+                    style={{ '--glow-color': `${galaxy.color}30` } as React.CSSProperties}
                   >
-                    <div className="flex items-start justify-between mb-3">
+                    {/* Accent border line at top */}
+                    <div
+                      className="absolute top-0 left-0 right-0 h-[2px] opacity-60 group-hover:opacity-100 transition-opacity"
+                      style={{ background: `linear-gradient(90deg, transparent, ${galaxy.color}, transparent)` }}
+                    />
+
+                    <div className="flex items-start justify-between mb-3 gap-3">
                       <h3 className={cn(
-                        "font-semibold group-hover:text-white transition-colors text-white/90",
+                        "font-semibold transition-colors",
                         idx === 0 && featured.length > 0 ? "text-2xl" : "text-lg"
-                      )}>
-                        {project.title}
+                      )} style={{ color: 'white' }}>
+                        <span className="group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/70 group-hover:bg-clip-text group-hover:text-transparent transition-all">
+                          {project.title}
+                        </span>
                       </h3>
-                      <span className="px-2 py-0.5 text-[9px] font-medium uppercase tracking-wider bg-white/5 text-white/40 rounded">
+                      <span
+                        className="px-2 py-0.5 text-[9px] font-medium uppercase tracking-wider rounded flex-shrink-0"
+                        style={{
+                          backgroundColor: `${galaxy.color}20`,
+                          color: galaxy.color,
+                          border: `1px solid ${galaxy.color}40`
+                        }}
+                      >
                         Featured
                       </span>
                     </div>
 
                     <p className={cn(
-                      "text-white/40 mb-4 line-clamp-2 leading-relaxed group-hover:text-white/60 transition-colors",
+                      "text-white/50 mb-4 line-clamp-2 leading-relaxed group-hover:text-white/70 transition-colors",
                       idx === 0 && featured.length > 0 ? "text-base" : "text-sm"
                     )}>
                       {project.description}
@@ -210,37 +261,58 @@ export function WorkPageClient({ galaxies }: WorkPageClientProps) {
                       {project.tags.slice(0, 4).map((tag) => (
                         <span
                           key={tag}
-                          className="px-2 py-0.5 text-[10px] rounded bg-white/5 text-white/30"
+                          className="px-2 py-0.5 text-[10px] rounded transition-all duration-150 hover:scale-105"
+                          style={{
+                            backgroundColor: `${galaxy.color}10`,
+                            color: `${galaxy.color}cc`,
+                            border: `1px solid ${galaxy.color}20`
+                          }}
                         >
                           {tag}
                         </span>
                       ))}
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px] text-white/30 font-mono mt-auto pt-3 border-t border-white/5">
+                    <div className="flex items-center justify-between text-[11px] text-white/40 font-mono mt-auto pt-3 border-t border-white/10">
                       <span>{formatDateRange(project.dateRange)}</span>
                       <ProjectLinks project={project} />
                     </div>
                   </Link>
                 </TiltCard>
+                </motion.div>
               ))}
 
               {/* Regular projects */}
-              {regular.map((project) => (
-                <TiltCard key={project.id} className="h-full">
+              {regular.map((project, idx) => (
+                <motion.div
+                  key={project.id}
+                  custom={featured.length + idx}
+                  variants={cardVariants}
+                  className="h-full"
+                >
+                <TiltCard className="h-full">
                   <Link
                     href={`/work/${project.id}`}
                     className={cn(
-                      'group block h-full rounded-xl border transition-all duration-200 p-5',
-                      'border-white/10 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/20',
+                      'group block h-full rounded-xl border transition-all duration-300 p-5 relative overflow-hidden',
+                      'border-white/10 bg-gradient-to-br from-white/[0.02] to-transparent',
+                      'hover:border-white/20 hover:from-white/[0.06] hover:to-white/[0.01]',
+                      'hover:shadow-[0_0_30px_var(--glow-color)]',
                       'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/30'
                     )}
+                    style={{ '--glow-color': `${galaxy.color}25` } as React.CSSProperties}
                   >
-                    <h3 className="text-lg font-semibold mb-2 group-hover:text-white transition-colors text-white/90">
+                    {/* Subtle accent dot */}
+                    <div
+                      className="absolute top-4 right-4 w-2 h-2 rounded-full opacity-40 group-hover:opacity-80 transition-opacity group-hover:scale-125"
+                      style={{ backgroundColor: galaxy.color }}
+                    />
+
+                    <h3 className="text-lg font-semibold mb-2 text-white group-hover:text-white transition-colors">
                       {project.title}
                     </h3>
 
-                    <p className="text-sm text-white/40 mb-4 line-clamp-2 leading-relaxed group-hover:text-white/60 transition-colors">
+                    <p className="text-sm text-white/45 mb-4 line-clamp-2 leading-relaxed group-hover:text-white/65 transition-colors">
                       {project.description}
                     </p>
 
@@ -248,26 +320,32 @@ export function WorkPageClient({ galaxies }: WorkPageClientProps) {
                       {project.tags.slice(0, 3).map((tag) => (
                         <span
                           key={tag}
-                          className="px-2 py-0.5 text-[10px] rounded bg-white/5 text-white/30"
+                          className="px-2 py-0.5 text-[10px] rounded transition-all duration-150 hover:scale-105"
+                          style={{
+                            backgroundColor: `${galaxy.color}08`,
+                            color: `${galaxy.color}aa`,
+                            border: `1px solid ${galaxy.color}15`
+                          }}
                         >
                           {tag}
                         </span>
                       ))}
                       {project.tags.length > 3 && (
-                        <span className="text-[10px] text-white/20">
+                        <span className="text-[10px] text-white/30">
                           +{project.tags.length - 3}
                         </span>
                       )}
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px] text-white/30 font-mono mt-auto pt-3 border-t border-white/5">
+                    <div className="flex items-center justify-between text-[11px] text-white/35 font-mono mt-auto pt-3 border-t border-white/8">
                       <span>{formatDateRange(project.dateRange)}</span>
                       <ProjectLinks project={project} />
                     </div>
                   </Link>
                 </TiltCard>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </section>
         )
       })}

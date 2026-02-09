@@ -159,26 +159,46 @@ export function Entrance() {
                         </motion.div>
 
                         {/* Main title with letter animation */}
-                        <div className="space-y-2">
-                            <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-white">
-                                <div className="overflow-hidden">
-                                    {firstName.split('').map((char, i) => (
-                                        <AnimatedLetter key={i} char={char} index={i} total={firstName.length} />
-                                    ))}
+                        <div className="space-y-4">
+                            <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter">
+                                <div className="overflow-hidden flex items-center justify-center gap-4">
+                                    {/* Decorative star icon */}
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0, rotate: -180 }}
+                                        animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                                        transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                                        className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 flex-shrink-0"
+                                    >
+                                        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-400 to-indigo-600 animate-pulse" />
+                                        <div className="absolute inset-1 rounded-full bg-gradient-to-br from-fuchsia-300 to-purple-500" />
+                                        <div className="absolute inset-[6px] rounded-full bg-white/80" />
+                                        <motion.div
+                                            className="absolute inset-0 rounded-full border-2 border-purple-400/50"
+                                            animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
+                                            transition={{ duration: 2, repeat: Infinity }}
+                                        />
+                                    </motion.div>
+                                    <span className="bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(168,85,247,0.3)]">
+                                        {firstName.split('').map((char, i) => (
+                                            <AnimatedLetter key={i} char={char} index={i} total={firstName.length} />
+                                        ))}
+                                    </span>
                                 </div>
                                 <div className="overflow-hidden">
-                                    {lastName.split('').map((char, i) => (
-                                        <AnimatedLetter key={i} char={char} index={firstName.length + i} total={lastName.length} />
-                                    ))}
+                                    <span className="bg-gradient-to-r from-purple-200 via-white to-purple-200 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(168,85,247,0.3)]">
+                                        {lastName.split('').map((char, i) => (
+                                            <AnimatedLetter key={i} char={char} index={firstName.length + i} total={lastName.length} />
+                                        ))}
+                                    </span>
                                 </div>
                             </h1>
 
-                            {/* Gradient line under name */}
+                            {/* Enhanced gradient line under name */}
                             <motion.div
                                 initial={{ scaleX: 0, opacity: 0 }}
                                 animate={{ scaleX: 1, opacity: 1 }}
                                 transition={{ duration: 1, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
-                                className="h-[2px] w-full max-w-md mx-auto bg-gradient-to-r from-transparent via-indigo-500 to-transparent"
+                                className="h-[3px] w-full max-w-lg mx-auto bg-gradient-to-r from-transparent via-purple-500 to-transparent shadow-[0_0_20px_rgba(168,85,247,0.5)]"
                             />
                         </div>
 

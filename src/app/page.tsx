@@ -116,10 +116,18 @@ export default function HomePage() {
       {/* Header Overlay - Top Left (hidden during tour) */}
       <header id="main-content" tabIndex={-1} className={`absolute top-4 left-4 md:top-10 md:left-10 z-10 pointer-events-none transition-opacity duration-500 ${isJourneyMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         <div className="glass-card rounded-2xl p-4 md:p-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 tracking-tight text-white leading-tight drop-shadow-2xl">
-            <AnimatedText type="chars" stagger={0.05}>
-              Elizabeth Stein
-            </AnimatedText>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 tracking-tight leading-tight drop-shadow-2xl flex items-center gap-3 md:gap-4">
+            {/* Star icon */}
+            <span className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex-shrink-0 inline-flex items-center justify-center">
+              <span className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-400 to-indigo-600 animate-pulse" />
+              <span className="absolute inset-1 rounded-full bg-gradient-to-br from-fuchsia-300 to-purple-500" />
+              <span className="absolute inset-[5px] rounded-full bg-white/80" />
+            </span>
+            <span className="bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
+              <AnimatedText type="chars" stagger={0.05}>
+                Elizabeth Stein
+              </AnimatedText>
+            </span>
           </h1>
           <FadeIn delay={0.8} direction="up">
             <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/95 max-w-xl leading-relaxed mb-4 drop-shadow-lg">

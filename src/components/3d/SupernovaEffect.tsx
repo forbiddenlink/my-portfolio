@@ -96,23 +96,34 @@ export function SupernovaEffect({ position, color, size }: SupernovaEffectProps)
 
   return (
     <group position={position}>
-      {/* Blazing core */}
+      {/* Blazing core - orange-tinted for Enterprise supernova */}
       <mesh ref={coreRef}>
         <sphereGeometry args={[size, 48, 48]} />
         <meshBasicMaterial
-          color="#ffffff"
+          color="#FFE4C4"
           transparent
           opacity={1}
         />
       </mesh>
 
+      {/* Inner hot glow - bright orange center */}
+      <mesh scale={1.15}>
+        <sphereGeometry args={[size, 32, 32]} />
+        <meshBasicMaterial
+          color="#FF8C42"
+          transparent
+          opacity={0.95}
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
+
       {/* Hot inner glow */}
-      <mesh scale={1.3}>
+      <mesh scale={1.4}>
         <sphereGeometry args={[size, 32, 32]} />
         <meshBasicMaterial
           color={color}
           transparent
-          opacity={0.9}
+          opacity={0.85}
           blending={THREE.AdditiveBlending}
         />
       </mesh>

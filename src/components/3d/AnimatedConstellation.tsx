@@ -135,23 +135,35 @@ export function AnimatedConstellation() {
     })
     linesRef.current = []
 
-    // Create new lines
+    // Create new lines with enhanced visuals
     constellationData.lines.forEach((line) => {
-      // Main glowing line
+      // Create curved path for smoother look
       const curve = new THREE.LineCurve3(line.start, line.end)
-      const points = curve.getPoints(50)
+      const points = curve.getPoints(80)
       const geometry = new THREE.BufferGeometry().setFromPoints(points)
 
+      // Main bright line
       const material = new THREE.LineBasicMaterial({
-        color: '#FF6B35',
+        color: '#FF8C42',
         transparent: true,
-        opacity: 0.4,
+        opacity: 0.6,
         blending: THREE.AdditiveBlending
       })
 
       const lineObj = new THREE.Line(geometry, material)
       groupRef.current?.add(lineObj)
       linesRef.current.push(lineObj)
+
+      // Secondary glow line (thicker appearance via additional line)
+      const glowMaterial = new THREE.LineBasicMaterial({
+        color: '#FF6B35',
+        transparent: true,
+        opacity: 0.25,
+        blending: THREE.AdditiveBlending
+      })
+
+      const glowLine = new THREE.Line(geometry.clone(), glowMaterial)
+      groupRef.current?.add(glowLine)
     })
   }, [constellationData])
 
@@ -211,7 +223,7 @@ export function AnimatedConstellation() {
 
   return (
     <group ref={groupRef}>
-      {/* Flowing particles */}
+      {/* Flowing energy particles */}
       {particleData && (
         <points ref={particlesRef}>
           <bufferGeometry>
@@ -231,10 +243,10 @@ export function AnimatedConstellation() {
             />
           </bufferGeometry>
           <pointsMaterial
-            size={0.5}
-            color="#FF6B35"
+            size={0.7}
+            color="#FFAA66"
             transparent
-            opacity={0.9}
+            opacity={0.95}
             blending={THREE.AdditiveBlending}
             depthWrite={false}
             sizeAttenuation
@@ -242,16 +254,49 @@ export function AnimatedConstellation() {
         </points>
       )}
 
-      {/* Glow spheres at each node */}
+      {/* Enhanced glow nodes at each connection point */}
       {constellationData.lines.map((line, i) => (
         <group key={i}>
+          {/* Inner core */}
           <mesh position={line.start}>
-            <sphereGeometry args={[0.4, 16, 16]} />
+            <sphereGeometry args={[0.3, 16, 16]} />
+            <meshBasicMaterial
+              color="#FFFFFF"
+              transparent
+              opacity={0.9}
+            />
+          </mesh>
+          {/* Middle glow */}
+          <mesh position={line.start}>
+            <sphereGeometry args={[0.5, 16, 16]} />
+            <meshBasicMaterial
+              color="#FF8C42"
+              transparent
+              opacity={0.7}
+              blending={THREE.AdditiveBlending}
+            />
+          </mesh>
+          {/* Outer glow */}
+          <mesh position={line.start}>
+            <sphereGeometry args={[0.8, 16, 16]} />
             <meshBasicMaterial
               color="#FF6B35"
               transparent
-              opacity={0.6}
+              opacity={0.35}
               blending={THREE.AdditiveBlending}
+              depthWrite={false}
+            />
+          </mesh>
+          {/* Pulse ring */}
+          <mesh position={line.start} rotation={[Math.PI / 2, 0, i * 0.5]}>
+            <ringGeometry args={[0.6, 0.7, 32]} />
+            <meshBasicMaterial
+              color="#FF6B35"
+              transparent
+              opacity={0.5}
+              side={THREE.DoubleSide}
+              blending={THREE.AdditiveBlending}
+              depthWrite={false}
             />
           </mesh>
         </group>

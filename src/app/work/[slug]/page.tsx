@@ -79,9 +79,17 @@ export default async function ProjectPage({
         <div className="mx-auto px-6 py-4 flex items-center justify-between backdrop-blur-md bg-black/40 border-b border-white/10">
           <Link
             href="/"
-            className="text-2xl font-bold bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent hover:from-white/90 hover:to-white/70 transition-all duration-300"
+            className="flex items-center gap-3 group"
           >
-            Elizabeth Stein
+            {/* Star icon */}
+            <span className="relative w-7 h-7 flex-shrink-0 inline-flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <span className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-400 to-indigo-600" />
+              <span className="absolute inset-0.5 rounded-full bg-gradient-to-br from-fuchsia-300 to-purple-500" />
+              <span className="absolute inset-[4px] rounded-full bg-white/80" />
+            </span>
+            <span className="text-2xl font-bold bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent group-hover:from-purple-200 group-hover:via-white group-hover:to-purple-200 transition-all duration-300">
+              Elizabeth Stein
+            </span>
           </Link>
           <nav className="flex items-center gap-6">
             <Link

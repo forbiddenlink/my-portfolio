@@ -31,9 +31,17 @@ export default function AboutPage() {
         >
           <Link
             href="/"
-            className="text-2xl font-bold bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent hover:from-white/90 hover:to-white/70 transition-all duration-300"
+            className="flex items-center gap-3 group"
           >
-            Elizabeth Stein
+            {/* Star icon */}
+            <span className="relative w-7 h-7 flex-shrink-0 inline-flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <span className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-400 to-indigo-600" />
+              <span className="absolute inset-0.5 rounded-full bg-gradient-to-br from-fuchsia-300 to-purple-500" />
+              <span className="absolute inset-[4px] rounded-full bg-white/80" />
+            </span>
+            <span className="text-2xl font-bold bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent group-hover:from-purple-200 group-hover:via-white group-hover:to-purple-200 transition-all duration-300">
+              Elizabeth Stein
+            </span>
           </Link>
           <nav className="flex items-center gap-6">
             <Link
@@ -75,13 +83,13 @@ export default function AboutPage() {
             </h2>
             <div className="space-y-4 text-lg text-white/80 leading-relaxed bg-white/5 p-8 rounded-2xl border border-white/10 backdrop-blur-sm">
               <p>
-                I'm a software development student and UX/UI-minded builder who loves turning messy ideas into clean,
+                I'm a full-stack developer and UX/UI-minded builder who loves turning messy ideas into clean,
                 usable products. I care deeply about design details, accessibility, and making things feel fast and
                 intuitive — but I also enjoy the backend puzzle of APIs, data flows, and systems that actually hold up in real life.
               </p>
               <p>
                 I work best in small, shippable steps, with clear commits and documentation so future me
-                (and teammates) don't suffer. Currently pursuing my B.S. in Software Development at Capella University
+                (and teammates) don't suffer. <strong className="text-emerald-400/90">Available now</strong> — completing my B.S. in Software Development at Capella University
                 (graduating March 2026) with a 3.98 GPA while working as Design Team Lead at Flo Labs.
               </p>
             </div>
