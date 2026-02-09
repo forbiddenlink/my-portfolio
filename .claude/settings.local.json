@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc:*)",
+      "WebSearch",
+      "Bash(npm run build:*)",
+      "Bash(npm install:*)",
+      "Bash(pnpm add:*)",
+      "mcp__plugin_playwright_playwright__browser_click",
+      "mcp__plugin_playwright_playwright__browser_snapshot",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "Bash(find:*)",
+      "Bash(wc:*)",
+      "Bash(ls:*)",
+      "Bash(vercel project:*)",
+      "Bash(vercel whoami:*)",
+      "Bash(pnpm exec tsc:*)",
+      "Bash(python3:*)",
+      "Bash(playwright install:*)",
+      "Bash(curl:*)",
+      "mcp__plugin_playwright_playwright__browser_console_messages",
+      "mcp__plugin_playwright_playwright__browser_wait_for",
+      "mcp__plugin_playwright_playwright__browser_press_key",
+      "mcp__plugin_playwright_playwright__browser_resize",
+      "mcp__plugin_playwright_playwright__browser_close",
+      "WebFetch(domain:tympanus.net)",
+      "WebFetch(domain:www.utsubo.com)",
+      "mcp__plugin_context7_context7__resolve-library-id",
+      "mcp__plugin_context7_context7__query-docs",
+      "Bash(pnpm build:*)",
+      "Bash(~/.claude/scripts/spec_metadata.sh:*)"
+    ]
+  }
+}
