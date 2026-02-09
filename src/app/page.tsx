@@ -140,14 +140,6 @@ export default function HomePage() {
             <span className="inline-block transition-transform group-hover:translate-x-1 leading-none">→</span>
           </Link>
         </MagneticButton>
-        <MagneticButton strength={0.25}>
-          <Link
-            href="/work"
-            className="ripple-button w-full md:min-w-[200px] rounded-xl bg-black/30 backdrop-blur-xl border border-white/20 text-white/80 hover:bg-black/40 hover:text-white hover:border-white/30 transition-all duration-300 shadow-xl pointer-events-auto flex items-center justify-center px-6 py-4 md:px-8"
-          >
-            <span className="whitespace-nowrap leading-none">Traditional view</span>
-          </Link>
-        </MagneticButton>
         <div className="pointer-events-auto hidden md:block">
           <ShareViewButton />
         </div>

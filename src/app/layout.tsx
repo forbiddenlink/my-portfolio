@@ -110,14 +110,14 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className="">
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className={`h-full bg-black text-white antialiased ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
+      <body className={` bg-black text-white antialiased ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
         <SmoothScroll />
         <WarpTransition />
         <NebulaCursor />

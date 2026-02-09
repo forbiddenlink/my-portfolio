@@ -113,7 +113,7 @@ export function Entrance() {
                     {/* Multiple gradient layers for depth */}
                     <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-950/40 via-purple-950/20 to-transparent" />
                     <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent" />
-                    <div className="absolute inset-0 bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,rgba(99,102,241,0.05)_60deg,transparent_120deg)]" />
+                    <div className="absolute inset-0 bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,rgba(99,102,241,0.05)_60deg,transparent_120deg)] pointer-events-none" />
 
                     {/* Animated rings */}
                     <motion.div
