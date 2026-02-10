@@ -80,23 +80,24 @@ const planetFragmentShader = `
   uniform float time;
   uniform float seed;
   uniform int planetType; // 0=rocky, 1=gas, 2=ice, 3=lava
-  
+  uniform float hasCities; // 1.0 for planets with city lights
+
   varying vec2 vUv;
   varying vec3 vNormal;
   varying vec3 vPosition;
-  
+
   // Noise functions
   float hash(vec3 p) {
     p = fract(p * vec3(443.8975, 397.2973, 491.1871));
     p += dot(p, p.yxz + 19.19);
     return fract((p.x + p.y) * p.z);
   }
-  
+
   float noise(vec3 p) {
     vec3 i = floor(p);
     vec3 f = fract(p);
     f = f * f * (3.0 - 2.0 * f);
-    
+
     return mix(
       mix(mix(hash(i), hash(i + vec3(1,0,0)), f.x),
           mix(hash(i + vec3(0,1,0)), hash(i + vec3(1,1,0)), f.x), f.y),
@@ -105,7 +106,7 @@ const planetFragmentShader = `
       f.z
     );
   }
-  
+
   float fbm(vec3 p) {
     float value = 0.0;
     float amplitude = 0.5;
@@ -116,7 +117,7 @@ const planetFragmentShader = `
     }
     return value;
   }
-  
+
   // Turbulence for gas giant band edges
   float turbulence(vec3 p) {
     float value = 0.0;
@@ -127,6 +128,20 @@ const planetFragmentShader = `
       amplitude *= 0.5;
     }
     return value;
+  }
+
+  // City lights pattern
+  float cityLights(vec3 pos, float landMask, float latitude) {
+    // Cities prefer mid-latitudes and land areas
+    float latPref = smoothstep(0.0, 0.25, abs(latitude)) * smoothstep(0.75, 0.5, abs(latitude));
+    float landPref = smoothstep(0.35, 0.55, landMask) * smoothstep(0.85, 0.6, landMask);
+
+    // City cluster noise
+    float cityNoise = fbm(pos * 25.0 + seed);
+    float clusterNoise = fbm(pos * 8.0 + seed * 0.5);
+
+    float cities = smoothstep(0.5, 0.7, cityNoise) * smoothstep(0.35, 0.55, clusterNoise);
+    return cities * latPref * landPref;
   }
   
   void main() {
@@ -225,16 +240,38 @@ const planetFragmentShader = `
     
     // Lighting
     vec3 lightDir = normalize(vec3(1.0, 1.0, 1.0));
-    float diff = max(dot(vNormal, lightDir), 0.0);
+    float NdotL = dot(vNormal, lightDir);
+    float diff = max(NdotL, 0.0);
     float ambient = 0.3;
-    
+
+    // Day/night calculation for city lights
+    float daylight = smoothstep(-0.1, 0.2, NdotL);
+
     color *= (ambient + diff * 0.7);
-    
+
+    // City lights on night side for rocky planets
+    if (hasCities > 0.5 && planetType == 0) {
+      float landMask = smoothstep(0.4, 0.6, pattern);
+      float latitude = vPosition.y;
+      float cities = cityLights(pos * 2.0, landMask, latitude);
+      float nightIntensity = 1.0 - daylight;
+
+      // Warm city light color with subtle flicker
+      vec3 cityColor = vec3(1.0, 0.85, 0.5);
+      float flicker = 0.9 + 0.1 * sin(time * 8.0 + pos.x * 40.0);
+
+      color += cityColor * cities * nightIntensity * flicker * 1.5;
+    }
+
     // Fresnel rim lighting
     vec3 viewDir = normalize(cameraPosition - vPosition);
     float fresnel = pow(1.0 - max(dot(viewDir, vNormal), 0.0), 3.0);
     color += baseColor * fresnel * 0.3;
-    
+
+    // Atmospheric glow at terminator (day/night boundary)
+    float terminator = smoothstep(-0.15, 0.0, NdotL) * smoothstep(0.2, 0.0, NdotL);
+    color += baseColor * terminator * 0.2;
+
     gl_FragColor = vec4(color, 1.0);
   }
 `
@@ -339,6 +376,14 @@ function RealisticPlanet({
   
   // Determine planet characteristics
   const hasRings = ['coulson-one', 'portfolio-pro', 'quantum-forge', 'flo-labs'].includes(project.id)
+
+  // Featured/enterprise projects have city lights (inhabited worlds)
+  const hasCities = useMemo(() => {
+    return project.featured ||
+           project.galaxy === 'enterprise' ||
+           ['caipo-ai', 'stancestream', 'finance-quest', 'portfolio-pro', 'codecraft'].includes(project.id)
+  }, [project])
+
   const planetType = useMemo(() => {
     if (project.color.includes('00D9FF') || project.color.includes('06FFA5') || project.color.includes('00ffff')) return 2 // Ice
     if (project.color.includes('FF6B6B') || project.color.includes('ff4444')) return 3 // Lava
@@ -439,7 +484,8 @@ function RealisticPlanet({
             secondaryColor: { value: secondaryColor },
             time: { value: 0 },
             seed: { value: seed },
-            planetType: { value: planetType }
+            planetType: { value: planetType },
+            hasCities: { value: hasCities ? 1.0 : 0.0 }
           }}
         />
       </mesh>

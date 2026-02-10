@@ -10,6 +10,7 @@ interface RealisticPlanetProps {
   size: number
   isSupernova?: boolean
   planetType?: 'rocky' | 'gas' | 'ice' | 'desert'
+  hasLife?: boolean  // Show city lights on night side
   onClick?: () => void
   onHover?: (hovered: boolean) => void
 }
@@ -20,6 +21,7 @@ export function RealisticPlanet({
   size,
   isSupernova = false,
   planetType = 'rocky',
+  hasLife = false,
   onClick,
   onHover
 }: RealisticPlanetProps) {
@@ -108,22 +110,23 @@ export function RealisticPlanet({
     uniform float time;
     uniform float brightness;
     uniform float planetType;
+    uniform float hasCities; // 1.0 for inhabited planets
     varying vec2 vUv;
     varying vec3 vNormal;
     varying vec3 vPosition;
-    
+
     // Enhanced noise function with more detail
     float hash(vec3 p) {
       p = fract(p * vec3(443.8975, 397.2973, 491.1871));
       p += dot(p, p.yxz + 19.19);
       return fract((p.x + p.y) * p.z);
     }
-    
+
     float noise(vec3 p) {
       vec3 i = floor(p);
       vec3 f = fract(p);
       f = f * f * (3.0 - 2.0 * f);
-      
+
       return mix(
         mix(mix(hash(i), hash(i + vec3(1,0,0)), f.x),
             mix(hash(i + vec3(0,1,0)), hash(i + vec3(1,1,0)), f.x), f.y),
@@ -132,13 +135,12 @@ export function RealisticPlanet({
         f.z
       );
     }
-    
+
     float fbm(vec3 p) {
       float value = 0.0;
       float amplitude = 0.5;
       float frequency = 1.0;
-      
-      // Optimized iterations for performance
+
       for(int i = 0; i < 5; i++) {
         value += amplitude * noise(p * frequency);
         frequency *= 2.17;
@@ -146,128 +148,207 @@ export function RealisticPlanet({
       }
       return value;
     }
-    
-    // Calculate perturbed normal for bump mapping effect
+
+    // Voronoi for craters and city clusters
+    vec2 voronoi(vec3 p) {
+      vec3 i = floor(p);
+      vec3 f = fract(p);
+      float minDist = 1.0;
+      float secondMin = 1.0;
+
+      for(int x = -1; x <= 1; x++) {
+        for(int y = -1; y <= 1; y++) {
+          for(int z = -1; z <= 1; z++) {
+            vec3 neighbor = vec3(float(x), float(y), float(z));
+            vec3 point = vec3(hash(i + neighbor), hash(i + neighbor + 100.0), hash(i + neighbor + 200.0));
+            vec3 diff = neighbor + point - f;
+            float dist = length(diff);
+            if(dist < minDist) {
+              secondMin = minDist;
+              minDist = dist;
+            } else if(dist < secondMin) {
+              secondMin = dist;
+            }
+          }
+        }
+      }
+      return vec2(minDist, secondMin);
+    }
+
+    // Calculate perturbed normal for bump mapping
     vec3 perturbNormal(vec3 pos, vec3 normal, float bumpScale) {
       float eps = 0.05;
       float base = fbm(pos);
       float dx = fbm(pos + vec3(eps, 0.0, 0.0)) - base;
       float dy = fbm(pos + vec3(0.0, eps, 0.0)) - base;
       float dz = fbm(pos + vec3(0.0, 0.0, eps)) - base;
-      
+
       vec3 grad = vec3(dx, dy, dz) * bumpScale;
       return normalize(normal - grad);
     }
-    
+
+    // City lights pattern
+    float cityLights(vec3 pos, float landMask, float latitude) {
+      // Cities cluster near coasts and avoid poles/equator extremes
+      float coastPreference = smoothstep(0.4, 0.55, landMask) * smoothstep(0.7, 0.55, landMask);
+      float latitudePreference = smoothstep(0.0, 0.3, abs(latitude)) * smoothstep(0.8, 0.5, abs(latitude));
+
+      // High frequency noise for individual lights
+      float cityNoise = fbm(pos * 30.0);
+      float clusterNoise = fbm(pos * 8.0);
+
+      // Create clustered city patterns
+      float cities = smoothstep(0.55, 0.7, cityNoise) * smoothstep(0.4, 0.6, clusterNoise);
+      cities *= coastPreference * latitudePreference;
+
+      // Add bright city centers
+      vec2 vor = voronoi(pos * 15.0);
+      float cityCenters = smoothstep(0.15, 0.05, vor.x) * clusterNoise;
+
+      return cities * 0.6 + cityCenters * 0.4;
+    }
+
+    // Crater generation for rocky planets
+    float craters(vec3 pos) {
+      float totalCraters = 0.0;
+
+      // Large craters
+      vec2 vor1 = voronoi(pos * 4.0);
+      float largeCrater = smoothstep(0.3, 0.2, vor1.x) * (1.0 - smoothstep(0.1, 0.0, vor1.x));
+
+      // Medium craters
+      vec2 vor2 = voronoi(pos * 10.0);
+      float medCrater = smoothstep(0.25, 0.15, vor2.x) * (1.0 - smoothstep(0.08, 0.0, vor2.x));
+
+      // Small craters
+      vec2 vor3 = voronoi(pos * 25.0);
+      float smallCrater = smoothstep(0.2, 0.1, vor3.x) * (1.0 - smoothstep(0.05, 0.0, vor3.x));
+
+      totalCraters = largeCrater * 0.4 + medCrater * 0.35 + smallCrater * 0.25;
+      return totalCraters;
+    }
+
     void main() {
-      // Multi-scale surface texture with enhanced detail
       vec3 pos = vPosition * 3.0 + vec3(time * 0.1);
-      
+
       // Large continents/oceans
       float continents = fbm(pos * 0.8);
-      
+
       // Medium terrain features
       float terrain = fbm(pos * 2.5 + vec3(50.0));
-      
-      // Fine surface detail with animation
+
+      // Fine surface detail
       float detail = fbm(pos * 6.0 + vec3(100.0));
-      
-      // Micro details for realism
-      float microDetail = fbm(pos * 12.0 + vec3(200.0));
-      
-      // Planet type specific surface patterns, roughness, and atmosphere
+
+      // Planet type specific patterns
       float surfacePattern;
       float roughness;
       float specularity;
       vec3 atmosColor;
-      
+      float landMask = 0.0;
+      float craterAmount = 0.0;
+
       if (planetType < 0.25) {
         // Rocky terrestrial planet
         surfacePattern = continents * 0.5 + terrain * 0.3 + detail * 0.2;
         roughness = 0.8;
-        specularity = 0.3; // Oceans and ice reflect light
-        atmosColor = vec3(0.4, 0.6, 1.0); // Earth-like blue atmosphere
+        specularity = 0.3;
+        atmosColor = vec3(0.4, 0.6, 1.0);
+        landMask = smoothstep(0.45, 0.55, continents); // Land vs ocean
+        craterAmount = craters(pos * 1.5) * (1.0 - landMask) * 0.3; // Craters more visible on barren areas
       } else if (planetType < 0.5) {
-        // Gas giant - smooth bands and storms
-        surfacePattern = continents * 0.2 + terrain * 0.6 + detail * 0.2;
+        // Gas giant - bands and storms
+        float bandY = sin(vPosition.y * 12.0 + terrain * 2.0);
+        float storms = fbm(pos * 4.0 + vec3(time * 0.5, 0.0, 0.0));
+        surfacePattern = bandY * 0.3 + storms * 0.4 + terrain * 0.3;
         roughness = 0.1;
-        specularity = 0.05; // Minimal reflection from gas
-        atmosColor = vec3(0.8, 0.7, 0.5); // Warm, thick atmosphere
+        specularity = 0.05;
+        atmosColor = vec3(0.8, 0.7, 0.5);
       } else if (planetType < 0.75) {
-        // Ice planet - crystalline patterns
-        surfacePattern = continents * 0.3 + terrain * 0.3 + detail * 0.4;
+        // Ice planet - crystalline
+        vec2 iceVor = voronoi(pos * 6.0);
+        float iceCracks = smoothstep(0.1, 0.05, iceVor.y - iceVor.x);
+        surfacePattern = continents * 0.3 + iceCracks * 0.4 + detail * 0.3;
         roughness = 0.4;
-        specularity = 0.8; // Very reflective ice
-        atmosColor = vec3(0.6, 0.8, 1.0); // Pale blue, thin atmosphere
+        specularity = 0.8;
+        atmosColor = vec3(0.6, 0.8, 1.0);
       } else {
-        // Desert planet - dune patterns
-        surfacePattern = continents * 0.45 + terrain * 0.35 + detail * 0.2;
+        // Desert planet - dunes
+        float dunes = sin(vPosition.x * 20.0 + terrain * 5.0) * 0.5 + 0.5;
+        surfacePattern = continents * 0.3 + dunes * 0.4 + detail * 0.3;
         roughness = 0.9;
-        specularity = 0.1; // Diffuse sand reflection
-        atmosColor = vec3(1.0, 0.8, 0.6); // Warm, dusty atmosphere
+        specularity = 0.1;
+        atmosColor = vec3(1.0, 0.8, 0.6);
+        craterAmount = craters(pos * 2.0) * 0.2;
       }
-      
-      // Enhanced latitude bands (climate zones)
-      float latitude = abs(vPosition.y);
-      float bands = smoothstep(0.3, 0.7, sin(latitude * 8.0 + surfacePattern * 2.0) * 0.5 + 0.5);
-      
-      // Polar regions get brighter (ice/snow)
-      float poles = smoothstep(0.6, 0.95, latitude);
-      
-      // Light direction (from upper right)
+
+      // Add crater depth
+      surfacePattern -= craterAmount;
+
+      // Latitude effects
+      float latitude = vPosition.y;
+      float absLatitude = abs(latitude);
+      float bands = smoothstep(0.3, 0.7, sin(absLatitude * 8.0 + surfacePattern * 2.0) * 0.5 + 0.5);
+      float poles = smoothstep(0.6, 0.95, absLatitude);
+
+      // Light direction (sun position)
       vec3 lightDir = normalize(vec3(1.0, 0.5, 1.0));
-      
-      // View direction
       vec3 viewDirection = normalize(cameraPosition - vPosition);
-      
-      // Apply normal perturbation for bump mapping (varies by planet type)
+
+      // Normal perturbation
       float bumpStrength = planetType < 0.25 ? 0.3 : planetType < 0.5 ? 0.1 : planetType < 0.75 ? 0.25 : 0.35;
       vec3 perturbedNormal = perturbNormal(pos * 2.0, vNormal, bumpStrength);
-      
-      // Diffuse lighting (Lambertian) with perturbed normal
-      float NdotL = max(dot(perturbedNormal, lightDir), 0.0);
-      float diffuse = NdotL * 0.85 + 0.15; // Add ambient
-      
-      // Specular highlights (Blinn-Phong) with perturbed normal
+
+      // Day/night calculation
+      float NdotL = dot(perturbedNormal, lightDir);
+      float daylight = smoothstep(-0.1, 0.2, NdotL); // Soft terminator
+      float diffuse = max(NdotL, 0.0) * 0.85 + 0.15;
+
+      // Specular
       vec3 halfDir = normalize(lightDir + viewDirection);
       float NdotH = max(dot(perturbedNormal, halfDir), 0.0);
-      float specular = pow(NdotH, 32.0 / roughness) * specularity * NdotL;
-      
-      // Build surface color with terrain patterns
+      float specular = pow(NdotH, 32.0 / roughness) * specularity * max(NdotL, 0.0);
+
+      // Surface color
       vec3 surfaceColor = color * (surfacePattern * 0.7 + 0.3) * (bands * 0.3 + 0.7);
-      
-      // Add polar brightness
       surfaceColor = mix(surfaceColor, surfaceColor * 1.6, poles);
-      
-      // Apply diffuse and specular lighting
       surfaceColor = surfaceColor * diffuse + vec3(1.0) * specular;
-      
-      // Physically-based atmospheric scattering (simplified Rayleigh + Mie)
+
+      // === CITY LIGHTS ON NIGHT SIDE ===
+      if (hasCities > 0.5 && planetType < 0.25) {
+        float cities = cityLights(pos * 2.0, landMask, latitude);
+        float nightIntensity = 1.0 - daylight;
+
+        // City light colors (warm yellow/orange)
+        vec3 cityColor = vec3(1.0, 0.85, 0.5);
+
+        // Flickering effect
+        float flicker = 0.9 + 0.1 * sin(time * 10.0 + pos.x * 50.0);
+
+        // Add city lights only on night side
+        vec3 cityGlow = cityColor * cities * nightIntensity * flicker * 2.0;
+        surfaceColor += cityGlow;
+      }
+
+      // Atmospheric scattering
       float viewAngle = dot(viewDirection, vNormal);
-      float sunAngle = dot(lightDir, vNormal);
-      
-      // Rayleigh scattering (blue wavelengths scatter more)
       float rayleigh = pow(1.0 - abs(viewAngle), 3.0) * 0.6;
-      
-      // Mie scattering (creates atmospheric glow)
       float mie = pow(max(dot(viewDirection, lightDir), 0.0), 8.0) * 0.4;
-      
-      // Atmospheric density falloff from surface
       float density = smoothstep(0.0, 0.5, 1.0 - abs(viewAngle));
-      
-      // Combine scattering with planet-specific atmosphere color
       vec3 atmosphere = atmosColor * color * (rayleigh + mie) * density;
-      
-      // Fresnel rim lighting (angle-dependent reflection)
+
+      // Terminator glow (atmosphere scatters light at day/night boundary)
+      float terminatorGlow = smoothstep(-0.2, 0.0, NdotL) * smoothstep(0.3, 0.0, NdotL);
+      atmosphere += atmosColor * terminatorGlow * 0.3;
+
+      // Fresnel rim
       float fresnel = pow(1.0 - max(viewAngle, 0.0), 2.5);
       vec3 rimLight = color * fresnel * 0.8;
-      
-      // Combine surface + atmosphere + rim
+
+      // Combine
       surfaceColor = surfaceColor + atmosphere + rimLight;
-      
-      // Emissive boost with atmospheric enhancement
       float emissive = brightness * (1.0 + fresnel * 0.5);
-      
+
       gl_FragColor = vec4(surfaceColor * emissive, 1.0);
     }
   `
@@ -338,7 +419,8 @@ export function RealisticPlanet({
             color: { value: new THREE.Color(color) },
             time: { value: 0 },
             brightness: { value: isSupernova ? 3.0 : 2.0 },
-            planetType: { value: planetType === 'rocky' ? 0.1 : planetType === 'gas' ? 0.4 : planetType === 'ice' ? 0.6 : 0.9 }
+            planetType: { value: planetType === 'rocky' ? 0.1 : planetType === 'gas' ? 0.4 : planetType === 'ice' ? 0.6 : 0.9 },
+            hasCities: { value: hasLife ? 1.0 : 0.0 }
           }}
         />
       </mesh>

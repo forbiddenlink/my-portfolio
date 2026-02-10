@@ -16,6 +16,7 @@ import { PlanetSurfaceExplorer } from '@/components/3d/PlanetSurfaceExplorer'
 import { GalaxyNavigation } from '@/components/ui/GalaxyNavigation'
 import { MinimapNavigator } from '@/components/ui/MinimapNavigator'
 import { JourneyCameraController, JourneyOverlay } from '@/components/ui/JourneyMode'
+import { TourElements } from '@/components/3d/TourElements'
 import { BlendFunction } from 'postprocessing'
 import { getGalaxyCenterPosition } from '@/lib/utils'
 
@@ -173,6 +174,9 @@ function SceneContent({ isMobile, controlsRef }: { isMobile: boolean; controlsRe
           </>
         )}
       </Suspense>
+
+      {/* Tour interactive elements (aliens, stations, trail) */}
+      <TourElements />
 
       {/* Journey Mode camera controller */}
       {isJourneyMode && <JourneyCameraController />}
