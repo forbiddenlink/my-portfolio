@@ -18,6 +18,7 @@ import { MinimapNavigator } from '@/components/ui/MinimapNavigator'
 import { JourneyCameraController, JourneyOverlay } from '@/components/ui/JourneyMode'
 import { TourElements } from '@/components/3d/TourElements'
 import { GalaxyCores } from '@/components/3d/GalaxyCore'
+import { PlanetEnhancements } from '@/components/3d/PlanetEnhancements'
 import { BlendFunction } from 'postprocessing'
 import { getGalaxyCenterPosition } from '@/lib/utils'
 
@@ -167,6 +168,7 @@ function SceneContent({ isMobile, controlsRef }: { isMobile: boolean; controlsRe
             <TwinklingStarfield count={isMobile ? 2000 : 5000} />
             <GalaxyCores />
             <EnhancedProjectStars />
+            <PlanetEnhancements />
             {!isMobile && (
               <>
                 <ShootingStars count={isMobile ? 2 : 5} />
