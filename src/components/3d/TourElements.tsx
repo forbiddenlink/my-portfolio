@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState, useEffect, useRef } from 'react'
 import { useViewStore } from '@/lib/store'
 import { galaxies } from '@/lib/galaxyData'
 import { generateProjectPosition, getGalaxyCenterPosition } from '@/lib/utils'
@@ -8,6 +8,7 @@ import { AlienCharacter, AlienVariant1, AlienVariant2, AlienVariant3, AlienVaria
 import { SpaceStation, Satellite } from './SpaceStation'
 import { TourCometManager } from './TourComet'
 import { JourneyTrail } from './JourneyTrail'
+import { WormholeEffect } from './WormholeEffect'
 
 // Generate tour stops data (matching JourneyMode.tsx)
 const TOUR_STOPS = galaxies.map((galaxy, galaxyIndex) => {
@@ -53,6 +54,53 @@ const ALIEN_VARIANTS = [
 export function TourElements() {
   const isJourneyMode = useViewStore((state) => state.isJourneyMode)
   const journeyStep = useViewStore((state) => state.journeyStep)
+
+  // Track previous step to detect galaxy-to-galaxy transitions
+  const prevStepRef = useRef(journeyStep)
+  const [wormholeActive, setWormholeActive] = useState(false)
+  const [wormholePositions, setWormholePositions] = useState<{
+    start: [number, number, number]
+    end: [number, number, number]
+  } | null>(null)
+
+  // Detect galaxy transitions and trigger wormhole
+  useEffect(() => {
+    if (!isJourneyMode) {
+      setWormholeActive(false)
+      setWormholePositions(null)
+      prevStepRef.current = 0
+      return
+    }
+
+    const prevStep = prevStepRef.current
+    const currentStop = TOUR_STOPS[journeyStep]
+    const prevStop = TOUR_STOPS[prevStep]
+
+    // Check if we're transitioning between different galaxies
+    if (prevStop && currentStop && prevStop.galaxyId !== currentStop.galaxyId) {
+      // Set wormhole positions between galaxy centers
+      setWormholePositions({
+        start: [
+          prevStop.galaxyPosition.x,
+          prevStop.galaxyPosition.y,
+          prevStop.galaxyPosition.z
+        ],
+        end: [
+          currentStop.galaxyPosition.x,
+          currentStop.galaxyPosition.y,
+          currentStop.galaxyPosition.z
+        ]
+      })
+      setWormholeActive(true)
+    }
+
+    prevStepRef.current = journeyStep
+  }, [journeyStep, isJourneyMode])
+
+  // Handle wormhole completion
+  const handleWormholeComplete = () => {
+    setWormholeActive(false)
+  }
 
   // Calculate alien positions - near featured projects
   const alienPositions = useMemo(() => {
@@ -105,6 +153,16 @@ export function TourElements() {
 
   return (
     <>
+      {/* Wormhole effect for galaxy-to-galaxy transitions */}
+      {wormholePositions && (
+        <WormholeEffect
+          isActive={wormholeActive}
+          startPosition={wormholePositions.start}
+          endPosition={wormholePositions.end}
+          onComplete={handleWormholeComplete}
+        />
+      )}
+
       {/* Journey trail showing path */}
       <JourneyTrail
         isJourneyMode={isJourneyMode}
