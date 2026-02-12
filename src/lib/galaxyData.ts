@@ -974,3 +974,94 @@ export function getProjectById(id: string) {
 export function getGalaxyById(id: string) {
   return galaxies.find((g) => g.id === id)
 }
+
+// =============================================================================
+// NARRATIVE TOURS - Themed journeys through related projects
+// =============================================================================
+
+export interface NarrativeTour {
+  id: string
+  name: string
+  tagline: string
+  description: string
+  color: string
+  icon: string // emoji
+  projectIds: string[]
+  narrativeIntros: Record<string, string> // Per-project narrative intro
+}
+
+export const narrativeTours: NarrativeTour[] = [
+  {
+    id: 'ai-journey',
+    name: 'My AI Journey',
+    tagline: 'From chatbots to autonomous agents',
+    description: 'Explore how I evolved from basic AI integrations to building multi-agent systems and autonomous AI artists.',
+    color: '#00D9FF',
+    icon: '🤖',
+    projectIds: [
+      'finance-quest',      // Start: AI-assisted learning
+      'tubedigest',         // Content summarization
+      'contradictme',       // Argument analysis
+      'stancestream',       // Multi-agent coordination
+      'componentcompass',   // GPT-4 Vision
+      'aria',               // Autonomous AI artist
+    ],
+    narrativeIntros: {
+      'finance-quest': 'It started with a question: could AI make learning stick? Finance Quest combined spaced repetition with intelligent feedback.',
+      'tubedigest': 'Then I wondered: what if AI could extract the essence of any content? TubeDigest was born from hours of watching tutorials.',
+      'contradictme': 'Fighting echo chambers became personal. ContradictMe uses AI to find the strongest counterarguments—not strawmen.',
+      'stancestream': 'What if multiple AIs could debate in real-time? StanceStream coordinates AI agents like an orchestra conductor.',
+      'componentcompass': 'Vision models opened new doors. Show ComponentCompass a screenshot and it finds the right component instantly.',
+      'aria': 'The culmination: an AI that doesn\'t just generate—it creates with personality, mood, and memory. ARIA is an artist.',
+    },
+  },
+  {
+    id: 'fullstack-evolution',
+    name: 'Full-Stack Evolution',
+    tagline: 'From first commit to enterprise scale',
+    description: 'The journey from building my first full-stack app to leading teams on 64,000+ file enterprise codebases.',
+    color: '#9D4EDD',
+    icon: '🚀',
+    projectIds: [
+      'create-surveys',     // Start: First real SaaS
+      'portfolio-pro',      // Comprehensive platform
+      'quantum-forge',      // Modern architecture
+      'flo-labs',           // Team leadership
+      'coulson-one',        // Enterprise scale
+    ],
+    narrativeIntros: {
+      'create-surveys': 'Every full-stack developer remembers their first real SaaS. Create Surveys taught me the full loop: build, ship, iterate.',
+      'portfolio-pro': 'Portfolio-Pro was ambitious: 205 lessons, Stripe integration, Monaco editor. It proved I could build comprehensive platforms.',
+      'quantum-forge': 'Modern architecture matters. Quantum Forge combines Next.js 15, React 19, and PostgreSQL with glass-morphism design.',
+      'flo-labs': 'Leading a team changed everything. 6 production sites, unified design system, mentoring developers—this was growth.',
+      'coulson-one': '64,806 files. Enterprise aviation software. Contributing here meant understanding scale, process, and real-world impact.',
+    },
+  },
+  {
+    id: 'devtools-builder',
+    name: 'Building Developer Tools',
+    tagline: 'Tools I wish existed, so I built them',
+    description: 'From accessibility checkers to image optimizers—building tools that make other developers\' lives easier.',
+    color: '#06FFA5',
+    icon: '🛠️',
+    projectIds: [
+      'accessibility-checker',  // Start: A11y automation
+      'codememory',             // Learning tools
+      'componentcompass',       // Component discovery
+      'imgzen',                 // Rust performance
+      'encryption-visualizer',  // Education
+    ],
+    narrativeIntros: {
+      'accessibility-checker': 'Accessibility shouldn\'t require expertise. I built a tool that catches 95% of WCAG violations automatically.',
+      'codememory': 'Learning web dev is hard. CodeMemory uses spaced repetition science to make knowledge stick—85% retention vs 20%.',
+      'componentcompass': 'Finding the right component shouldn\'t mean reading docs for hours. Screenshot → component in 2 seconds.',
+      'imgzen': 'Image optimization was always manual. ImgZen automates it in Rust—90% size reduction, zero configuration.',
+      'encryption-visualizer': 'Cryptography is abstract until you see it. Watch AES transform your data byte by byte.',
+    },
+  },
+]
+
+// Helper to get narrative tour by ID
+export function getNarrativeTourById(id: string) {
+  return narrativeTours.find((t) => t.id === id)
+}

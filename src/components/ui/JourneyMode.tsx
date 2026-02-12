@@ -1,45 +1,120 @@
 'use client'
 
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useCallback, useMemo } from 'react'
 import { useThree } from '@react-three/fiber'
 import { useViewStore } from '@/lib/store'
-import { galaxies } from '@/lib/galaxyData'
+import { galaxies, narrativeTours, getProjectById, getGalaxyById, type NarrativeTour } from '@/lib/galaxyData'
 import { generateProjectPosition } from '@/lib/utils'
+import type { Project } from '@/lib/types'
 import gsap from 'gsap'
-import * as THREE from 'three'
 
-// Define tour stops - one featured project per galaxy
-const TOUR_STOPS = galaxies.map((galaxy, galaxyIndex) => {
-  // Find featured project or first project
-  const featuredProject = galaxy.projects.find(p => p.featured) || galaxy.projects[0]
+interface TourStop {
+  galaxyId: string
+  galaxyName: string
+  galaxyColor: string
+  galaxyPosition: { x: number; y: number; z: number }
+  project: Project
+  projectPosition: { x: number; y: number; z: number }
+  narrativeIntro?: string
+}
 
-  // Calculate galaxy center position
-  const galaxyAngle = (galaxyIndex / 6) * Math.PI * 2
-  const galaxyRadius = 25
-  const galaxyPosition = {
-    x: Math.cos(galaxyAngle) * galaxyRadius,
-    y: 0,
-    z: Math.sin(galaxyAngle) * galaxyRadius
+// Default tour: one featured project per galaxy
+function getDefaultTourStops(): TourStop[] {
+  return galaxies.map((galaxy, galaxyIndex) => {
+    const featuredProject = galaxy.projects.find(p => p.featured) || galaxy.projects[0]
+
+    const galaxyAngle = (galaxyIndex / 6) * Math.PI * 2
+    const galaxyRadius = 25
+    const galaxyPosition = {
+      x: Math.cos(galaxyAngle) * galaxyRadius,
+      y: 0,
+      z: Math.sin(galaxyAngle) * galaxyRadius
+    }
+
+    const [px, py, pz] = generateProjectPosition(
+      featuredProject.id,
+      galaxy.id,
+      galaxyIndex,
+      0,
+      galaxy.projects.length
+    )
+
+    return {
+      galaxyId: galaxy.id,
+      galaxyName: galaxy.name,
+      galaxyColor: galaxy.color,
+      galaxyPosition,
+      project: featuredProject,
+      projectPosition: { x: px, y: py, z: pz }
+    }
+  })
+}
+
+// Generate tour stops for a narrative tour
+function getNarrativeTourStops(tourId: string): TourStop[] {
+  const tour = narrativeTours.find(t => t.id === tourId)
+  if (!tour) return getDefaultTourStops()
+
+  const stops: TourStop[] = []
+
+  for (const projectId of tour.projectIds) {
+    const project = getProjectById(projectId)
+    if (!project) continue
+
+    const galaxy = getGalaxyById(project.galaxy)
+    if (!galaxy) continue
+
+    const galaxyIndex = galaxies.findIndex(g => g.id === galaxy.id)
+    const projectIndex = galaxy.projects.findIndex(p => p.id === projectId)
+
+    const galaxyAngle = (galaxyIndex / 6) * Math.PI * 2
+    const galaxyRadius = 25
+    const galaxyPosition = {
+      x: Math.cos(galaxyAngle) * galaxyRadius,
+      y: 0,
+      z: Math.sin(galaxyAngle) * galaxyRadius
+    }
+
+    const [px, py, pz] = generateProjectPosition(
+      project.id,
+      galaxy.id,
+      galaxyIndex,
+      projectIndex,
+      galaxy.projects.length
+    )
+
+    stops.push({
+      galaxyId: galaxy.id,
+      galaxyName: galaxy.name,
+      galaxyColor: tour.color,
+      galaxyPosition,
+      project,
+      projectPosition: { x: px, y: py, z: pz },
+      narrativeIntro: tour.narrativeIntros[projectId]
+    })
   }
 
-  // Calculate project position
-  const [px, py, pz] = generateProjectPosition(
-    featuredProject.id,
-    galaxy.id,
-    galaxyIndex,
-    0,
-    galaxy.projects.length
-  )
+  return stops
+}
 
-  return {
-    galaxyId: galaxy.id,
-    galaxyName: galaxy.name,
-    galaxyColor: galaxy.color,
-    galaxyPosition,
-    project: featuredProject,
-    projectPosition: { x: px, y: py, z: pz }
-  }
-})
+// Hook to get current tour stops based on active tour
+function useTourStops(): TourStop[] {
+  const activeTourId = useViewStore((state) => state.activeTourId)
+
+  return useMemo(() => {
+    if (!activeTourId) return getDefaultTourStops()
+    return getNarrativeTourStops(activeTourId)
+  }, [activeTourId])
+}
+
+// Hook to get active tour info
+function useActiveTour(): NarrativeTour | null {
+  const activeTourId = useViewStore((state) => state.activeTourId)
+  return useMemo(() => {
+    if (!activeTourId) return null
+    return narrativeTours.find(t => t.id === activeTourId) || null
+  }, [activeTourId])
+}
 
 // Camera controller for journey - runs inside Canvas
 export function JourneyCameraController() {
@@ -50,6 +125,7 @@ export function JourneyCameraController() {
   const nextJourneyStop = useViewStore((state) => state.nextJourneyStop)
   const endJourney = useViewStore((state) => state.endJourney)
 
+  const tourStops = useTourStops()
   const timelineRef = useRef<gsap.core.Timeline | null>(null)
   const autoAdvanceRef = useRef<NodeJS.Timeout | null>(null)
 
@@ -57,7 +133,7 @@ export function JourneyCameraController() {
   useEffect(() => {
     if (!isJourneyMode) return
 
-    const stop = TOUR_STOPS[journeyStep]
+    const stop = tourStops[journeyStep]
     if (!stop) {
       endJourney()
       return
@@ -103,7 +179,7 @@ export function JourneyCameraController() {
         timelineRef.current.kill()
       }
     }
-  }, [isJourneyMode, journeyStep, camera, endJourney])
+  }, [isJourneyMode, journeyStep, camera, endJourney, tourStops])
 
   // Auto-advance timer
   useEffect(() => {
@@ -116,7 +192,7 @@ export function JourneyCameraController() {
 
     // Wait for camera animation (4.5s) + hold time (5s)
     autoAdvanceRef.current = setTimeout(() => {
-      if (journeyStep < TOUR_STOPS.length - 1) {
+      if (journeyStep < tourStops.length - 1) {
         nextJourneyStop()
       } else {
         endJourney()
@@ -128,7 +204,7 @@ export function JourneyCameraController() {
         clearTimeout(autoAdvanceRef.current)
       }
     }
-  }, [isJourneyMode, isJourneyPaused, journeyStep, nextJourneyStop, endJourney])
+  }, [isJourneyMode, isJourneyPaused, journeyStep, nextJourneyStop, endJourney, tourStops.length])
 
   return null
 }
@@ -144,13 +220,16 @@ export function JourneyOverlay() {
   const toggleJourneyPause = useViewStore((state) => state.toggleJourneyPause)
   const endJourney = useViewStore((state) => state.endJourney)
 
+  const tourStops = useTourStops()
+  const activeTour = useActiveTour()
+
   const handleNext = useCallback(() => {
-    if (journeyStep < TOUR_STOPS.length - 1) {
+    if (journeyStep < tourStops.length - 1) {
       nextJourneyStop()
     } else {
       endJourney()
     }
-  }, [journeyStep, nextJourneyStop, endJourney])
+  }, [journeyStep, tourStops.length, nextJourneyStop, endJourney])
 
   const handlePrev = useCallback(() => {
     if (journeyStep > 0) {
@@ -160,7 +239,7 @@ export function JourneyOverlay() {
 
   if (!isJourneyMode) return null
 
-  const currentStop = TOUR_STOPS[journeyStep]
+  const currentStop = tourStops[journeyStep]
   if (!currentStop) return null
 
   return (
@@ -178,6 +257,17 @@ export function JourneyOverlay() {
             border: `1px solid ${currentStop.galaxyColor}40`,
           }}
         >
+          {/* Tour name badge (for narrative tours) */}
+          {activeTour && (
+            <div
+              className="inline-flex items-center gap-1.5 text-xs font-medium px-2 py-1 rounded-full mb-3"
+              style={{ backgroundColor: `${activeTour.color}20`, color: activeTour.color }}
+            >
+              <span>{activeTour.icon}</span>
+              <span>{activeTour.name}</span>
+            </div>
+          )}
+
           {/* Galaxy label */}
           <div
             className="text-xs font-medium uppercase tracking-wider mb-2"
@@ -191,15 +281,19 @@ export function JourneyOverlay() {
             {currentStop.project.title}
           </h3>
 
-          {/* Description */}
+          {/* Narrative intro (for narrative tours) or description */}
           <p className="text-sm text-white/70 leading-relaxed">
-            {currentStop.project.description.slice(0, 120)}
-            {currentStop.project.description.length > 120 ? '...' : ''}
+            {currentStop.narrativeIntro || (
+              <>
+                {currentStop.project.description.slice(0, 120)}
+                {currentStop.project.description.length > 120 ? '...' : ''}
+              </>
+            )}
           </p>
 
           {/* Tags */}
           <div className="flex flex-wrap gap-2 mt-3">
-            {currentStop.project.tags.slice(0, 3).map((tag) => (
+            {currentStop.project.tags.slice(0, 3).map((tag: string) => (
               <span
                 key={tag}
                 className="text-xs px-2 py-1 rounded-full bg-white/10 text-white/60"
@@ -223,7 +317,7 @@ export function JourneyOverlay() {
         >
           {/* Progress dots */}
           <div className="flex items-center gap-2">
-            {TOUR_STOPS.map((_, index) => (
+            {tourStops.map((_: TourStop, index: number) => (
               <button
                 key={index}
                 onClick={() => setJourneyStep(index)}
@@ -274,7 +368,7 @@ export function JourneyOverlay() {
           <button
             onClick={handleNext}
             className="text-white/70 hover:text-white transition-colors"
-            aria-label={journeyStep === TOUR_STOPS.length - 1 ? 'End tour' : 'Next stop'}
+            aria-label={journeyStep === tourStops.length - 1 ? 'End tour' : 'Next stop'}
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -297,5 +391,5 @@ export function JourneyOverlay() {
   )
 }
 
-// Export tour stops for external use
-export { TOUR_STOPS }
+// Export for external use
+export { narrativeTours }

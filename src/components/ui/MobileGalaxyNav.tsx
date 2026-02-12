@@ -1,6 +1,7 @@
 'use client'
 
-import { galaxies } from '@/lib/galaxyData'
+import { useState } from 'react'
+import { galaxies, narrativeTours } from '@/lib/galaxyData'
 import { useViewStore } from '@/lib/store'
 import { cn } from '@/lib/utils'
 
@@ -11,6 +12,7 @@ export function MobileGalaxyNav() {
   const reset = useViewStore((state) => state.reset)
   const isJourneyMode = useViewStore((state) => state.isJourneyMode)
   const startJourney = useViewStore((state) => state.startJourney)
+  const [showTourSheet, setShowTourSheet] = useState(false)
 
   // Hide during exploration mode and journey mode
   if (view === 'exploration' || isJourneyMode) return null
@@ -79,9 +81,9 @@ export function MobileGalaxyNav() {
 
         {/* Tour button */}
         <button
-          onClick={startJourney}
+          onClick={() => setShowTourSheet(true)}
           className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all duration-200 min-w-[60px] hover:bg-white/10 active:scale-95"
-          aria-label="Take the guided tour"
+          aria-label="Choose a guided tour"
         >
           <svg
             className="w-4 h-4 text-indigo-400"
@@ -106,6 +108,71 @@ export function MobileGalaxyNav() {
           <span className="text-[10px] font-medium text-indigo-300">Tour</span>
         </button>
       </nav>
+
+      {/* Tour Selection Sheet */}
+      {showTourSheet && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center"
+          onClick={() => setShowTourSheet(false)}
+        >
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+
+          {/* Sheet */}
+          <div
+            className="relative w-full max-w-lg bg-gradient-to-t from-black to-gray-900 rounded-t-3xl p-6 pb-8 animate-slide-up"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Handle */}
+            <div className="w-12 h-1 bg-white/30 rounded-full mx-auto mb-6" />
+
+            <h2 className="text-lg font-bold text-white mb-4">Choose a Tour</h2>
+
+            <div className="space-y-3">
+              {/* Default Galaxy Tour */}
+              <button
+                onClick={() => {
+                  startJourney()
+                  setShowTourSheet(false)
+                }}
+                className="w-full flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-colors text-left"
+              >
+                <span className="text-2xl">🌌</span>
+                <div className="flex-1">
+                  <div className="font-medium text-white">Galaxy Overview</div>
+                  <div className="text-sm text-white/60">Visit each galaxy&apos;s highlights</div>
+                </div>
+              </button>
+
+              {/* Narrative Tours */}
+              {narrativeTours.map((tour) => (
+                <button
+                  key={tour.id}
+                  onClick={() => {
+                    startJourney(tour.id)
+                    setShowTourSheet(false)
+                  }}
+                  className="w-full flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-colors text-left"
+                >
+                  <span className="text-2xl">{tour.icon}</span>
+                  <div className="flex-1">
+                    <div className="font-medium" style={{ color: tour.color }}>{tour.name}</div>
+                    <div className="text-sm text-white/60">{tour.tagline}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            {/* Cancel button */}
+            <button
+              onClick={() => setShowTourSheet(false)}
+              className="w-full mt-4 py-3 text-white/60 hover:text-white transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -1,6 +1,7 @@
 'use client'
 
-import { galaxies } from '@/lib/galaxyData'
+import { useState } from 'react'
+import { galaxies, narrativeTours } from '@/lib/galaxyData'
 import { useViewStore } from '@/lib/store'
 import { cn } from '@/lib/utils'
 
@@ -11,6 +12,7 @@ export function GalaxyNavigation() {
   const reset = useViewStore((state) => state.reset)
   const isJourneyMode = useViewStore((state) => state.isJourneyMode)
   const startJourney = useViewStore((state) => state.startJourney)
+  const [showTourMenu, setShowTourMenu] = useState(false)
 
   // Hide during exploration mode and journey mode for immersion
   if (view === 'exploration' || isJourneyMode) return null
@@ -104,38 +106,96 @@ export function GalaxyNavigation() {
 
             <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-0" />
 
-            {/* Take the Tour button */}
-            <button
-              onClick={startJourney}
-              className="ripple-button group flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 relative overflow-hidden min-h-[44px] hover:bg-gradient-to-r hover:from-indigo-500/20 hover:to-purple-500/20 hover:scale-105"
-              aria-label="Take the guided tour"
-            >
-              <div className="w-3 h-3 flex items-center justify-center">
+            {/* Tours Section */}
+            <div className="relative">
+              {/* Tour Toggle Button */}
+              <button
+                onClick={() => setShowTourMenu(!showTourMenu)}
+                className={cn(
+                  'ripple-button group flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 relative overflow-hidden min-h-[44px] w-full',
+                  showTourMenu
+                    ? 'bg-gradient-to-r from-indigo-500/20 to-purple-500/20'
+                    : 'hover:bg-gradient-to-r hover:from-indigo-500/20 hover:to-purple-500/20 hover:scale-105'
+                )}
+                aria-label="Show tour options"
+                aria-expanded={showTourMenu}
+              >
+                <div className="w-3 h-3 flex items-center justify-center">
+                  <svg
+                    className="w-4 h-4 text-indigo-400 group-hover:text-indigo-300 transition-colors"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div>
+                <span className="text-sm font-semibold text-indigo-300 group-hover:text-indigo-200 transition-all duration-300 whitespace-nowrap leading-none flex-1 text-left">
+                  Guided Tours
+                </span>
                 <svg
-                  className="w-4 h-4 text-indigo-400 group-hover:text-indigo-300 transition-colors"
+                  className={cn(
+                    'w-4 h-4 text-indigo-400 transition-transform duration-300',
+                    showTourMenu ? 'rotate-180' : ''
+                  )}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
-                  aria-hidden="true"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
-              </div>
-              <span className="text-sm font-semibold text-indigo-300 group-hover:text-indigo-200 transition-all duration-300 whitespace-nowrap leading-none">
-                Take the Tour
-              </span>
-            </button>
+              </button>
+
+              {/* Tour Options Menu */}
+              {showTourMenu && (
+                <div className="mt-2 space-y-1 animate-fade-in">
+                  {/* Default Galaxy Tour */}
+                  <button
+                    onClick={() => {
+                      startJourney()
+                      setShowTourMenu(false)
+                    }}
+                    className="w-full group flex items-center gap-3 py-2.5 px-4 rounded-lg transition-all duration-200 hover:bg-white/10 text-left"
+                  >
+                    <span className="text-lg">🌌</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-medium text-white/90">Galaxy Overview</div>
+                      <div className="text-xs text-white/50 truncate">Visit each galaxy&apos;s highlights</div>
+                    </div>
+                  </button>
+
+                  {/* Narrative Tours */}
+                  {narrativeTours.map((tour) => (
+                    <button
+                      key={tour.id}
+                      onClick={() => {
+                        startJourney(tour.id)
+                        setShowTourMenu(false)
+                      }}
+                      className="w-full group flex items-center gap-3 py-2.5 px-4 rounded-lg transition-all duration-200 hover:bg-white/10 text-left"
+                    >
+                      <span className="text-lg">{tour.icon}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium" style={{ color: tour.color }}>{tour.name}</div>
+                        <div className="text-xs text-white/50 truncate">{tour.tagline}</div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </nav>
         </div>
       </div>

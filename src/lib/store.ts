@@ -15,6 +15,7 @@ interface ViewStore {
   isJourneyMode: boolean
   journeyStep: number
   isJourneyPaused: boolean
+  activeTourId: string | null // null = default galaxy tour, string = narrative tour ID
 
   // Actions
   setView: (view: ViewState) => void
@@ -31,7 +32,7 @@ interface ViewStore {
   zoomOut: () => void
 
   // Journey Mode actions
-  startJourney: () => void
+  startJourney: (tourId?: string) => void
   endJourney: () => void
   nextJourneyStop: () => void
   prevJourneyStop: () => void
@@ -51,6 +52,7 @@ export const useViewStore = create<ViewStore>((set, get) => ({
   isJourneyMode: false,
   journeyStep: 0,
   isJourneyPaused: false,
+  activeTourId: null,
 
   // Basic setters
   setView: (view) => set({ view }),
@@ -120,10 +122,11 @@ export const useViewStore = create<ViewStore>((set, get) => ({
   },
 
   // Journey Mode actions
-  startJourney: () => set({
+  startJourney: (tourId?: string) => set({
     isJourneyMode: true,
     journeyStep: 0,
     isJourneyPaused: false,
+    activeTourId: tourId ?? null,
     view: 'universe'
   }),
 
