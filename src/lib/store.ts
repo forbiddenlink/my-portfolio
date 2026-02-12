@@ -148,20 +148,32 @@ export const useViewStore = create<ViewStore>((set, get) => ({
   })),
 }))
 
-// Reduced motion preference detection - proper React hook with subscription
+// Motion preferences store - combines OS preference with manual toggle
 import { useState, useEffect } from 'react'
 
+interface MotionStore {
+  manualReducedMotion: boolean | null // null = follow OS, true/false = override
+  setManualReducedMotion: (value: boolean | null) => void
+}
+
+export const useMotionStore = create<MotionStore>((set) => ({
+  manualReducedMotion: null,
+  setManualReducedMotion: (value) => set({ manualReducedMotion: value }),
+}))
+
 export function usePrefersReducedMotion() {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const [osPreference, setOsPreference] = useState(false)
+  const manualOverride = useMotionStore((state) => state.manualReducedMotion)
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(mediaQuery.matches)
+    setOsPreference(mediaQuery.matches)
 
-    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches)
+    const handler = (e: MediaQueryListEvent) => setOsPreference(e.matches)
     mediaQuery.addEventListener('change', handler)
     return () => mediaQuery.removeEventListener('change', handler)
   }, [])
 
-  return prefersReducedMotion
+  // Manual override takes precedence over OS preference
+  return manualOverride !== null ? manualOverride : osPreference
 }

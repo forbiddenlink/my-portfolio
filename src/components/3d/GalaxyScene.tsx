@@ -14,6 +14,8 @@ import { InteractiveSpaceDust } from '@/components/3d/InteractiveSpaceDust'
 import { getProjectById, galaxies } from '@/lib/galaxyData'
 import { PlanetSurfaceExplorer } from '@/components/3d/PlanetSurfaceExplorer'
 import { GalaxyNavigation } from '@/components/ui/GalaxyNavigation'
+import { MobileGalaxyNav } from '@/components/ui/MobileGalaxyNav'
+import { MotionToggle } from '@/components/ui/MotionToggle'
 import { MinimapNavigator } from '@/components/ui/MinimapNavigator'
 import { JourneyCameraController, JourneyOverlay } from '@/components/ui/JourneyMode'
 import { TourElements } from '@/components/3d/TourElements'
@@ -318,6 +320,8 @@ export default function GalaxyScene() {
       </Canvas>
 
       <GalaxyNavigation />
+      <MobileGalaxyNav />
+      <MotionToggle />
       <MinimapNavigator />
       <JourneyOverlay />
     </div>

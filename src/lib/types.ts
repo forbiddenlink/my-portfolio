@@ -26,12 +26,14 @@ export interface Project {
   dateRange: string // "2023-2024", "2022", etc.
   challenge?: string // Custom challenge text for case study page
   solution?: string // Custom solution text for case study page
+  impact?: string // Quantifiable outcomes and results
 }
 
 export interface Galaxy {
   id: string
   name: string
   description: string
+  narrative?: string // Story-driven tagline for the galaxy
   color: string // Primary color for this galaxy's stars
   size: number // Relative size/importance
   projects: Project[]

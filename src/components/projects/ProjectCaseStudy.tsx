@@ -70,8 +70,8 @@ export function ProjectCaseStudy({ project }: ProjectCaseStudyProps) {
           {project.description}
         </p>
 
-        {/* Challenge & Solution - use custom text if provided, otherwise generate from context */}
-        <div className="grid md:grid-cols-2 gap-6 mt-8">
+        {/* Challenge, Solution & Impact - use custom text if provided, otherwise generate from context */}
+        <div className="grid md:grid-cols-3 gap-6 mt-8">
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 hover:border-white/20">
             <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
               <span className="text-2xl">🎯</span>
@@ -94,6 +94,21 @@ export function ProjectCaseStudy({ project }: ProjectCaseStudyProps) {
               {project.solution || (project.tags.includes('AI') ?
                 `Built with ${project.tags.filter(t => ['Next.js', 'React', 'TypeScript', 'Supabase', 'OpenAI', 'Claude'].includes(t)).join(', ') || 'modern web technologies'}, integrating AI capabilities for enhanced functionality.` :
                 `Architected with ${project.tags.slice(0, 3).join(', ')}, focusing on performance, accessibility, and maintainability.`
+              )}
+            </p>
+          </div>
+
+          <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 hover:border-white/30" style={{ boxShadow: `0 0 30px ${project.color}20` }}>
+            <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+              <span className="text-2xl">📈</span>
+              <span>Impact</span>
+            </h3>
+            <p className="text-white/70 leading-relaxed">
+              {project.impact || (project.metrics?.tests ?
+                `${project.metrics.tests} automated tests ensuring reliability. ${project.metrics.users ? `Serving ${project.metrics.users}.` : 'Production-ready and deployed.'}` :
+                project.links?.live ?
+                  `Successfully deployed to production and actively maintained. Built with modern best practices for performance and accessibility.` :
+                  `Completed as a learning project, demonstrating proficiency in ${project.tags.slice(0, 2).join(' and ')}.`
               )}
             </p>
           </div>

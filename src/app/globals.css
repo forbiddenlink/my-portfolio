@@ -265,12 +265,16 @@ body {
 
 /* Smooth transitions for interactive elements */
 button, a, [role="button"] {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 button:active, a:active, [role="button"]:active {
-  transform: scale(0.95);
+  transform: scale(0.98);
 }
 
 /* Ensure canvas takes full height */
@@ -718,6 +722,16 @@ img:hover {
   50% {
     filter: drop-shadow(0 0 20px currentColor) drop-shadow(0 0 40px currentColor);
   }
+}
+
+/* Slow Spin Animation (for motion toggle icon) */
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 /* Morphing Background */
