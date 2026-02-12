@@ -1,19 +1,23 @@
 'use client'
 
-import { useRef, useMemo } from 'react'
-import { useFrame } from '@react-three/fiber'
+import { useRef, useMemo, useState } from 'react'
+import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { galaxies } from '@/lib/galaxyData'
 import { getGalaxyCenterPosition } from '@/lib/utils'
+
+// Distance thresholds for galaxy core LOD
+const SPIRAL_RENDER_DISTANCE = 80  // Show spiral arms only when within this distance
 
 interface GalaxyCoreProps {
   position: [number, number, number]
   color: string
   scale?: number
+  showSpirals?: boolean
 }
 
 // Individual galaxy core with luminous center and spiral arms
-function GalaxyCoreSingle({ position, color, scale = 1 }: GalaxyCoreProps) {
+function GalaxyCoreSingle({ position, color, scale = 1, showSpirals = true }: GalaxyCoreProps) {
   const coreRef = useRef<THREE.Mesh>(null)
   const armsRef = useRef<THREE.Points>(null)
   const glowRef = useRef<THREE.Mesh>(null)
@@ -161,32 +165,34 @@ function GalaxyCoreSingle({ position, color, scale = 1 }: GalaxyCoreProps) {
         />
       </mesh>
 
-      {/* Spiral arm particles */}
-      <points ref={armsRef}>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            args={[spiralData.positions, 3]}
+      {/* Spiral arm particles - only render when close enough for detail to matter */}
+      {showSpirals && (
+        <points ref={armsRef}>
+          <bufferGeometry>
+            <bufferAttribute
+              attach="attributes-position"
+              args={[spiralData.positions, 3]}
+            />
+            <bufferAttribute
+              attach="attributes-color"
+              args={[spiralData.colors, 3]}
+            />
+            <bufferAttribute
+              attach="attributes-size"
+              args={[spiralData.sizes, 1]}
+            />
+          </bufferGeometry>
+          <pointsMaterial
+            size={0.4}
+            vertexColors
+            transparent
+            opacity={0.6}
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
+            sizeAttenuation
           />
-          <bufferAttribute
-            attach="attributes-color"
-            args={[spiralData.colors, 3]}
-          />
-          <bufferAttribute
-            attach="attributes-size"
-            args={[spiralData.sizes, 1]}
-          />
-        </bufferGeometry>
-        <pointsMaterial
-          size={0.4}
-          vertexColors
-          transparent
-          opacity={0.6}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-          sizeAttenuation
-        />
-      </points>
+        </points>
+      )}
 
       {/* Central point light for bloom effect */}
       <pointLight
@@ -199,8 +205,11 @@ function GalaxyCoreSingle({ position, color, scale = 1 }: GalaxyCoreProps) {
   )
 }
 
-// Render cores for all galaxies
+// Render cores for all galaxies with distance-based LOD
 export function GalaxyCores() {
+  const { camera } = useThree()
+  const [visibleSpirals, setVisibleSpirals] = useState<Set<string>>(new Set())
+
   const galaxyCores = useMemo(() => {
     return galaxies.map((galaxy, index) => {
       const [x, y, z] = getGalaxyCenterPosition(index)
@@ -212,6 +221,23 @@ export function GalaxyCores() {
     })
   }, [])
 
+  // Check distances to determine which galaxy cores should show spirals
+  useFrame(() => {
+    const newVisible = new Set<string>()
+    galaxyCores.forEach((core) => {
+      const dist = camera.position.distanceTo(new THREE.Vector3(...core.position))
+      if (dist < SPIRAL_RENDER_DISTANCE) {
+        newVisible.add(core.id)
+      }
+    })
+
+    // Only update state if changed
+    if (newVisible.size !== visibleSpirals.size ||
+        ![...newVisible].every(id => visibleSpirals.has(id))) {
+      setVisibleSpirals(newVisible)
+    }
+  })
+
   return (
     <>
       {galaxyCores.map((core) => (
@@ -220,6 +246,7 @@ export function GalaxyCores() {
           position={core.position}
           color={core.color}
           scale={1.2}
+          showSpirals={visibleSpirals.has(core.id)}
         />
       ))}
     </>

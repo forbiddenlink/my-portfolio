@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState, useMemo } from 'react'
-import { useFrame } from '@react-three/fiber'
+import { useFrame, useThree } from '@react-three/fiber'
 import { Text } from '@react-three/drei'
 import { galaxies } from '@/lib/galaxyData'
 import { generateProjectPosition, getSizeMultiplier } from '@/lib/utils'
@@ -9,6 +9,11 @@ import { useViewStore } from '@/lib/store'
 import * as THREE from 'three'
 import { SupernovaEffect } from './SupernovaEffect'
 import { AnimatedConstellation } from './AnimatedConstellation'
+
+// LOD distance thresholds
+const LOD_NEAR = 15    // Full detail
+const LOD_MEDIUM = 35  // Medium detail
+const LOD_FAR = 60     // Low detail (universe view)
 
 export function EnhancedProjectStars() {
   return (
@@ -368,11 +373,16 @@ function RealisticPlanet({
   onPlanetClick: () => void
 }) {
   const [hovered, setHovered] = useState(false)
+  const [lodLevel, setLodLevel] = useState<'high' | 'medium' | 'low'>('high')
   const planetRef = useRef<THREE.Mesh>(null)
   const atmosphereRef = useRef<THREE.Mesh>(null)
   const ringsRef = useRef<THREE.Mesh>(null)
   const cloudRef = useRef<THREE.Mesh>(null)
   const groupRef = useRef<THREE.Group>(null)
+  const { camera } = useThree()
+
+  // Pre-compute position vector for distance calculation
+  const positionVec = useMemo(() => new THREE.Vector3(...position), [position])
   
   // Determine planet characteristics
   const hasRings = ['coulson-one', 'portfolio-pro', 'quantum-forge', 'flo-labs'].includes(project.id)
@@ -413,7 +423,12 @@ function RealisticPlanet({
   
   useFrame((state) => {
     const time = state.clock.elapsedTime
-    
+
+    // Calculate distance to camera for LOD (every frame is fine, it's cheap)
+    const distance = camera.position.distanceTo(positionVec)
+    const newLod = distance < LOD_NEAR ? 'high' : distance < LOD_MEDIUM ? 'medium' : 'low'
+    if (newLod !== lodLevel) setLodLevel(newLod)
+
     if (planetRef.current) {
       planetRef.current.rotation.y += rotationSpeed
       const material = planetRef.current.material as THREE.ShaderMaterial
@@ -421,11 +436,11 @@ function RealisticPlanet({
         material.uniforms.time.value = time
       }
     }
-    
+
     if (ringsRef.current) {
       ringsRef.current.rotation.z += 0.0003
     }
-    
+
     // Rotate cloud layer at different speed
     if (cloudRef.current) {
       cloudRef.current.rotation.y += rotationSpeed * 1.5
@@ -434,8 +449,8 @@ function RealisticPlanet({
         material.uniforms.time.value = time
       }
     }
-    
-    
+
+
     if (groupRef.current && hovered) {
       const scale = 1.1 + Math.sin(time * 3) * 0.02
       groupRef.current.scale.setScalar(scale)
@@ -490,37 +505,41 @@ function RealisticPlanet({
         />
       </mesh>
       
-      {/* Atmosphere glow - reduced size to prevent overlap */}
-      <mesh ref={atmosphereRef} scale={1.1}>
-        <sphereGeometry args={[sizeMultiplier, 32, 32]} />
-        <meshBasicMaterial
-          color={project.color}
-          transparent
-          opacity={hovered ? 0.3 : 0.15}
-          side={THREE.BackSide}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-        />
-      </mesh>
+      {/* Atmosphere glow - only render at medium+ detail */}
+      {lodLevel !== 'low' && (
+        <mesh ref={atmosphereRef} scale={1.1}>
+          <sphereGeometry args={[sizeMultiplier, lodLevel === 'high' ? 32 : 16, lodLevel === 'high' ? 32 : 16]} />
+          <meshBasicMaterial
+            color={project.color}
+            transparent
+            opacity={hovered ? 0.3 : 0.15}
+            side={THREE.BackSide}
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
+          />
+        </mesh>
+      )}
 
-      {/* Outer atmosphere haze - reduced size */}
-      <mesh scale={1.18}>
-        <sphereGeometry args={[sizeMultiplier, 24, 24]} />
-        <meshBasicMaterial
-          color={project.color}
-          transparent
-          opacity={hovered ? 0.15 : 0.08}
-          side={THREE.BackSide}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-        />
-      </mesh>
+      {/* Outer atmosphere haze - only render at high detail */}
+      {lodLevel === 'high' && (
+        <mesh scale={1.18}>
+          <sphereGeometry args={[sizeMultiplier, 24, 24]} />
+          <meshBasicMaterial
+            color={project.color}
+            transparent
+            opacity={hovered ? 0.15 : 0.08}
+            side={THREE.BackSide}
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
+          />
+        </mesh>
+      )}
       
 
-      {/* Cloud layer for gas giants */}
-      {planetType === 1 && (
+      {/* Cloud layer for gas giants - only at high/medium detail */}
+      {planetType === 1 && lodLevel !== 'low' && (
         <mesh ref={cloudRef} scale={1.03}>
-          <sphereGeometry args={[sizeMultiplier, 48, 48]} />
+          <sphereGeometry args={[sizeMultiplier, lodLevel === 'high' ? 48 : 24, lodLevel === 'high' ? 48 : 24]} />
           <shaderMaterial
             vertexShader={cloudVertexShader}
             fragmentShader={cloudFragmentShader}
@@ -535,10 +554,10 @@ function RealisticPlanet({
           />
         </mesh>
       )}
-      {/* Saturn-like rings */}
+      {/* Saturn-like rings - with LOD-based segments */}
       {hasRings && (
         <mesh ref={ringsRef} rotation={[Math.PI / 2.5, 0, Math.PI / 8]}>
-          <ringGeometry args={[sizeMultiplier * 1.4, sizeMultiplier * 2.2, 64]} />
+          <ringGeometry args={[sizeMultiplier * 1.4, sizeMultiplier * 2.2, lodLevel === 'high' ? 64 : lodLevel === 'medium' ? 32 : 16]} />
           <meshBasicMaterial
             color={project.color}
             transparent
@@ -549,11 +568,11 @@ function RealisticPlanet({
           />
         </mesh>
       )}
-      
-      {/* Hover indicator ring */}
-      {hovered && (
+
+      {/* Hover indicator ring - only when close enough to interact */}
+      {hovered && lodLevel !== 'low' && (
         <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[sizeMultiplier * 1.3, sizeMultiplier * 1.35, 48]} />
+          <ringGeometry args={[sizeMultiplier * 1.3, sizeMultiplier * 1.35, 32]} />
           <meshBasicMaterial
             color="#ffffff"
             transparent
