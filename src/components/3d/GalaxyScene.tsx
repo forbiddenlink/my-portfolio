@@ -29,6 +29,8 @@ import { AuroraRibbons } from '@/components/3d/AuroraRibbons'
 import { CosmicJellyfish } from '@/components/3d/CosmicJellyfish'
 import { Pulsars } from '@/components/3d/Pulsars'
 import { SolarFlares } from '@/components/3d/SolarFlares'
+import { BlackHole } from '@/components/3d/BlackHole'
+import { AsteroidBelts } from '@/components/3d/AsteroidBelts'
 import { BlendFunction } from 'postprocessing'
 import { getGalaxyCenterPosition } from '@/lib/utils'
 
@@ -189,6 +191,8 @@ function SceneContent({ isMobile, controlsRef }: { isMobile: boolean; controlsRe
                 <CosmicJellyfish count={4} />
                 <Pulsars count={3} />
                 <SolarFlares />
+                <BlackHole />
+                <AsteroidBelts />
               </>
             )}
           </>
