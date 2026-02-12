@@ -71,7 +71,7 @@ export function MobileGalaxyNav() {
                 }}
               />
               <span className="text-[10px] font-medium text-white/80 truncate max-w-[40px]">
-                {galaxy.name.split(' ')[0]}
+                {galaxy.id === 'ai' ? 'AI' : galaxy.id === 'experimental' ? 'Lab' : galaxy.name.split(' ')[0]}
               </span>
             </button>
           ))}

@@ -212,7 +212,7 @@ export default function AboutPage() {
             <div className="space-y-4">
               <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:bg-white/[0.07] transition-all hover:translate-x-2">
                 <p className="text-white/80">
-                  ✨ Built and deployed 50+ production projects including enterprise SaaS platforms,
+                  ✨ Built and deployed 60 production projects including enterprise SaaS platforms,
                   AI-powered applications, and educational tools with 1,200+ automated tests
                 </p>
               </div>

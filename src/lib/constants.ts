@@ -10,7 +10,7 @@ export const SITE = {
   name: 'Elizabeth Stein',
   title: 'Full-Stack Developer & AI Integration Specialist',
   fullTitle: 'Elizabeth Stein | Full-Stack Developer & AI Integration Specialist',
-  description: 'Full-stack development, AI integration, design systems, and enterprise-scale applications. Explore 50+ projects across 6 galaxies with 1,200+ automated tests.',
+  description: 'Full-stack development, AI integration, design systems, and enterprise-scale applications. Explore 60 projects across 6 galaxies with 1,200+ automated tests.',
   shortDescription: 'Full-stack development, AI integration, design systems, and enterprise-scale applications.',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://elizabethstein.com',
   keywords: [
@@ -47,7 +47,7 @@ export const SITE = {
 
 // Portfolio stats
 export const STATS = {
-  projectCount: '50+',
+  projectCount: '60',
   testCount: '1,200+',
   yearsExperience: '3+',
 } as const

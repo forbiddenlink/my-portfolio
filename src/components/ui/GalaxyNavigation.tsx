@@ -97,7 +97,7 @@ export function GalaxyNavigation() {
                   }}
                 />
                 <span className="text-sm font-semibold text-white transition-all duration-300 whitespace-nowrap leading-none">
-                  {galaxy.name.split(' ')[0]}
+                  {galaxy.id === 'ai' ? 'AI' : galaxy.id === 'experimental' ? 'Lab' : galaxy.name.split(' ')[0]}
                 </span>
               </button>
             ))}

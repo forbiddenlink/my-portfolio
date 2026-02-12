@@ -239,7 +239,7 @@ export const galaxies: Galaxy[] = [
         size: 'supermassive',
         galaxy: 'ai',
         metrics: { tests: 400 },
-        links: { live: 'https://ai-artist-gallery.vercel.app', github: 'https://github.com/forbiddenlink/aria' },
+        links: { github: 'https://github.com/forbiddenlink/aria' },
         featured: true,
         dateRange: '2025',
         challenge: 'Building an AI that creates art with genuine personality rather than just generating images on demand - an agent that has moods, preferences, and learns over time.',

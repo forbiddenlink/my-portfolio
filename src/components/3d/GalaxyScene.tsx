@@ -21,6 +21,7 @@ import { JourneyCameraController, JourneyOverlay } from '@/components/ui/Journey
 import { TourElements } from '@/components/3d/TourElements'
 import { GalaxyCores } from '@/components/3d/GalaxyCore'
 import { PlanetEnhancements } from '@/components/3d/PlanetEnhancements'
+import { ProjectRelationships } from '@/components/3d/ProjectRelationships'
 import { BlendFunction } from 'postprocessing'
 import { getGalaxyCenterPosition } from '@/lib/utils'
 
@@ -171,6 +172,7 @@ function SceneContent({ isMobile, controlsRef }: { isMobile: boolean; controlsRe
             <GalaxyCores />
             <EnhancedProjectStars />
             <PlanetEnhancements />
+            <ProjectRelationships />
             {!isMobile && (
               <>
                 <ShootingStars count={isMobile ? 2 : 5} />
