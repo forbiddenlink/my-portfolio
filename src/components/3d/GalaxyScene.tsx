@@ -24,6 +24,11 @@ import { TourElements } from '@/components/3d/TourElements'
 import { GalaxyCores } from '@/components/3d/GalaxyCore'
 import { PlanetEnhancements } from '@/components/3d/PlanetEnhancements'
 import { ProjectRelationships } from '@/components/3d/ProjectRelationships'
+import { CosmicComets } from '@/components/3d/CosmicComets'
+import { AuroraRibbons } from '@/components/3d/AuroraRibbons'
+import { CosmicJellyfish } from '@/components/3d/CosmicJellyfish'
+import { Pulsars } from '@/components/3d/Pulsars'
+import { SolarFlares } from '@/components/3d/SolarFlares'
 import { BlendFunction } from 'postprocessing'
 import { getGalaxyCenterPosition } from '@/lib/utils'
 
@@ -179,6 +184,11 @@ function SceneContent({ isMobile, controlsRef }: { isMobile: boolean; controlsRe
               <>
                 <ShootingStars count={isMobile ? 2 : 5} />
                 <InteractiveSpaceDust count={isMobile ? 300 : 800} />
+                <CosmicComets count={3} />
+                <AuroraRibbons count={4} />
+                <CosmicJellyfish count={4} />
+                <Pulsars count={3} />
+                <SolarFlares />
               </>
             )}
           </>

@@ -4,9 +4,16 @@
  * WebGPU provides 20-30% performance boost over WebGL.
  * Supported in Chrome, Edge, and Safari 26+ (September 2025).
  * Falls back to WebGL2 for Firefox and older browsers.
+ *
+ * NOTE: Currently disabled because @react-three/postprocessing
+ * is not compatible with WebGPU renderer (getContextAttributes error).
+ * Re-enable when postprocessing adds WebGPU support.
  */
 
 export type RendererType = 'webgpu' | 'webgl'
+
+// Disable WebGPU until postprocessing is compatible
+const WEBGPU_ENABLED = false
 
 // Cache the result to avoid repeated checks
 let cachedSupport: boolean | null = null
@@ -17,6 +24,12 @@ let supportPromise: Promise<boolean> | null = null
  * This performs an async check to request an adapter.
  */
 export async function checkWebGPUSupport(): Promise<boolean> {
+  // WebGPU disabled due to postprocessing incompatibility
+  if (!WEBGPU_ENABLED) {
+    cachedSupport = false
+    return false
+  }
+
   // Return cached result if available
   if (cachedSupport !== null) {
     return cachedSupport
