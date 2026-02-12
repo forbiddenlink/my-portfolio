@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useViewStore } from '@/lib/store'
 import { getProjectById } from '@/lib/galaxyData'
 import { ExternalLink, Github, X, FileText } from 'lucide-react'
+import { KineticTitle } from './KineticTitle'
 
 export function HolographicProjectPanel({ show }: { show: boolean }) {
   const selectedProject = useViewStore((state) => state.selectedProject)
@@ -47,9 +48,12 @@ export function HolographicProjectPanel({ show }: { show: boolean }) {
               >
                 ACCESSING PROJECT DATA...
               </div>
-              <h2 className="text-4xl font-bold mb-2" style={{ color: project.color }}>
-                {project.title}
-              </h2>
+              <KineticTitle
+                text={project.title}
+                className="text-4xl font-bold mb-2"
+                color={project.color}
+                as="h2"
+              />
               {project.company && (
                 <p className="text-white/70 text-lg font-mono">{project.company}</p>
               )}
