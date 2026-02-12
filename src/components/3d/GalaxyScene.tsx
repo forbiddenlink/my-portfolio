@@ -1,11 +1,13 @@
 'use client'
 
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { useFrame, useThree } from '@react-three/fiber'
 import { OrbitControls, PerspectiveCamera, PerformanceMonitor } from '@react-three/drei'
 import { EffectComposer, Bloom, Vignette, DepthOfField, ChromaticAberration } from '@react-three/postprocessing'
-import { useRef, useMemo, useState, useEffect, Suspense } from 'react'
+import { useRef, useMemo, useState, useEffect, Suspense, useCallback } from 'react'
 import * as THREE from 'three'
 import { useViewStore, usePrefersReducedMotion } from '@/lib/store'
+import { WebGPUCanvas } from '@/components/3d/WebGPUCanvas'
+import { type RendererType } from '@/lib/webgpu'
 import { TwinklingStarfield } from '@/components/3d/TwinklingStarfield'
 import { NebulaBackground } from '@/components/3d/NebulaBackground'
 import { EnhancedProjectStars } from '@/components/3d/EnhancedProjectStars'
@@ -267,6 +269,7 @@ function SceneWrapper({ isMobile }: { isMobile: boolean }) {
 export default function GalaxyScene() {
   const [dpr, setDpr] = useState(1)
   const [isMobile, setIsMobile] = useState(false)
+  const [rendererType, setRendererType] = useState<RendererType | null>(null)
 
   useEffect(() => {
     // Basic mobile check
@@ -282,11 +285,16 @@ export default function GalaxyScene() {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
+  // Callback when renderer is ready
+  const handleRendererReady = useCallback((type: RendererType) => {
+    setRendererType(type)
+  }, [])
+
   // Static fallback for browsers without WebGL support
   const WebGLFallback = (
     <div className="w-full h-full flex items-center justify-center bg-gradient-to-b from-black via-indigo-950 to-black">
       <div className="text-center p-8 max-w-lg">
-        <div className="text-6xl mb-4">🌌</div>
+        <div className="text-6xl mb-4">*</div>
         <h2 className="text-2xl font-bold text-white mb-4">Welcome to My Portfolio</h2>
         <p className="text-gray-300 mb-6">
           This experience is best viewed in a browser with WebGL support.
@@ -296,18 +304,25 @@ export default function GalaxyScene() {
           href="/work"
           className="inline-block px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors"
         >
-          View Projects →
+          View Projects
         </a>
       </div>
     </div>
   )
 
+  // Loading state while checking WebGPU support
+  const LoadingFallback = (
+    <div className="w-full h-full flex items-center justify-center bg-black">
+      <div className="text-white/50 text-sm">Initializing 3D renderer...</div>
+    </div>
+  )
+
   return (
     <div className="w-full h-screen relative">
-      <Canvas
+      <WebGPUCanvas
         dpr={dpr}
         className="w-full h-full block"
-        gl={{
+        rendererConfig={{
           antialias: true,
           alpha: false,
           powerPreference: "high-performance",
@@ -317,9 +332,12 @@ export default function GalaxyScene() {
         }}
         camera={{ position: [0, 20, 60], fov: 45 }}
         fallback={WebGLFallback}
+        loadingFallback={LoadingFallback}
+        onRendererReady={handleRendererReady}
+        showRendererIndicator={process.env.NODE_ENV === 'development'}
       >
         <SceneWrapper isMobile={isMobile} />
-      </Canvas>
+      </WebGPUCanvas>
 
       <GalaxyNavigation />
       <MobileGalaxyNav />
