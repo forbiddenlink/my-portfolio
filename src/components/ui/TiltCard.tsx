@@ -75,7 +75,7 @@ export function TiltCard({ children, className }: TiltCardProps) {
             <div
                 className={cn(
                     "relative h-full transition-shadow duration-300 rounded-2xl overflow-hidden",
-                    hovered ? "shadow-2xl shadow-purple-500/20" : "shadow-lg"
+                    hovered ? "shadow-[0_20px_50px_rgba(168,85,247,0.25),0_8px_24px_rgba(99,102,241,0.2)]" : "shadow-lg"
                 )}
                 style={{ transform: 'translateZ(20px)' }}
             >

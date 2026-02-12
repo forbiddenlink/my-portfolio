@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Send, Sparkles, X, User, Bot, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useViewStore } from '@/lib/store'
@@ -18,6 +19,14 @@ export function GalaxyGuide() {
     const [messages, setMessages] = useState<Message[]>([
         { role: 'assistant', content: "Greetings! I am your Galaxy Guide. How can I assist you in navigating Elizabeth's universe of code today?" }
     ])
+    const [showSuggestions, setShowSuggestions] = useState(true)
+
+    const suggestedPrompts = [
+        "What are Liz's best AI projects?",
+        "Tell me about her enterprise work",
+        "What technologies does she use?",
+        "Show me full-stack projects"
+    ]
     const [inputValue, setInputValue] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -46,6 +55,7 @@ export function GalaxyGuide() {
 
         const userMsg = inputValue.trim()
         setInputValue('')
+        setShowSuggestions(false)
         setMessages(prev => [...prev, { role: 'user', content: userMsg }])
         setIsLoading(true)
 
@@ -90,8 +100,15 @@ export function GalaxyGuide() {
             )}
 
             {/* Chat Interface */}
+            <AnimatePresence>
             {isOpen && (
-                <div className="fixed bottom-4 right-4 left-4 md:left-auto md:bottom-10 md:right-10 z-50 md:w-[400px] h-[70vh] md:h-[500px] flex flex-col rounded-3xl overflow-hidden glass-panel animate-in fade-in slide-in-from-bottom-10 duration-300 border border-white/10 shadow-[0_0_80px_rgba(0,0,0,0.8)]">
+                <motion.div
+                    initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
+                    animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                    exit={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
+                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    className="fixed bottom-4 right-4 left-4 md:left-auto md:bottom-10 md:right-10 z-50 md:w-[400px] h-[70vh] md:h-[500px] flex flex-col rounded-3xl overflow-hidden glass-panel border border-white/10 shadow-[0_0_80px_rgba(0,0,0,0.8)]"
+                >
                     {/* Header */}
                     <div className="flex items-center justify-between p-4 border-b border-white/10 bg-gradient-to-r from-indigo-900/40 to-purple-900/40 backdrop-blur-xl">
                         <div className="flex items-center gap-3">
@@ -117,6 +134,23 @@ export function GalaxyGuide() {
 
                     {/* Messages */}
                     <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent bg-black/40 backdrop-blur-md">
+                        {/* Suggested Prompts */}
+                        {showSuggestions && messages.length === 1 && (
+                            <div className="flex flex-wrap gap-2 mb-4">
+                                {suggestedPrompts.map((prompt, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={() => {
+                                            setInputValue(prompt)
+                                            setShowSuggestions(false)
+                                        }}
+                                        className="px-3 py-1.5 text-xs bg-indigo-500/10 border border-indigo-500/20 rounded-full text-indigo-200/80 hover:bg-indigo-500/20 hover:border-indigo-500/30 transition-all"
+                                    >
+                                        {prompt}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                         {messages.map((msg, idx) => (
                             <div
                                 key={idx}
@@ -178,8 +212,9 @@ export function GalaxyGuide() {
                             <p className="text-[10px] text-white/20">Powered by MiniMax API</p>
                         </div>
                     </form>
-                </div>
+                </motion.div>
             )}
+            </AnimatePresence>
         </>
     )
 }

@@ -38,14 +38,16 @@ export function ScrollReveal({
       initial={{
         ...directions[direction],
         opacity: 0,
+        filter: 'blur(4px)',
       }}
       animate={isInView ? {
         x: 0,
         y: 0,
         opacity: 1,
+        filter: 'blur(0px)',
       } : undefined}
       transition={{
-        duration: 0.8,
+        duration: 0.5,
         delay,
         ease: easings.easeOutExpo,
       }}
@@ -73,10 +75,10 @@ export function ScrollScale({
     <motion.div
       ref={ref}
       className={className}
-      initial={{ scale: 0.8, opacity: 0 }}
-      animate={isInView ? { scale: 1, opacity: 1 } : undefined}
+      initial={{ scale: 0.9, opacity: 0, filter: 'blur(4px)' }}
+      animate={isInView ? { scale: 1, opacity: 1, filter: 'blur(0px)' } : undefined}
       transition={{
-        duration: 0.6,
+        duration: 0.45,
         delay,
         ease: easings.easeOutBack,
       }}
@@ -105,10 +107,10 @@ export function ScrollStagger({
       {Array.isArray(children) && children.map((child, index) => (
         <motion.div
           key={index}
-          initial={{ y: 30, opacity: 0 }}
-          animate={isInView ? { y: 0, opacity: 1 } : undefined}
+          initial={{ y: 20, opacity: 0, filter: 'blur(4px)' }}
+          animate={isInView ? { y: 0, opacity: 1, filter: 'blur(0px)' } : undefined}
           transition={{
-            duration: 0.6,
+            duration: 0.45,
             delay: index * staggerDelay,
             ease: easings.easeOutQuint,
           }}
