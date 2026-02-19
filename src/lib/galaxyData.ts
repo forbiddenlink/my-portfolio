@@ -651,7 +651,7 @@ export const galaxies: Galaxy[] = [
         brightness: 1.5,
         size: 'medium',
         galaxy: 'devtools',
-        links: { live: 'https://securitytrainer.vercel.app' },
+        links: { live: 'https://security-trainer.vercel.app' },
         featured: false,
         dateRange: '2025',
         challenge: 'Security training is often theoretical and boring. Developers learn best by doing, but vulnerability labs are complex to set up.',
