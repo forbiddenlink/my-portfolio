@@ -20,6 +20,7 @@ import { MobileGalaxyNav } from '@/components/ui/MobileGalaxyNav'
 import { MotionToggle } from '@/components/ui/MotionToggle'
 import { MinimapNavigator } from '@/components/ui/MinimapNavigator'
 import { JourneyCameraController, JourneyOverlay } from '@/components/ui/JourneyMode'
+import { ExplorerHUD } from '@/components/ui/ExplorerHUD'
 import { TourElements } from '@/components/3d/TourElements'
 import { GalaxyCores } from '@/components/3d/GalaxyCore'
 import { PlanetEnhancements } from '@/components/3d/PlanetEnhancements'
@@ -31,6 +32,7 @@ import { Pulsars } from '@/components/3d/Pulsars'
 import { SolarFlares } from '@/components/3d/SolarFlares'
 import { BlackHole } from '@/components/3d/BlackHole'
 import { AsteroidBelts } from '@/components/3d/AsteroidBelts'
+import { ScanSystem } from '@/components/3d/ScanSystem'
 import { BlendFunction } from 'postprocessing'
 import { getGalaxyCenterPosition } from '@/lib/utils'
 
@@ -180,6 +182,7 @@ function SceneContent({ isMobile, controlsRef }: { isMobile: boolean; controlsRe
             <TwinklingStarfield count={isMobile ? 2000 : 5000} />
             <GalaxyCores />
             <EnhancedProjectStars />
+            <ScanSystem />
             <PlanetEnhancements />
             <ProjectRelationships />
             {!isMobile && (
@@ -358,6 +361,7 @@ export default function GalaxyScene() {
       <MotionToggle />
       <MinimapNavigator />
       <JourneyOverlay />
+      <ExplorerHUD />
     </div>
   )
 }

@@ -11,6 +11,7 @@ interface RealisticPlanetProps {
   isSupernova?: boolean
   planetType?: 'rocky' | 'gas' | 'ice' | 'desert'
   hasLife?: boolean  // Show city lights on night side
+  isScanned?: boolean  // Only allow click interaction if scanned
   onClick?: () => void
   onHover?: (hovered: boolean) => void
 }
@@ -22,6 +23,7 @@ export function RealisticPlanet({
   isSupernova = false,
   planetType = 'rocky',
   hasLife = false,
+  isScanned = true,
   onClick,
   onHover
 }: RealisticPlanetProps) {
@@ -398,7 +400,9 @@ export function RealisticPlanet({
         position={[0, 0, 0]}
         onClick={(e) => {
           e.stopPropagation()
-          onClick?.()
+          if (isScanned) {
+            onClick?.()
+          }
         }}
         onPointerOver={(e) => {
           e.stopPropagation()

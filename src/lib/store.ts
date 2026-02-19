@@ -9,7 +9,12 @@ interface ViewStore {
   selectedGalaxy: string | null
   selectedProject: string | null
   isLanding: boolean // Track landing animation state
-  hasEntered: boolean // New: Track if user has entered the experience
+  hasEntered: boolean // Track if user has entered the experience
+
+  // Scan state (Explorer Phase 1)
+  scannedPlanets: Set<string>
+  scanningPlanet: string | null
+  scanProgress: number // 0-1
 
   // Journey Mode state
   isJourneyMode: boolean
@@ -21,7 +26,7 @@ interface ViewStore {
   setView: (view: ViewState) => void
   selectGalaxy: (galaxyId: string) => void
   selectProject: (projectId: string) => void
-  enter: () => void // New: Enter action
+  enter: () => void
   reset: () => void
 
   // Navigation helpers
@@ -30,6 +35,12 @@ interface ViewStore {
   exploreProject: (projectId: string) => void
   exitExploration: () => void
   zoomOut: () => void
+
+  // Scan actions (Explorer Phase 1)
+  startScan: (planetId: string) => void
+  updateScanProgress: (progress: number) => void
+  completeScan: (planetId: string) => void
+  cancelScan: () => void
 
   // Journey Mode actions
   startJourney: (tourId?: string) => void
@@ -47,6 +58,11 @@ export const useViewStore = create<ViewStore>((set, get) => ({
   selectedProject: null,
   isLanding: false,
   hasEntered: false,
+
+  // Scan initial state
+  scannedPlanets: new Set<string>(),
+  scanningPlanet: null,
+  scanProgress: 0,
 
   // Journey Mode initial state
   isJourneyMode: false,
@@ -120,6 +136,27 @@ export const useViewStore = create<ViewStore>((set, get) => ({
       set({ view: 'universe', selectedGalaxy: null, isLanding: false })
     }
   },
+
+  // Scan actions
+  startScan: (planetId) => set({
+    scanningPlanet: planetId,
+    scanProgress: 0
+  }),
+
+  updateScanProgress: (progress) => set({
+    scanProgress: Math.min(1, Math.max(0, progress))
+  }),
+
+  completeScan: (planetId) => set((state) => ({
+    scannedPlanets: new Set([...state.scannedPlanets, planetId]),
+    scanningPlanet: null,
+    scanProgress: 0
+  })),
+
+  cancelScan: () => set({
+    scanningPlanet: null,
+    scanProgress: 0
+  }),
 
   // Journey Mode actions
   startJourney: (tourId?: string) => set({

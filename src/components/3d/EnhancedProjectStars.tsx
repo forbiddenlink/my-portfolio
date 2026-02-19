@@ -32,6 +32,7 @@ export function EnhancedProjectStars() {
 function GalaxyCluster({ galaxy, galaxyIndex }: { galaxy: any; galaxyIndex: number }) {
   const groupRef = useRef<THREE.Group>(null)
   const zoomToProject = useViewStore((state) => state.zoomToProject)
+  const scannedPlanets = useViewStore((state) => state.scannedPlanets)
 
   return (
     <group ref={groupRef}>
@@ -46,6 +47,7 @@ function GalaxyCluster({ galaxy, galaxyIndex }: { galaxy: any; galaxyIndex: numb
 
         const sizeMultiplier = getSizeMultiplier(project.size)
         const isSupernova = project.id === 'coulson-one'
+        const isScanned = scannedPlanets.has(project.id)
 
         return (
           <RealisticPlanet
@@ -54,6 +56,7 @@ function GalaxyCluster({ galaxy, galaxyIndex }: { galaxy: any; galaxyIndex: numb
             position={position}
             sizeMultiplier={sizeMultiplier}
             isSupernova={isSupernova}
+            isScanned={isScanned}
             onPlanetClick={() => zoomToProject(project.id)}
           />
         )
@@ -364,12 +367,14 @@ function RealisticPlanet({
   position,
   sizeMultiplier,
   isSupernova,
+  isScanned,
   onPlanetClick
 }: {
   project: any
   position: [number, number, number]
   sizeMultiplier: number
   isSupernova: boolean
+  isScanned: boolean
   onPlanetClick: () => void
 }) {
   const [hovered, setHovered] = useState(false)
@@ -466,9 +471,9 @@ function RealisticPlanet({
         <SupernovaEffect position={[0, 0, 0]} color={project.color} size={sizeMultiplier} />
         {/* Invisible clickable sphere for the supernova */}
         <mesh
-          onClick={onPlanetClick}
+          onClick={() => isScanned && onPlanetClick()}
           onPointerEnter={() => {
-            document.body.style.cursor = 'pointer'
+            document.body.style.cursor = isScanned ? 'pointer' : 'not-allowed'
           }}
           onPointerLeave={() => {
             document.body.style.cursor = 'auto'
@@ -486,9 +491,15 @@ function RealisticPlanet({
       {/* Main planet with procedural surface */}
       <mesh
         ref={planetRef}
-        onClick={onPlanetClick}
-        onPointerEnter={() => setHovered(true)}
-        onPointerLeave={() => setHovered(false)}
+        onClick={() => isScanned && onPlanetClick()}
+        onPointerEnter={() => {
+          setHovered(true)
+          document.body.style.cursor = isScanned ? 'pointer' : 'not-allowed'
+        }}
+        onPointerLeave={() => {
+          setHovered(false)
+          document.body.style.cursor = 'auto'
+        }}
       >
         <sphereGeometry args={[sizeMultiplier, 64, 64]} />
         <shaderMaterial
