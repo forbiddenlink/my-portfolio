@@ -10,9 +10,10 @@ import * as THREE from 'three'
 import { SupernovaEffect } from './SupernovaEffect'
 import { AnimatedConstellation } from './AnimatedConstellation'
 
-// LOD distance thresholds
+// LOD distance thresholds with hysteresis buffer to prevent flickering
 const LOD_NEAR = 15    // Full detail
 const LOD_MEDIUM = 35  // Medium detail
+const LOD_HYSTERESIS = 3  // Buffer zone to prevent rapid switching
 const LOD_FAR = 60     // Low detail (universe view)
 
 export function EnhancedProjectStars() {
@@ -379,6 +380,7 @@ function RealisticPlanet({
 }) {
   const [hovered, setHovered] = useState(false)
   const [lodLevel, setLodLevel] = useState<'high' | 'medium' | 'low'>('high')
+  const lodLevelRef = useRef<'high' | 'medium' | 'low'>('high')
   const planetRef = useRef<THREE.Mesh>(null)
   const atmosphereRef = useRef<THREE.Mesh>(null)
   const ringsRef = useRef<THREE.Mesh>(null)
@@ -429,10 +431,25 @@ function RealisticPlanet({
   useFrame((state) => {
     const time = state.clock.elapsedTime
 
-    // Calculate distance to camera for LOD (every frame is fine, it's cheap)
+    // Calculate distance to camera for LOD with hysteresis to prevent flickering
     const distance = camera.position.distanceTo(positionVec)
-    const newLod = distance < LOD_NEAR ? 'high' : distance < LOD_MEDIUM ? 'medium' : 'low'
-    if (newLod !== lodLevel) setLodLevel(newLod)
+    const currentLod = lodLevelRef.current
+    let newLod = currentLod
+
+    // Apply hysteresis: need to cross threshold + buffer to switch
+    if (currentLod === 'high' && distance > LOD_NEAR + LOD_HYSTERESIS) {
+      newLod = 'medium'
+    } else if (currentLod === 'medium') {
+      if (distance < LOD_NEAR - LOD_HYSTERESIS) newLod = 'high'
+      else if (distance > LOD_MEDIUM + LOD_HYSTERESIS) newLod = 'low'
+    } else if (currentLod === 'low' && distance < LOD_MEDIUM - LOD_HYSTERESIS) {
+      newLod = 'medium'
+    }
+
+    if (newLod !== currentLod) {
+      lodLevelRef.current = newLod
+      setLodLevel(newLod)
+    }
 
     if (planetRef.current) {
       planetRef.current.rotation.y += rotationSpeed

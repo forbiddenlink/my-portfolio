@@ -182,7 +182,7 @@ function SceneContent({ isMobile, controlsRef }: { isMobile: boolean; controlsRe
             <TwinklingStarfield count={isMobile ? 2000 : 5000} />
             <GalaxyCores />
             <EnhancedProjectStars />
-            {/* <ScanSystem /> temporarily disabled for debugging */}
+            <ScanSystem />
             <PlanetEnhancements />
             <ProjectRelationships />
             {!isMobile && (
@@ -361,7 +361,7 @@ export default function GalaxyScene() {
       <MotionToggle />
       <MinimapNavigator />
       <JourneyOverlay />
-      {/* <ExplorerHUD /> temporarily disabled for debugging */}
+      <ExplorerHUD />
     </div>
   )
 }
