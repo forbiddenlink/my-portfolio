@@ -209,10 +209,6 @@ function GalaxyCoreSingle({ position, color, scale = 1, showSpirals = true }: Ga
 export function GalaxyCores() {
   const { camera } = useThree()
   const [visibleSpirals, setVisibleSpirals] = useState<Set<string>>(new Set())
-  // Use ref to track previous state and avoid array allocation every frame
-  const prevVisibleRef = useRef<Set<string>>(new Set())
-  // Reuse Vector3 to avoid allocation in render loop
-  const tempVec = useMemo(() => new THREE.Vector3(), [])
 
   const galaxyCores = useMemo(() => {
     return galaxies.map((galaxy, index) => {
@@ -229,27 +225,15 @@ export function GalaxyCores() {
   useFrame(() => {
     const newVisible = new Set<string>()
     galaxyCores.forEach((core) => {
-      tempVec.set(core.position[0], core.position[1], core.position[2])
-      const dist = camera.position.distanceTo(tempVec)
+      const dist = camera.position.distanceTo(new THREE.Vector3(...core.position))
       if (dist < SPIRAL_RENDER_DISTANCE) {
         newVisible.add(core.id)
       }
     })
 
-    // Only update state if changed - compare without creating intermediate arrays
-    const prev = prevVisibleRef.current
-    let changed = newVisible.size !== prev.size
-    if (!changed) {
-      for (const id of newVisible) {
-        if (!prev.has(id)) {
-          changed = true
-          break
-        }
-      }
-    }
-
-    if (changed) {
-      prevVisibleRef.current = newVisible
+    // Only update state if changed
+    if (newVisible.size !== visibleSpirals.size ||
+        ![...newVisible].every(id => visibleSpirals.has(id))) {
       setVisibleSpirals(newVisible)
     }
   })
