@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { galaxies } from '@/lib/galaxyData'
 import { generateProjectPosition } from '@/lib/utils'
@@ -13,7 +13,19 @@ const ENHANCEMENT_RENDER_DISTANCE = 50
 // Add visual enhancements to specific planets based on their properties
 export function PlanetEnhancements() {
   const { camera } = useThree()
-  const [visibleEnhancements, setVisibleEnhancements] = useState<Set<string>>(new Set())
+
+  // Use refs for group visibility - avoids React re-renders that cause flickering
+  const asteroidRefs = useRef<(THREE.Group | null)[]>([])
+  const moonRefs = useRef<(THREE.Group | null)[]>([])
+  const binaryRefs = useRef<(THREE.Group | null)[]>([])
+
+  // Pre-compute position vectors to avoid creating new objects every frame
+  const positionVectors = useRef<{
+    asteroids: THREE.Vector3[]
+    moons: THREE.Vector3[]
+    binaries: THREE.Vector3[]
+  } | null>(null)
+
   // Find projects that should have special effects
   const enhancements = useMemo(() => {
     const asteroidFields: Array<{
@@ -79,51 +91,59 @@ export function PlanetEnhancements() {
       })
     })
 
+    // Initialize position vectors for distance calculations
+    positionVectors.current = {
+      asteroids: asteroidFields.map(f => new THREE.Vector3(...f.position)),
+      moons: moons.map(m => new THREE.Vector3(...m.position)),
+      binaries: binaryStars.map(b => new THREE.Vector3(...b.position)),
+    }
+
     return { asteroidFields, moons, binaryStars }
   }, [])
 
-  // Check distances every few frames and update visibility
+  // Update visibility imperatively in useFrame - no setState, no re-renders
   useFrame(() => {
-    const newVisible = new Set<string>()
+    const vectors = positionVectors.current
+    if (!vectors) return
 
-    // Check asteroid fields
-    enhancements.asteroidFields.forEach((field, index) => {
-      const dist = camera.position.distanceTo(new THREE.Vector3(...field.position))
-      if (dist < ENHANCEMENT_RENDER_DISTANCE) {
-        newVisible.add(`asteroid-${index}`)
+    // Update asteroid field visibility
+    vectors.asteroids.forEach((pos, index) => {
+      const group = asteroidRefs.current[index]
+      if (group) {
+        const dist = camera.position.distanceTo(pos)
+        group.visible = dist < ENHANCEMENT_RENDER_DISTANCE
       }
     })
 
-    // Check moons
-    enhancements.moons.forEach((moon, index) => {
-      const dist = camera.position.distanceTo(new THREE.Vector3(...moon.position))
-      if (dist < ENHANCEMENT_RENDER_DISTANCE) {
-        newVisible.add(`moon-${index}`)
+    // Update moon visibility
+    vectors.moons.forEach((pos, index) => {
+      const group = moonRefs.current[index]
+      if (group) {
+        const dist = camera.position.distanceTo(pos)
+        group.visible = dist < ENHANCEMENT_RENDER_DISTANCE
       }
     })
 
-    // Check binary stars
-    enhancements.binaryStars.forEach((binary, index) => {
-      const dist = camera.position.distanceTo(new THREE.Vector3(...binary.position))
-      if (dist < ENHANCEMENT_RENDER_DISTANCE) {
-        newVisible.add(`binary-${index}`)
+    // Update binary star visibility
+    vectors.binaries.forEach((pos, index) => {
+      const group = binaryRefs.current[index]
+      if (group) {
+        const dist = camera.position.distanceTo(pos)
+        group.visible = dist < ENHANCEMENT_RENDER_DISTANCE
       }
     })
-
-    // Only update state if changed
-    if (newVisible.size !== visibleEnhancements.size ||
-        ![...newVisible].every(key => visibleEnhancements.has(key))) {
-      setVisibleEnhancements(newVisible)
-    }
   })
 
   return (
     <>
-      {/* Asteroid fields around supermassive planets - only render when close */}
-      {enhancements.asteroidFields.map((field, index) =>
-        visibleEnhancements.has(`asteroid-${index}`) ? (
+      {/* Asteroid fields around supermassive planets - always render, control visibility via ref */}
+      {enhancements.asteroidFields.map((field, index) => (
+        <group
+          key={`asteroid-${index}`}
+          ref={(el) => { asteroidRefs.current[index] = el }}
+          visible={false}
+        >
           <AsteroidField
-            key={`asteroid-${index}`}
             position={field.position}
             innerRadius={field.innerRadius}
             outerRadius={field.outerRadius}
@@ -131,36 +151,42 @@ export function PlanetEnhancements() {
             count={80}
             rotationSpeed={0.08}
           />
-        ) : null
-      )}
+        </group>
+      ))}
 
-      {/* Moons orbiting large featured planets - only render when close */}
-      {enhancements.moons.map((moon, index) =>
-        visibleEnhancements.has(`moon-${index}`) ? (
+      {/* Moons orbiting large featured planets - always render, control visibility via ref */}
+      {enhancements.moons.map((moon, index) => (
+        <group
+          key={`moon-${index}`}
+          ref={(el) => { moonRefs.current[index] = el }}
+          visible={false}
+        >
           <OrbitingMoon
-            key={`moon-${index}`}
             planetPosition={moon.position}
             orbitRadius={moon.orbitRadius}
             moonSize={0.25}
             orbitSpeed={0.4}
             color={moon.color}
           />
-        ) : null
-      )}
+        </group>
+      ))}
 
-      {/* Binary companions for special projects - only render when close */}
-      {enhancements.binaryStars.map((binary, index) =>
-        visibleEnhancements.has(`binary-${index}`) ? (
+      {/* Binary companions for special projects - always render, control visibility via ref */}
+      {enhancements.binaryStars.map((binary, index) => (
+        <group
+          key={`binary-${index}`}
+          ref={(el) => { binaryRefs.current[index] = el }}
+          visible={false}
+        >
           <BinaryCompanion
-            key={`binary-${index}`}
             primaryPosition={binary.position}
             orbitRadius={3}
             starSize={0.5}
             orbitSpeed={0.25}
             color={binary.color}
           />
-        ) : null
-      )}
+        </group>
+      ))}
     </>
   )
 }

@@ -2,7 +2,7 @@
 
 import { useFrame, useThree } from '@react-three/fiber'
 import { OrbitControls, PerspectiveCamera, PerformanceMonitor } from '@react-three/drei'
-import { EffectComposer, Bloom, Vignette, DepthOfField, ChromaticAberration } from '@react-three/postprocessing'
+// Post-processing removed - caused flickering bug and scene looks great without it
 import { useRef, useMemo, useState, useEffect, Suspense, useCallback } from 'react'
 import * as THREE from 'three'
 import { useViewStore, usePrefersReducedMotion } from '@/lib/store'
@@ -33,7 +33,6 @@ import { SolarFlares } from '@/components/3d/SolarFlares'
 import { BlackHole } from '@/components/3d/BlackHole'
 import { AsteroidBelts } from '@/components/3d/AsteroidBelts'
 import { ScanSystem } from '@/components/3d/ScanSystem'
-import { BlendFunction } from 'postprocessing'
 import { getGalaxyCenterPosition } from '@/lib/utils'
 
 // Camera fly-to controller for galaxy navigation
@@ -227,45 +226,6 @@ function SceneContent({ isMobile, controlsRef }: { isMobile: boolean; controlsRe
         />
       )}
 
-      {/* Post Processing - Reduced for mobile */}
-      {isMobile ? (
-        <EffectComposer enableNormalPass={false}>
-          <Bloom
-            intensity={0.6}
-            luminanceThreshold={0.35}
-            luminanceSmoothing={0.9}
-            mipmapBlur
-          />
-          <Vignette
-            offset={0.25}
-            darkness={0.7}
-            eskil={false}
-            blendFunction={BlendFunction.NORMAL}
-          />
-        </EffectComposer>
-      ) : (
-        <EffectComposer enableNormalPass={false}>
-          <Bloom
-            intensity={1.2}
-            luminanceThreshold={0.15}
-            luminanceSmoothing={0.9}
-            radius={0.9}
-            mipmapBlur
-          />
-          <ChromaticAberration
-            blendFunction={BlendFunction.NORMAL}
-            offset={new THREE.Vector2(0.0008, 0.0008)}
-            radialModulation={true}
-            modulationOffset={0.3}
-          />
-          <Vignette
-            offset={0.2}
-            darkness={0.7}
-            eskil={false}
-            blendFunction={BlendFunction.NORMAL}
-          />
-        </EffectComposer>
-      )}
     </>
   )
 }
@@ -288,13 +248,27 @@ export default function GalaxyScene() {
   const [isMobile, setIsMobile] = useState(false)
   const [rendererType, setRendererType] = useState<RendererType | null>(null)
 
+  // Refs to track previous values and avoid unnecessary state updates that cause re-renders
+  const prevMobileRef = useRef<boolean | null>(null)
+  const prevDprRef = useRef<number | null>(null)
+
   useEffect(() => {
-    // Basic mobile check
+    // Basic mobile check - only update state if values actually changed
     const checkMobile = () => {
       const mobile = window.innerWidth < 768
-      setIsMobile(mobile)
-      // Use full device pixel ratio for sharp rendering
-      setDpr(Math.min(window.devicePixelRatio, mobile ? 2 : 3))
+      const newDpr = Math.min(window.devicePixelRatio, mobile ? 2 : 3)
+
+      // Only update isMobile if it changed
+      if (prevMobileRef.current !== mobile) {
+        prevMobileRef.current = mobile
+        setIsMobile(mobile)
+      }
+
+      // Only update dpr if it changed (avoid triggering Canvas buffer resize)
+      if (prevDprRef.current !== newDpr) {
+        prevDprRef.current = newDpr
+        setDpr(newDpr)
+      }
     }
 
     checkMobile()

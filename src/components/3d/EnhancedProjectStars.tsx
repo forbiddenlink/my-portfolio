@@ -379,18 +379,21 @@ function RealisticPlanet({
   onPlanetClick: () => void
 }) {
   const [hovered, setHovered] = useState(false)
-  const [lodLevel, setLodLevel] = useState<'high' | 'medium' | 'low'>('high')
+  // Use ref for LOD level to avoid React re-renders that cause flickering
   const lodLevelRef = useRef<'high' | 'medium' | 'low'>('high')
+  // Refs for all meshes - visibility controlled imperatively in useFrame
   const planetRef = useRef<THREE.Mesh>(null)
   const atmosphereRef = useRef<THREE.Mesh>(null)
-  const ringsRef = useRef<THREE.Mesh>(null)
+  const outerAtmosphereRef = useRef<THREE.Mesh>(null)
   const cloudRef = useRef<THREE.Mesh>(null)
+  const ringsRef = useRef<THREE.Mesh>(null)
+  const hoverRingRef = useRef<THREE.Mesh>(null)
   const groupRef = useRef<THREE.Group>(null)
   const { camera } = useThree()
 
   // Pre-compute position vector for distance calculation
   const positionVec = useMemo(() => new THREE.Vector3(...position), [position])
-  
+
   // Determine planet characteristics
   const hasRings = ['coulson-one', 'portfolio-pro', 'quantum-forge', 'flo-labs'].includes(project.id)
 
@@ -407,7 +410,7 @@ function RealisticPlanet({
     if (sizeMultiplier > 1.8) return 1 // Gas giant
     return 0 // Rocky
   }, [project.color, sizeMultiplier])
-  
+
   // Generate secondary color
   const secondaryColor = useMemo(() => {
     const color = new THREE.Color(project.color)
@@ -415,7 +418,7 @@ function RealisticPlanet({
     color.getHSL(hsl)
     return new THREE.Color().setHSL((hsl.h + 0.1) % 1, hsl.s * 0.8, hsl.l * 0.7)
   }, [project.color])
-  
+
   // Unique seed per planet
   const seed = useMemo(() => {
     let hash = 0
@@ -425,13 +428,13 @@ function RealisticPlanet({
     }
     return Math.abs(hash) % 1000
   }, [project.id])
-  
+
   const rotationSpeed = useMemo(() => 0.001 + (seed % 100) * 0.00002, [seed])
-  
+
   useFrame((state) => {
     const time = state.clock.elapsedTime
 
-    // Calculate distance to camera for LOD with hysteresis to prevent flickering
+    // Calculate distance to camera for LOD with hysteresis
     const distance = camera.position.distanceTo(positionVec)
     const currentLod = lodLevelRef.current
     let newLod = currentLod
@@ -446,9 +449,21 @@ function RealisticPlanet({
       newLod = 'medium'
     }
 
-    if (newLod !== currentLod) {
-      lodLevelRef.current = newLod
-      setLodLevel(newLod)
+    // Update LOD ref (no setState - no React re-render)
+    lodLevelRef.current = newLod
+
+    // Control visibility imperatively based on LOD - no React re-renders
+    if (atmosphereRef.current) {
+      atmosphereRef.current.visible = newLod !== 'low'
+    }
+    if (outerAtmosphereRef.current) {
+      outerAtmosphereRef.current.visible = newLod === 'high'
+    }
+    if (cloudRef.current) {
+      cloudRef.current.visible = newLod !== 'low'
+    }
+    if (hoverRingRef.current) {
+      hoverRingRef.current.visible = hovered && newLod !== 'low'
     }
 
     if (planetRef.current) {
@@ -472,7 +487,6 @@ function RealisticPlanet({
       }
     }
 
-
     if (groupRef.current && hovered) {
       const scale = 1.1 + Math.sin(time * 3) * 0.02
       groupRef.current.scale.setScalar(scale)
@@ -480,7 +494,7 @@ function RealisticPlanet({
       groupRef.current.scale.lerp(new THREE.Vector3(1, 1, 1), 0.1)
     }
   })
-  
+
   // For supernova, render the special effect with clickable area
   if (isSupernova) {
     return (
@@ -532,42 +546,37 @@ function RealisticPlanet({
           }}
         />
       </mesh>
-      
-      {/* Atmosphere glow - only render at medium+ detail */}
-      {lodLevel !== 'low' && (
-        <mesh ref={atmosphereRef} scale={1.1}>
-          <sphereGeometry args={[sizeMultiplier, lodLevel === 'high' ? 32 : 16, lodLevel === 'high' ? 32 : 16]} />
-          <meshBasicMaterial
-            color={project.color}
-            transparent
-            opacity={hovered ? 0.3 : 0.15}
-            side={THREE.BackSide}
-            blending={THREE.AdditiveBlending}
-            depthWrite={false}
-          />
-        </mesh>
-      )}
 
-      {/* Outer atmosphere haze - only render at high detail */}
-      {lodLevel === 'high' && (
-        <mesh scale={1.18}>
-          <sphereGeometry args={[sizeMultiplier, 24, 24]} />
-          <meshBasicMaterial
-            color={project.color}
-            transparent
-            opacity={hovered ? 0.15 : 0.08}
-            side={THREE.BackSide}
-            blending={THREE.AdditiveBlending}
-            depthWrite={false}
-          />
-        </mesh>
-      )}
-      
+      {/* Atmosphere glow - visibility controlled in useFrame */}
+      <mesh ref={atmosphereRef} scale={1.1} visible={false}>
+        <sphereGeometry args={[sizeMultiplier, 32, 32]} />
+        <meshBasicMaterial
+          color={project.color}
+          transparent
+          opacity={hovered ? 0.3 : 0.15}
+          side={THREE.BackSide}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+        />
+      </mesh>
 
-      {/* Cloud layer for gas giants - only at high/medium detail */}
-      {planetType === 1 && lodLevel !== 'low' && (
-        <mesh ref={cloudRef} scale={1.03}>
-          <sphereGeometry args={[sizeMultiplier, lodLevel === 'high' ? 48 : 24, lodLevel === 'high' ? 48 : 24]} />
+      {/* Outer atmosphere haze - visibility controlled in useFrame */}
+      <mesh ref={outerAtmosphereRef} scale={1.18} visible={false}>
+        <sphereGeometry args={[sizeMultiplier, 24, 24]} />
+        <meshBasicMaterial
+          color={project.color}
+          transparent
+          opacity={hovered ? 0.15 : 0.08}
+          side={THREE.BackSide}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+        />
+      </mesh>
+
+      {/* Cloud layer for gas giants - visibility controlled in useFrame */}
+      {planetType === 1 && (
+        <mesh ref={cloudRef} scale={1.03} visible={false}>
+          <sphereGeometry args={[sizeMultiplier, 48, 48]} />
           <shaderMaterial
             vertexShader={cloudVertexShader}
             fragmentShader={cloudFragmentShader}
@@ -582,10 +591,11 @@ function RealisticPlanet({
           />
         </mesh>
       )}
-      {/* Saturn-like rings - with LOD-based segments */}
+
+      {/* Saturn-like rings */}
       {hasRings && (
         <mesh ref={ringsRef} rotation={[Math.PI / 2.5, 0, Math.PI / 8]}>
-          <ringGeometry args={[sizeMultiplier * 1.4, sizeMultiplier * 2.2, lodLevel === 'high' ? 64 : lodLevel === 'medium' ? 32 : 16]} />
+          <ringGeometry args={[sizeMultiplier * 1.4, sizeMultiplier * 2.2, 64]} />
           <meshBasicMaterial
             color={project.color}
             transparent
@@ -597,19 +607,17 @@ function RealisticPlanet({
         </mesh>
       )}
 
-      {/* Hover indicator ring - only when close enough to interact */}
-      {hovered && lodLevel !== 'low' && (
-        <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[sizeMultiplier * 1.3, sizeMultiplier * 1.35, 32]} />
-          <meshBasicMaterial
-            color="#ffffff"
-            transparent
-            opacity={0.6}
-            side={THREE.DoubleSide}
-            blending={THREE.AdditiveBlending}
-          />
-        </mesh>
-      )}
+      {/* Hover indicator ring - visibility controlled in useFrame */}
+      <mesh ref={hoverRingRef} rotation={[Math.PI / 2, 0, 0]} visible={false}>
+        <ringGeometry args={[sizeMultiplier * 1.3, sizeMultiplier * 1.35, 32]} />
+        <meshBasicMaterial
+          color="#ffffff"
+          transparent
+          opacity={0.6}
+          side={THREE.DoubleSide}
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
     </group>
   )
 }

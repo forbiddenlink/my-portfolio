@@ -106,7 +106,7 @@ function GalaxySolarFlares({ position, color }: SolarFlareProps) {
     })
   }, [baseColor])
 
-  // Spawn new flares periodically
+  // Spawn new flares and cleanup expired ones periodically (not in useFrame)
   useEffect(() => {
     if (prefersReducedMotion) return
 
@@ -124,34 +124,45 @@ function GalaxySolarFlares({ position, color }: SolarFlareProps) {
       setFlares(prev => [...prev.slice(-4), newFlare]) // Keep max 5 flares
     }
 
+    // Cleanup expired flares (separate from useFrame to avoid render loop interference)
+    const cleanupFlares = () => {
+      const now = performance.now() / 1000
+      setFlares(prev => {
+        const activeFlares = prev.filter(flare => {
+          const progress = (now - flare.startTime) / flare.duration
+          return progress < 1
+        })
+        // Only return new array if something changed
+        return activeFlares.length !== prev.length ? activeFlares : prev
+      })
+    }
+
     // Spawn initial flare
     const initialDelay = Math.random() * 5000
     const initialTimeout = setTimeout(spawnFlare, initialDelay)
 
     // Regular spawning
-    const interval = setInterval(() => {
+    const spawnInterval = setInterval(() => {
       if (Math.random() < 0.3) { // 30% chance every interval
         spawnFlare()
       }
     }, 3000)
 
+    // Cleanup interval (every 500ms, but outside render loop)
+    const cleanupInterval = setInterval(cleanupFlares, 500)
+
     return () => {
       clearTimeout(initialTimeout)
-      clearInterval(interval)
+      clearInterval(spawnInterval)
+      clearInterval(cleanupInterval)
     }
   }, [position, baseColor, brightColor, prefersReducedMotion])
 
+  // Update flare materials in useFrame (no state changes, just uniform updates)
   useFrame((state) => {
     const time = state.clock.getElapsedTime()
     const now = performance.now() / 1000
 
-    // Update and cleanup flares
-    setFlares(prev => prev.filter(flare => {
-      const progress = (now - flare.startTime) / flare.duration
-      return progress < 1
-    }))
-
-    // Update flare materials
     if (groupRef.current) {
       groupRef.current.children.forEach((flareMesh, i) => {
         if (flareMesh instanceof THREE.Mesh && flares[i]) {

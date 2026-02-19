@@ -282,6 +282,10 @@ export function ScanSystem() {
   const [nearestPlanet, setNearestPlanet] = useState<PlanetData | null>(null)
   const [isSpaceHeld, setIsSpaceHeld] = useState(false)
   const scanStartTimeRef = useRef<number | null>(null)
+  // Refs to track previous values and avoid unnecessary state updates
+  const prevNearestIdRef = useRef<string | null>(null)
+  const prevDistanceRef = useRef<number>(Infinity)
+  const prevProgressRef = useRef<number>(0)
 
   // Keyboard handlers for Space key
   useEffect(() => {
@@ -323,7 +327,7 @@ export function ScanSystem() {
     }
   }, [isSpaceHeld, nearestPlanet, scanningPlanet, scannedPlanets, startScan, cancelScan])
 
-  // Main update loop
+  // Main update loop - CRITICAL: Avoid state updates unless values actually change
   useFrame((state, delta) => {
     // Skip in exploration mode
     if (view === 'exploration') return
@@ -340,16 +344,24 @@ export function ScanSystem() {
       }
     }
 
-    // Update nearest planet state
-    if (nearest !== nearestPlanet) {
+    // Only update state if the nearest planet ID changed (not object reference)
+    const nearestId = nearest?.project.id ?? null
+    if (nearestId !== prevNearestIdRef.current) {
+      prevNearestIdRef.current = nearestId
       setNearestPlanet(nearest)
     }
 
-    // Update shared state for HUD
-    if (nearest) {
-      setTarget(nearest.project, nearest.positionTuple, minDistance)
-    } else {
-      setTarget(null, null, Infinity)
+    // Only update target store if distance changed significantly (>0.5 units)
+    const distanceChanged = Math.abs(minDistance - prevDistanceRef.current) > 0.5
+    const targetChanged = nearestId !== prevNearestIdRef.current
+
+    if (targetChanged || distanceChanged) {
+      prevDistanceRef.current = minDistance
+      if (nearest) {
+        setTarget(nearest.project, nearest.positionTuple, minDistance)
+      } else {
+        setTarget(null, null, Infinity)
+      }
     }
 
     // 2. Update scan progress if actively scanning
@@ -357,12 +369,17 @@ export function ScanSystem() {
       const elapsed = (performance.now() - scanStartTimeRef.current) / 1000
       const progress = Math.min(elapsed / SCAN_DURATION, 1)
 
-      updateScanProgress(progress)
+      // Only update if progress changed by at least 1%
+      if (Math.abs(progress - prevProgressRef.current) > 0.01) {
+        prevProgressRef.current = progress
+        updateScanProgress(progress)
+      }
 
       // Complete scan when done
       if (progress >= 1) {
         completeScan(scanningPlanet)
         scanStartTimeRef.current = null
+        prevProgressRef.current = 0
       }
     }
   })
