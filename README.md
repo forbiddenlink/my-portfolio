@@ -1,11 +1,11 @@
 # 🌌 Galaxy Portfolio
 
-Elizabeth Stein's interactive 3D portfolio - an Awwwards-quality experience showcasing 30+ projects across 6 galaxies with planetary exploration.
+Elizabeth Stein's interactive 3D portfolio - an Awwwards-quality experience showcasing 60+ projects across 6 galaxies with planetary exploration.
 
 ## ✨ Features
 
 ### 🚀 3D Galaxy Experience
-- **Interactive Solar System**: Navigate 30+ projects represented as realistic planets
+- **Interactive Solar System**: Navigate 60+ projects represented as realistic planets
 - **Planetary Exploration**: Land on planets and walk around in first-person mode (WASD controls)
 - **Cinematic Animations**: GSAP-powered camera transitions and landing sequences
 - **Procedural Planets**: GLSL shaders with realistic atmospheres, clouds, and ring systems
@@ -111,7 +111,7 @@ src/
 │   └── ErrorBoundary.tsx             # WebGL fallback
 └── lib/
     ├── types.ts                # TypeScript interfaces
-    ├── galaxyData.ts           # Single source of truth (30+ projects)
+    ├── galaxyData.ts           # Single source of truth (60+ projects)
     ├── store.ts                # Zustand state management
     └── utils.ts                # Helper functions
 ```
@@ -222,4 +222,4 @@ vercel deploy
 ---
 
 **Elizabeth Stein** - Full-Stack Developer & AI Integration Specialist
-[GitHub](https://github.com/forbiddenlink) • [LinkedIn](https://linkedin.com/in/elizabethstein)
+[GitHub](https://github.com/forbiddenlink) • [LinkedIn](https://linkedin.com/in/imkindageeky)

@@ -20,3 +20,18 @@ tsconfig.tsbuildinfo
 
 # VS Code AI rules
 .github/instructions/codacy.instructions.md
+
+# Specter knowledge graph cache
+.specter/
+
+# Claude Code caches and session files
+.claude/cache/
+.claude/tsc-cache/
+.claude/settings.local.json
+thoughts/
+
+# Screenshots (development/testing artifacts)
+*.png
+
+# Temporary files
+/tmp/
