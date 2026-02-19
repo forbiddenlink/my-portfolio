@@ -1,24 +1,110 @@
 @import "tailwindcss";
 
 :root {
-  /* Colors */
+  /* ===== BASE COLORS ===== */
   --background: #000000;
   --foreground: #ffffff;
-  
+
   /* Accent colors (RGB for opacity flexibility) */
   --color-accent-purple: 168, 85, 247;
   --color-accent-indigo: 99, 102, 241;
   --color-accent-blue: 59, 130, 246;
   --color-accent-pink: 236, 72, 153;
-  
-  /* Opacity scale */
+
+  /* Semantic colors (RGB for opacity flexibility) */
+  --color-success: 34, 197, 94;
+  --color-warning: 251, 191, 36;
+  --color-error: 239, 68, 68;
+  --color-info: 59, 130, 246;
+
+  /* Galaxy theme colors (for reference) */
+  --color-galaxy-enterprise: #FF6B35;
+  --color-galaxy-ai: #00D9FF;
+  --color-galaxy-fullstack: #9D4EDD;
+  --color-galaxy-devtools: #06FFA5;
+  --color-galaxy-creative: #FF006E;
+  --color-galaxy-experimental: #FFB800;
+
+  /* ===== TYPOGRAPHY SCALE ===== */
+  /* Based on 1.25 ratio (Major Third) - optimized for digital */
+  --text-xs: 0.75rem;      /* 12px - captions, meta */
+  --text-sm: 0.875rem;     /* 14px - secondary body */
+  --text-base: 1rem;       /* 16px - body */
+  --text-lg: 1.125rem;     /* 18px - lead text */
+  --text-xl: 1.25rem;      /* 20px - H5 */
+  --text-2xl: 1.5rem;      /* 24px - H4 */
+  --text-3xl: 2rem;        /* 32px - H3 */
+  --text-4xl: 2.5rem;      /* 40px - H2 */
+  --text-5xl: 3rem;        /* 48px - H1 */
+  --text-6xl: 3.75rem;     /* 60px - Display */
+
+  /* Line heights */
+  --leading-none: 1;
+  --leading-tight: 1.15;
+  --leading-snug: 1.3;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+
+  /* Font weights */
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* ===== SPACING SYSTEM ===== */
+  /* Based on 4px base unit (8pt grid friendly) */
+  --space-0: 0;
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-20: 5rem;     /* 80px */
+  --space-24: 6rem;     /* 96px */
+  --space-32: 8rem;     /* 128px */
+
+  /* Section spacing */
+  --section-gap-sm: var(--space-12);  /* 48px */
+  --section-gap-md: var(--space-16);  /* 64px */
+  --section-gap-lg: var(--space-24);  /* 96px */
+
+  /* Card padding */
+  --card-padding-sm: var(--space-4);  /* 16px */
+  --card-padding-md: var(--space-5);  /* 20px */
+  --card-padding-lg: var(--space-8);  /* 32px */
+
+  /* ===== OPACITY SCALE ===== */
   --opacity-subtle: 0.05;
   --opacity-light: 0.1;
   --opacity-medium: 0.2;
   --opacity-strong: 0.4;
   --opacity-heavy: 0.6;
-  
-  /* Z-index layers */
+
+  /* Text opacity (for white text on dark bg) */
+  --text-opacity-primary: 0.95;
+  --text-opacity-secondary: 0.70;
+  --text-opacity-tertiary: 0.50;
+  --text-opacity-muted: 0.35;
+  --text-opacity-disabled: 0.25;
+
+  /* Surface opacity (white surfaces on dark bg) */
+  --surface-opacity-1: 0.02;
+  --surface-opacity-2: 0.05;
+  --surface-opacity-3: 0.08;
+  --surface-opacity-4: 0.12;
+
+  /* Border opacity */
+  --border-opacity-subtle: 0.08;
+  --border-opacity-default: 0.12;
+  --border-opacity-strong: 0.20;
+
+  /* ===== Z-INDEX LAYERS ===== */
   --z-background: -1;
   --z-particles: 5;
   --z-base: 10;
@@ -29,15 +115,17 @@
   --z-overlay: 100;
   --z-cursor: 9999;
   --z-transition: 10000;
-  
-  /* Animation durations */
+
+  /* ===== ANIMATION ===== */
+  /* Durations */
+  --duration-instant: 50ms;
   --duration-fast: 150ms;
   --duration-normal: 300ms;
   --duration-medium: 500ms;
   --duration-slow: 800ms;
   --duration-slower: 1200ms;
-  
-  /* Animation easings */
+
+  /* Easings */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
@@ -45,20 +133,37 @@
   --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-magnetic: cubic-bezier(0.65, 0.05, 0.36, 1);
   --ease-image-hover: cubic-bezier(0.43, 0.13, 0.23, 0.96);
-  /* Typography scale */
-  --text-opacity-primary: 0.95;
-  --text-opacity-secondary: 0.70;
-  --text-opacity-tertiary: 0.50;
-  --text-opacity-disabled: 0.35;
-  
-  /* Glass morphism tokens */
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  /* ===== GLASS MORPHISM ===== */
   --glass-blur: 16px;
   --glass-saturate: 180%;
   --glass-bg-opacity: 0.08;
   --glass-border-opacity: 0.12;
-  
-  /* Button tokens */
-  --btn-radius: 12px;
+
+  /* ===== BORDER RADIUS ===== */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-full: 9999px;
+
+  /* Component-specific radii */
+  --btn-radius: var(--radius-lg);
+  --card-radius: var(--radius-xl);
+  --input-radius: var(--radius-md);
+  --badge-radius: var(--radius-full);
+
+  /* ===== SHADOWS ===== */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 12px 48px rgba(0, 0, 0, 0.5);
+  --shadow-glow-purple: 0 0 20px rgba(var(--color-accent-purple), 0.3);
+  --shadow-glow-blue: 0 0 20px rgba(var(--color-accent-blue), 0.3);
+
+  /* ===== BUTTON TOKENS ===== */
   --btn-transition: 200ms var(--ease-out-expo);
 }
 
