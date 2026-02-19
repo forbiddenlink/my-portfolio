@@ -232,6 +232,7 @@ function SceneContent({ isMobile, controlsRef }: { isMobile: boolean; controlsRe
             luminanceThreshold={0.35}
             luminanceSmoothing={0.9}
             mipmapBlur
+            resolutionScale={0.5}
           />
           <Vignette
             offset={0.25}
@@ -248,6 +249,7 @@ function SceneContent({ isMobile, controlsRef }: { isMobile: boolean; controlsRe
             luminanceSmoothing={0.9}
             radius={0.9}
             mipmapBlur
+            resolutionScale={0.75}
           />
           <ChromaticAberration
             blendFunction={BlendFunction.NORMAL}
