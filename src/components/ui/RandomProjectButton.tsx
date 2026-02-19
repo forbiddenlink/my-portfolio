@@ -30,7 +30,7 @@ export function RandomProjectButton({ projects }: RandomProjectButtonProps) {
       disabled={isShuffling}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className="px-5 py-3 bg-gradient-to-r from-purple-500/10 to-indigo-500/10 border border-purple-500/20 hover:border-purple-500/30 hover:from-purple-500/15 hover:to-indigo-500/15 rounded-lg transition-all duration-200 text-white/70 hover:text-white text-sm flex items-center gap-2 disabled:opacity-70"
+      className="min-h-[44px] px-5 py-3 bg-gradient-to-r from-purple-500/10 to-indigo-500/10 border border-purple-500/20 hover:border-purple-500/30 hover:from-purple-500/15 hover:to-indigo-500/15 rounded-lg transition-all duration-200 text-white/70 hover:text-white text-sm flex items-center gap-2 disabled:opacity-70"
     >
       <AnimatePresence mode="wait">
         {isShuffling ? (

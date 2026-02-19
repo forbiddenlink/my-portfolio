@@ -79,7 +79,7 @@ export default async function ProjectPage({
         <div className="mx-auto px-6 py-4 flex items-center justify-between backdrop-blur-md bg-black/40 border-b border-white/10">
           <Link
             href="/"
-            className="flex items-center gap-3 group"
+            className="flex items-center gap-3 group min-h-[44px] min-w-[44px] p-2"
           >
             {/* Star icon */}
             <span className="relative w-7 h-7 flex-shrink-0 inline-flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
@@ -91,16 +91,16 @@ export default async function ProjectPage({
               Elizabeth Stein
             </span>
           </Link>
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-8">
             <Link
               href="/work"
-              className="text-white/70 hover:text-white transition-colors duration-200 text-sm font-medium hover:scale-105"
+              className="text-white/70 hover:text-white transition-colors duration-200 text-sm font-medium hover:scale-105 min-h-[44px] px-4 py-3 inline-flex items-center"
             >
               ← All Projects
             </Link>
             <Link
               href="/about"
-              className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all text-sm font-medium hover:scale-105"
+              className="px-4 py-3 min-h-[44px] inline-flex items-center rounded-lg bg-white/10 hover:bg-white/20 transition-all text-sm font-medium hover:scale-105"
             >
               About
             </Link>

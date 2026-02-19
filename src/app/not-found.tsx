@@ -64,7 +64,7 @@ export default function NotFound() {
                 >
                     <Link
                         href="/"
-                        className="group relative inline-flex items-center gap-2 px-8 py-4 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:border-white/20 transition-all duration-300 backdrop-blur-md"
+                        className="group relative inline-flex items-center gap-2 min-h-[44px] px-8 py-4 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:border-white/20 transition-all duration-300 backdrop-blur-md"
                     >
                         <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform text-purple-400" />
                         <span>Return to Mission Control</span>

@@ -135,7 +135,7 @@ export default function HomePage() {
             </p>
             <Link
               href="/about"
-              className="pointer-events-auto inline-block text-sm text-white/70 hover:text-white transition-colors duration-200 underline underline-offset-4 drop-shadow-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/50 rounded"
+              className="pointer-events-auto inline-flex items-center min-h-[44px] px-2 py-2 text-sm text-white/70 hover:text-white transition-colors duration-200 underline underline-offset-4 drop-shadow-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/50 rounded"
             >
               More about me →
             </Link>
