@@ -37,7 +37,7 @@ function ProjectLinks({ project }: { project: Project }) {
     <div className="flex items-center gap-2">
       {hasLive && (
         <span
-          className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400/80 text-[10px] border border-emerald-500/20 group-hover:bg-emerald-500/20 group-hover:border-emerald-500/30 transition-all"
+          className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-success/10 text-success text-[10px] border border-success/20 group-hover:bg-success/20 group-hover:border-success/30 transition-all"
           title="Live demo available"
         >
           <ExternalLink className="w-3 h-3" />
@@ -46,7 +46,7 @@ function ProjectLinks({ project }: { project: Project }) {
       )}
       {hasGithub && (
         <span
-          className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400/80 text-[10px] border border-purple-500/20 group-hover:bg-purple-500/20 group-hover:border-purple-500/30 transition-all"
+          className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-purple/10 text-accent-purple text-[10px] border border-accent-purple/20 group-hover:bg-accent-purple/20 group-hover:border-accent-purple/30 transition-all"
           title="Source code available"
         >
           <Github className="w-3 h-3" />
@@ -101,7 +101,7 @@ export function WorkPageClient({ galaxies }: WorkPageClientProps) {
           </h1>
         </ScrollReveal>
         <ScrollReveal direction="up" delay={0.4}>
-          <p className="text-lg text-white/50 max-w-2xl leading-relaxed">
+          <p className="text-lg text-white/[var(--text-opacity-tertiary)] max-w-2xl leading-relaxed">
             {projectCount} projects spanning enterprise applications, AI integration, full-stack development,
             and creative experiments.
           </p>
@@ -110,13 +110,13 @@ export function WorkPageClient({ galaxies }: WorkPageClientProps) {
           <nav className="mt-8 flex flex-wrap gap-3" aria-label="Page navigation">
             <Link
               href="/"
-              className="px-5 py-3 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 rounded-lg transition-all duration-200 text-white/60 hover:text-white text-sm"
+              className="min-h-[44px] px-5 py-3 inline-flex items-center bg-surface-2 border border-white/[var(--border-opacity-default)] hover:bg-surface-3 hover:border-white/[var(--border-opacity-strong)] rounded-lg transition-all duration-normal text-white/[var(--text-opacity-secondary)] hover:text-white text-sm"
             >
               ← 3D View
             </Link>
             <Link
               href="/about"
-              className="px-5 py-3 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 rounded-lg transition-all duration-200 text-white/60 hover:text-white text-sm"
+              className="min-h-[44px] px-5 py-3 inline-flex items-center bg-surface-2 border border-white/[var(--border-opacity-default)] hover:bg-surface-3 hover:border-white/[var(--border-opacity-strong)] rounded-lg transition-all duration-normal text-white/[var(--text-opacity-secondary)] hover:text-white text-sm"
             >
               About
             </Link>
@@ -130,19 +130,19 @@ export function WorkPageClient({ galaxies }: WorkPageClientProps) {
         <div className="mb-12 space-y-4">
           {/* Search Input */}
           <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/[var(--text-opacity-muted)]" />
             <input
               type="text"
               placeholder="Search projects, technologies..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-10 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/30 focus:outline-none focus:border-white/20 focus:bg-white/10 transition-all text-sm"
+              className="w-full pl-10 pr-10 py-3 bg-surface-2 border border-white/[var(--border-opacity-default)] rounded-lg text-white placeholder:text-white/[var(--text-opacity-muted)] focus:outline-none focus:border-white/[var(--border-opacity-strong)] focus:bg-surface-3 transition-all text-sm"
               aria-label="Search projects"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/60 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/[var(--text-opacity-muted)] hover:text-white/[var(--text-opacity-secondary)] transition-colors"
                 aria-label="Clear search"
               >
                 <X className="w-4 h-4" />
@@ -162,13 +162,13 @@ export function WorkPageClient({ galaxies }: WorkPageClientProps) {
       {/* No Results Message */}
       {filteredGalaxies.length === 0 && (
         <div className="text-center py-16">
-          <p className="text-white/50 text-lg mb-4">No projects found for "{searchQuery}"</p>
+          <p className="text-white/[var(--text-opacity-tertiary)] text-lg mb-4">No projects found for "{searchQuery}"</p>
           <button
             onClick={() => {
               setSearchQuery('')
               setSelectedGalaxy(null)
             }}
-            className="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white/70 hover:bg-white/15 hover:text-white transition-all text-sm"
+            className="px-4 py-2 bg-surface-3 border border-white/[var(--border-opacity-strong)] rounded-lg text-white/[var(--text-opacity-secondary)] hover:bg-surface-4 hover:text-white transition-all text-sm"
           >
             Clear filters
           </button>
@@ -189,10 +189,10 @@ export function WorkPageClient({ galaxies }: WorkPageClientProps) {
                   style={{ backgroundColor: galaxy.color }}
                   aria-hidden="true"
                 />
-                <h2 className="text-lg font-medium text-white/80">{galaxy.name}</h2>
-                <span className="text-sm text-white/30">({galaxy.projects.length})</span>
+                <h2 className="text-lg font-medium text-white/[var(--text-opacity-primary)]">{galaxy.name}</h2>
+                <span className="text-sm text-white/[var(--text-opacity-muted)]">({galaxy.projects.length})</span>
               </div>
-              <p className="text-white/40 mb-6 text-sm">{galaxy.description}</p>
+              <p className="text-white/[var(--text-opacity-muted)] mb-6 text-sm">{galaxy.description}</p>
             </ScrollReveal>
 
             {/* Bento Grid with stagger animation */}
@@ -251,7 +251,7 @@ export function WorkPageClient({ galaxies }: WorkPageClientProps) {
                     </div>
 
                     <p className={cn(
-                      "text-white/50 mb-4 line-clamp-2 leading-relaxed group-hover:text-white/70 transition-colors",
+                      "text-white/[var(--text-opacity-tertiary)] mb-4 line-clamp-2 leading-relaxed group-hover:text-white/[var(--text-opacity-secondary)] transition-colors",
                       idx === 0 && featured.length > 0 ? "text-base" : "text-sm"
                     )}>
                       {project.description}
@@ -273,7 +273,7 @@ export function WorkPageClient({ galaxies }: WorkPageClientProps) {
                       ))}
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px] text-white/40 font-mono mt-auto pt-3 border-t border-white/10">
+                    <div className="flex items-center justify-between text-[11px] text-white/[var(--text-opacity-muted)] font-mono mt-auto pt-3 border-t border-white/[var(--border-opacity-default)]">
                       <span>{formatDateRange(project.dateRange)}</span>
                       <ProjectLinks project={project} />
                     </div>
@@ -312,7 +312,7 @@ export function WorkPageClient({ galaxies }: WorkPageClientProps) {
                       {project.title}
                     </h3>
 
-                    <p className="text-sm text-white/45 mb-4 line-clamp-2 leading-relaxed group-hover:text-white/65 transition-colors">
+                    <p className="text-sm text-white/[var(--text-opacity-tertiary)] mb-4 line-clamp-2 leading-relaxed group-hover:text-white/[var(--text-opacity-secondary)] transition-colors">
                       {project.description}
                     </p>
 
@@ -331,13 +331,13 @@ export function WorkPageClient({ galaxies }: WorkPageClientProps) {
                         </span>
                       ))}
                       {project.tags.length > 3 && (
-                        <span className="text-[10px] text-white/30">
+                        <span className="text-[10px] text-white/[var(--text-opacity-muted)]">
                           +{project.tags.length - 3}
                         </span>
                       )}
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px] text-white/35 font-mono mt-auto pt-3 border-t border-white/8">
+                    <div className="flex items-center justify-between text-[11px] text-white/[var(--text-opacity-muted)] font-mono mt-auto pt-3 border-t border-white/[var(--border-opacity-subtle)]">
                       <span>{formatDateRange(project.dateRange)}</span>
                       <ProjectLinks project={project} />
                     </div>

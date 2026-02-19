@@ -27,11 +27,11 @@ export default function AboutPage() {
       {/* Navigation Header */}
       <header className="fixed top-0 left-0 right-0 z-50 animate-in slide-in-from-top-4 duration-500">
         <div
-          className="mx-auto px-6 py-4 flex items-center justify-between backdrop-blur-md bg-black/40 border-b border-white/10"
+          className="mx-auto px-6 py-4 flex items-center justify-between backdrop-blur-md bg-black/40 border-b border-white/[var(--border-opacity-default)]"
         >
           <Link
             href="/"
-            className="flex items-center gap-3 group"
+            className="flex items-center gap-3 group min-h-[44px] min-w-[44px] p-2"
           >
             {/* Star icon */}
             <span className="relative w-7 h-7 flex-shrink-0 inline-flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
@@ -43,16 +43,16 @@ export default function AboutPage() {
               Elizabeth Stein
             </span>
           </Link>
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-8">
             <Link
               href="/"
-              className="text-white/70 hover:text-white transition-colors duration-200 text-sm font-medium hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 rounded"
+              className="text-white/[var(--text-opacity-secondary)] hover:text-white transition-colors duration-normal text-sm font-medium hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 rounded min-h-[44px] px-4 py-3 inline-flex items-center"
             >
               ← Back to Galaxy
             </Link>
             <Link
               href="/work"
-              className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all text-sm font-medium hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50"
+              className="px-4 py-3 min-h-[44px] inline-flex items-center rounded-lg bg-white/10 hover:bg-white/20 transition-all text-sm font-medium hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50"
             >
               View All Work
             </Link>
@@ -76,12 +76,12 @@ export default function AboutPage() {
           {/* Bio Section */}
           <section className="mb-16 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150 fill-mode-both">
             <h2 className="text-3xl font-semibold mb-6 flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-purple-500/20" aria-hidden="true">
-                <Sparkles className="w-6 h-6 text-purple-300" />
+              <div className="p-2 rounded-lg bg-accent-purple/20" aria-hidden="true">
+                <Sparkles className="w-6 h-6 text-accent-purple" />
               </div>
               About Me
             </h2>
-            <div className="space-y-4 text-lg text-white/80 leading-relaxed bg-white/5 p-8 rounded-2xl border border-white/10 backdrop-blur-sm">
+            <div className="space-y-4 text-lg text-white/[var(--text-opacity-primary)] leading-relaxed bg-surface-2 p-8 rounded-2xl border border-white/[var(--border-opacity-default)] backdrop-blur-sm">
               <p>
                 I'm a full-stack developer and UX/UI-minded builder who loves turning messy ideas into clean,
                 usable products. I care deeply about design details, accessibility, and making things feel fast and
@@ -89,7 +89,7 @@ export default function AboutPage() {
               </p>
               <p>
                 I work best in small, shippable steps, with clear commits and documentation so future me
-                (and teammates) don't suffer. <strong className="text-emerald-400/90">Available now</strong> — completing my B.S. in Software Development at Capella University
+                (and teammates) don't suffer. <strong className="text-success">Available now</strong> — completing my B.S. in Software Development at Capella University
                 (graduating March 2026) with a 3.98 GPA while working as Design Team Lead at Flo Labs.
               </p>
             </div>
@@ -99,14 +99,14 @@ export default function AboutPage() {
           <section className="mb-16 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300 fill-mode-both">
             <h2 className="text-3xl font-semibold mb-8">What I Do</h2>
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/[0.07] transition-all hover:-translate-y-1 hover:shadow-xl group">
+              <div className="bg-surface-2 backdrop-blur-sm border border-white/[var(--border-opacity-default)] rounded-2xl p-6 hover:bg-surface-3 transition-all hover:-translate-y-1 hover:shadow-xl group">
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl group-hover:scale-110 transition-transform">
-                    <Palette className="w-6 h-6 text-purple-400" />
+                  <div className="p-3 bg-gradient-to-br from-accent-purple/20 to-accent-pink/20 rounded-xl group-hover:scale-110 transition-transform">
+                    <Palette className="w-6 h-6 text-accent-purple" />
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold mb-2">Frontend Excellence</h3>
-                    <p className="text-white/70">
+                    <p className="text-white/[var(--text-opacity-secondary)]">
                       Polished, responsive interfaces with reusable components and consistent UI patterns.
                       I bridge design intent and implementation details—spacing, typography, states, responsiveness.
                     </p>
@@ -114,14 +114,14 @@ export default function AboutPage() {
                 </div>
               </div>
 
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/[0.07] transition-all hover:-translate-y-1 hover:shadow-xl group">
+              <div className="bg-surface-2 backdrop-blur-sm border border-white/[var(--border-opacity-default)] rounded-2xl p-6 hover:bg-surface-3 transition-all hover:-translate-y-1 hover:shadow-xl group">
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-xl group-hover:scale-110 transition-transform">
-                    <Code2 className="w-6 h-6 text-blue-400" />
+                  <div className="p-3 bg-gradient-to-br from-accent-blue/20 to-info/20 rounded-xl group-hover:scale-110 transition-transform">
+                    <Code2 className="w-6 h-6 text-accent-blue" />
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold mb-2">Full-Stack Features</h3>
-                    <p className="text-white/70">
+                    <p className="text-white/[var(--text-opacity-secondary)]">
                       End-to-end feature development from UI to API integration and data flow.
                       Comfortable with Java/Spring Boot services, REST APIs, and production-ready backends.
                     </p>
@@ -129,14 +129,14 @@ export default function AboutPage() {
                 </div>
               </div>
 
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/[0.07] transition-all hover:-translate-y-1 hover:shadow-xl group">
+              <div className="bg-surface-2 backdrop-blur-sm border border-white/[var(--border-opacity-default)] rounded-2xl p-6 hover:bg-surface-3 transition-all hover:-translate-y-1 hover:shadow-xl group">
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-xl group-hover:scale-110 transition-transform">
-                    <Cpu className="w-6 h-6 text-green-400" />
+                  <div className="p-3 bg-gradient-to-br from-success/20 to-success/10 rounded-xl group-hover:scale-110 transition-transform">
+                    <Cpu className="w-6 h-6 text-success" />
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold mb-2">CMS & Content Systems</h3>
-                    <p className="text-white/70">
+                    <p className="text-white/[var(--text-opacity-secondary)]">
                       CMS-driven sites and content workflows, including Craft CMS environments.
                       Content modeling, migrations, and template architecture that makes editors' lives easier.
                     </p>
@@ -144,14 +144,14 @@ export default function AboutPage() {
                 </div>
               </div>
 
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/[0.07] transition-all hover:-translate-y-1 hover:shadow-xl group">
+              <div className="bg-surface-2 backdrop-blur-sm border border-white/[var(--border-opacity-default)] rounded-2xl p-6 hover:bg-surface-3 transition-all hover:-translate-y-1 hover:shadow-xl group">
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-xl group-hover:scale-110 transition-transform">
-                    <Sparkles className="w-6 h-6 text-orange-400" />
+                  <div className="p-3 bg-gradient-to-br from-warning/20 to-error/20 rounded-xl group-hover:scale-110 transition-transform">
+                    <Sparkles className="w-6 h-6 text-warning" />
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold mb-2">AI Integration</h3>
-                    <p className="text-white/70">
+                    <p className="text-white/[var(--text-opacity-secondary)]">
                       AI-powered interfaces and workflows, including MCP-based tool connections and OpenAI API integrations.
                       Built production AI travel planner with 22+ specialized prompts.
                     </p>
@@ -164,41 +164,41 @@ export default function AboutPage() {
           {/* Tech Snapshot */}
           <section className="mb-16 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-500 fill-mode-both">
             <h2 className="text-3xl font-semibold mb-6">Tech Snapshot</h2>
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:bg-white/[0.07] transition-colors">
+            <div className="bg-surface-2 backdrop-blur-sm border border-white/[var(--border-opacity-default)] rounded-2xl p-8 hover:bg-surface-3 transition-colors">
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-xl font-semibold mb-4 text-white/90">Frontend</h3>
-                  <p className="text-white/70 leading-relaxed">
+                  <h3 className="text-xl font-semibold mb-4 text-white/[var(--text-opacity-primary)]">Frontend</h3>
+                  <p className="text-white/[var(--text-opacity-secondary)] leading-relaxed">
                     Next.js, React, TypeScript, Tailwind CSS, shadcn/ui, Three.js, GSAP
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-4 text-white/90">Backend</h3>
-                  <p className="text-white/70 leading-relaxed">
+                  <h3 className="text-xl font-semibold mb-4 text-white/[var(--text-opacity-primary)]">Backend</h3>
+                  <p className="text-white/[var(--text-opacity-secondary)] leading-relaxed">
                     Java, Spring Boot, Node.js, REST APIs, Python
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-4 text-white/90">CMS & Platforms</h3>
-                  <p className="text-white/70 leading-relaxed">
+                  <h3 className="text-xl font-semibold mb-4 text-white/[var(--text-opacity-primary)]">CMS & Platforms</h3>
+                  <p className="text-white/[var(--text-opacity-secondary)] leading-relaxed">
                     Craft CMS, Strapi, WordPress, Vercel, Firebase
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-4 text-white/90">AI & Integration</h3>
-                  <p className="text-white/70 leading-relaxed">
+                  <h3 className="text-xl font-semibold mb-4 text-white/[var(--text-opacity-primary)]">AI & Integration</h3>
+                  <p className="text-white/[var(--text-opacity-secondary)] leading-relaxed">
                     Claude/Anthropic, OpenAI GPT-4, Stable Diffusion, MCP Protocol, Algolia Agent Studio
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-4 text-white/90">Data & Infrastructure</h3>
-                  <p className="text-white/70 leading-relaxed">
+                  <h3 className="text-xl font-semibold mb-4 text-white/[var(--text-opacity-primary)]">Data & Infrastructure</h3>
+                  <p className="text-white/[var(--text-opacity-secondary)] leading-relaxed">
                     PostgreSQL, Supabase, MongoDB, Redis, Prisma, Docker, Git/GitHub
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-4 text-white/90">Process</h3>
-                  <p className="text-white/70 leading-relaxed">
+                  <h3 className="text-xl font-semibold mb-4 text-white/[var(--text-opacity-primary)]">Process</h3>
+                  <p className="text-white/[var(--text-opacity-secondary)] leading-relaxed">
                     Agile/Scrum, CI/CD, Testing (1,200+ automated tests), Documentation
                   </p>
                 </div>
@@ -210,35 +210,35 @@ export default function AboutPage() {
           <section className="mb-16 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-700 fill-mode-both">
             <h2 className="text-3xl font-semibold mb-6">Highlights</h2>
             <div className="space-y-4">
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:bg-white/[0.07] transition-all hover:translate-x-2">
-                <p className="text-white/80">
+              <div className="bg-surface-2 backdrop-blur-sm border border-white/[var(--border-opacity-default)] rounded-xl p-6 hover:bg-surface-3 transition-all hover:translate-x-2">
+                <p className="text-white/[var(--text-opacity-primary)]">
                   ✨ Built and deployed 60 production projects including enterprise SaaS platforms,
                   AI-powered applications, and educational tools with 1,200+ automated tests
                 </p>
               </div>
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:bg-white/[0.07] transition-all hover:translate-x-2">
-                <p className="text-white/80">
+              <div className="bg-surface-2 backdrop-blur-sm border border-white/[var(--border-opacity-default)] rounded-xl p-6 hover:bg-surface-3 transition-all hover:translate-x-2">
+                <p className="text-white/[var(--text-opacity-primary)]">
                   🎨 Led complete redesign of Flo Labs web ecosystem with unified design system and modern architecture
                 </p>
               </div>
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:bg-white/[0.07] transition-all hover:translate-x-2">
-                <p className="text-white/80">
+              <div className="bg-surface-2 backdrop-blur-sm border border-white/[var(--border-opacity-default)] rounded-xl p-6 hover:bg-surface-3 transition-all hover:translate-x-2">
+                <p className="text-white/[var(--text-opacity-primary)]">
                   🤖 Built sophisticated AI systems including autonomous artist with 400+ tests,
                   multi-agent platforms, and GPT-4 Vision integrations with Algolia Agent Studio
                 </p>
               </div>
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:bg-white/[0.07] transition-all hover:translate-x-2">
-                <p className="text-white/80">
+              <div className="bg-surface-2 backdrop-blur-sm border border-white/[var(--border-opacity-default)] rounded-xl p-6 hover:bg-surface-3 transition-all hover:translate-x-2">
+                <p className="text-white/[var(--text-opacity-primary)]">
                   📚 Created full educational platforms: Portfolio-Pro (205 lessons), Finance Quest (17 chapters, 30+ calculators, 85% retention rate)
                 </p>
               </div>
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:bg-white/[0.07] transition-all hover:translate-x-2">
-                <p className="text-white/80">
+              <div className="bg-surface-2 backdrop-blur-sm border border-white/[var(--border-opacity-default)] rounded-xl p-6 hover:bg-surface-3 transition-all hover:translate-x-2">
+                <p className="text-white/[var(--text-opacity-primary)]">
                   🏗️ Navigated 64,806-file enterprise codebase (Coulson One) and built monorepo architectures with NestJS, Next.js, and React Native
                 </p>
               </div>
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:bg-white/[0.07] transition-all hover:translate-x-2">
-                <p className="text-white/80">
+              <div className="bg-surface-2 backdrop-blur-sm border border-white/[var(--border-opacity-default)] rounded-xl p-6 hover:bg-surface-3 transition-all hover:translate-x-2">
+                <p className="text-white/[var(--text-opacity-primary)]">
                   🎓 Maintaining 3.98 GPA while working full-time, Dean's List all quarters
                 </p>
               </div>
@@ -260,7 +260,7 @@ export default function AboutPage() {
           {/* CTA */}
           <section className="text-center animate-in fade-in zoom-in duration-700 delay-1000 fill-mode-both">
             <h2 className="text-3xl font-semibold mb-6">Let's Build Something</h2>
-            <p className="text-xl text-white/70 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-white/[var(--text-opacity-secondary)] mb-8 max-w-2xl mx-auto">
               Whether you're looking to collaborate on a project or just want to chat about web development,
               AI integration, or design systems—I'd love to hear from you.
             </p>
@@ -283,7 +283,7 @@ export default function AboutPage() {
                 href="https://github.com/forbiddenlink"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/50 hover:text-white transition-colors"
+                className="text-white/[var(--text-opacity-tertiary)] hover:text-white transition-colors"
                 aria-label="GitHub Profile"
               >
                 <Github className="w-6 h-6" />
@@ -292,7 +292,7 @@ export default function AboutPage() {
                 href="https://linkedin.com/in/imkindageeky"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/50 hover:text-white transition-colors"
+                className="text-white/[var(--text-opacity-tertiary)] hover:text-white transition-colors"
                 aria-label="LinkedIn Profile"
               >
                 <Linkedin className="w-6 h-6" />
@@ -303,8 +303,8 @@ export default function AboutPage() {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 py-8 relative z-10 bg-black/20 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-white/40 text-sm">
+      <footer className="border-t border-white/[var(--border-opacity-default)] py-8 relative z-10 bg-black/20 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-white/[var(--text-opacity-muted)] text-sm">
           <p>© {new Date().getFullYear()} Elizabeth Stein. Built with Next.js, React, Three.js, and a lot of coffee.</p>
           <div className="flex items-center gap-4">
             <a
