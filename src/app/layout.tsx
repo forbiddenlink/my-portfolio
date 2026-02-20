@@ -4,7 +4,7 @@ import { Analytics } from '@/components/Analytics'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { NebulaCursor } from '@/components/ui/NebulaCursor'
 import { WarpTransition } from '@/components/ui/WarpTransition'
-import { StarryBackground } from '@/components/ui/StarryBackground'
+// import { StarryBackground } from '@/components/ui/StarryBackground'
 import { SmoothScroll } from '@/components/ui/SmoothScroll'
 import { SITE, CONTACT } from '@/lib/constants'
 import '@/app/globals.css'
@@ -27,11 +27,11 @@ export const metadata: Metadata = {
   title: SITE.fullTitle,
   description: SITE.description,
   metadataBase: new URL(SITE.url),
-  icons: {
-    icon: '/favicon.svg',
-    shortcut: '/favicon.svg',
-    apple: '/favicon.svg',
-  },
+  // icons: {
+  //   icon: '/favicon.svg',
+  //   shortcut: '/favicon.svg',
+  //   apple: '/favicon.svg',
+  // },
   keywords: [...SITE.keywords],
   authors: [{ name: SITE.name }],
   creator: SITE.name,

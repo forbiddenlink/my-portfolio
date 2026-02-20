@@ -1,383 +1,296 @@
-# Research Report: 3D Interactive Portfolio Website Best Practices (2025/2026)
-Generated: 2026-02-08
+# Research Report: Portfolio Website Best Practices 2025-2026
+Generated: 2026-02-12
 
 ## Executive Summary
 
-3D interactive portfolios using Three.js/React Three Fiber are increasingly popular but require careful attention to performance, accessibility, and progressive enhancement. The key to success is balancing visual impact with usability: start with a high-impact hero that loads fast, use on-demand rendering, implement proper fallbacks, and respect user preferences for reduced motion. Galaxy/space themes work well when they serve the content rather than overwhelming it.
+Portfolio websites in 2025-2026 emphasize immersive 3D experiences with WebGL/Three.js, scroll-triggered animations, and kinetic typography while maintaining strict performance budgets and accessibility requirements. The most successful portfolios combine strong narrative storytelling with interactive elements, respecting user preferences for reduced motion while providing engaging experiences for those who want them.
 
 ## Research Question
 
-Best practices for 3D interactive portfolio websites in 2025/2026, covering galaxy/space themes, navigation patterns, layout optimization, performance, UX, accessibility, and mobile considerations.
-
----
+What are the current best practices and trends for portfolio websites in 2025-2026, specifically regarding visual effects, storytelling, performance, accessibility, mobile experience, and case study presentation?
 
 ## Key Findings
 
-### 1. Galaxy/Space-Themed Portfolios - What Works
+### Finding 1: Visual Trends - Beyond Static to Immersive
 
-**Effective Approaches:**
-- Space themes work best when they create a sense of exploration and discovery
-- Let the cosmos "play a significant role" while keeping content accessible (like Mordillo portfolio)
-- Use the galaxy as a navigation metaphor - planets/stars as project waypoints
-- Combine interactive scenes with dynamic content for a "product demo feel" rather than static resume
+**3D Graphics and WebGL have become mainstream** in portfolio design. Key trends include:
 
-**Common Pitfalls:**
-- Overwhelming the user with too much visual complexity
-- Making navigation unclear or hidden behind the 3D experience
-- Excessive loading times that frustrate before impressing
-- Gaudy, outdated 3D effects that feel like "90s-era design elements"
-- Motion that triggers vestibular disorders (affects 70+ million people)
+- **Interactive 3D models** - Users can rotate, examine, and interact with 3D elements
+- **Scroll-triggered animations** - Movement tied to scroll position for narrative progression
+- **Kinetic typography** - Text that moves, morphs, and responds to user interaction
+- **Magnetic cursor effects** - Liquid distortions, glowing particles, and cursor trails
+- **AR previews** - Augmented reality elements for product showcases
 
-**Award-Winning Examples:**
-- Sleep Well Creative (Awwwards Site of the Day, Jan 2026)
-- Bécane Paris (Developer Award, Jan 2026)
-- Chipsa Design - blending aesthetics, WebGL, 3D, and CGI
-- 12 Wave - "galaxy full of surprises and unexpected twists"
-- Space Cowboys - gamified case study navigation
+**Tools making this accessible:**
+- No-code WebGL builders (Unicorn Studio, Spline)
+- Three.js and React Three Fiber for custom implementations
+- WebGPU (production-ready since r171, supported in Safari 26 as of September 2025)
 
-**Source:** [Awwwards 3D Websites](https://www.awwwards.com/websites/3d/), [Muzli Top 100 Portfolios 2025](https://muz.li/blog/top-100-most-creative-and-unique-portfolio-websites-of-2025/)
+**Specific actionable recommendations for your galaxy portfolio:**
+1. Add **kinetic typography** to project titles on hover - letters could scatter like stars
+2. Implement **scroll-triggered constellation formations** that connect projects thematically
+3. Create **AR mode** for viewing the galaxy on mobile (experimental but distinctive)
+4. Add **magnetic cursor effects** to project stars - they could gravitationally attract
 
----
-
-### 2. Navigation Patterns - Sidebar vs Floating Elements
-
-**Sidebar Best Practices (2025):**
-- Contextual sidebars showing relevant options based on current page/action
-- Combine icons with text labels for better comprehension
-- Include light/dark mode toggles as standard UX feature
-- Ensure sidebar works across mobile and desktop
-
-**Minimap Implementation:**
-- Sync minimap to navigation system (see portfolio-hall example)
-- Click minimap locations to trigger navigation with smooth transitions
-- Interface should fade out, fly to destination, fade back in
-- Face nearest point of interest after navigation
-
-**Floating Navigation:**
-- Keep navigation visible but non-intrusive
-- Use semi-transparent or glassmorphism effects
-- Ensure contrast against varying 3D backgrounds
-- Consider collapsible/expandable states
-
-**Key Principle:** "Clean navigation creates natural flow through the work" - navigation should feel integrated, not bolted on.
-
-**Source:** [Sidebar UX Practices 2025](https://uiuxdesigntrends.com/best-ux-practices-for-sidebar-menu-in-2025/), [portfolio-hall GitHub](https://github.com/Muhammad-Hazimi-Yusri/portfolio-hall)
+- Source: [Muzli - Top 100 Creative Portfolio Websites 2025](https://muz.li/blog/top-100-most-creative-and-unique-portfolio-websites-of-2025/)
+- Source: [Figma - Web Design Trends 2026](https://www.figma.com/resource-library/web-design-trends/)
 
 ---
 
-### 3. Layout Optimization - Preventing Overlap & Z-Index Management
+### Finding 2: Storytelling - Narrative Structure That Works
 
-**Z-Index Fundamentals:**
-- Z-index only works on positioned elements (absolute, relative, fixed, sticky)
-- Canvas behind content: `position: fixed; left: 0; top: 0; z-index: -1`
-- Use `zIndexRange` prop in Drei Html component: `zIndexRange={[100, 0]}`
+**Modern portfolios are moving from project lists to journeys:**
 
-**HTML Overlay Strategies:**
-```jsx
-// Drei Html component for 3D-integrated UI
-<Html
-  transform
-  distanceFactor={1.5}
-  occlude
-  style={{ transition: 'opacity 0.2s', pointerEvents: 'none' }}
->
-  <div className="annotation">Content</div>
-</Html>
-```
+- **Animated intros and cinemagraphs** create immediate emotional impact
+- **Character development** - treating yourself as the protagonist of your career story
+- **Plot progression** - structure your work as chapters with conflict and resolution
+- **Thematic threading** - connect projects by recurring themes rather than just timeline
 
-**Responsive Canvas:**
-- Add resize event listeners updating camera aspect ratios
-- Update renderer sizes when browser window changes
-- Use narrower field of view with adaptive aspect ratios for mobile
+**Narrative structures that work:**
 
-**Preventing Overlap Issues:**
-- Use CSS `pointer-events: none` on decorative overlays
-- Layer UI on top of canvas with absolute positioning
-- Test z-index at different scroll positions and states
+1. **The Hero's Journey** - Challenge faced, solution discovered, impact achieved
+2. **The Evolution Arc** - Show skill development from early to recent work
+3. **The Thematic Gallery** - Group work by problem types solved, not project types
+4. **The Interactive Documentary** - Let visitors choose their path through your story
 
-**Source:** [Three.js Forum Z-Index Discussion](https://discourse.threejs.org/t/z-index-on-css-3d-disable-depth-buffer/9126), [Drei Documentation](https://github.com/pmndrs/drei)
+**Specific actionable recommendations for your galaxy portfolio:**
+1. Your 6 galaxy categories could represent **chapters of a story** - give each a narrative theme (e.g., "The AI Frontier", "Creative Explorations", "Enterprise Missions")
+2. Add an **"Origin Story"** section to your About page with an animated timeline
+3. Create **guided tours** through your work organized by skill demonstrated (your existing JourneyMode is perfect for this)
+4. Implement **"Plot Twists"** - unexpected project connections (e.g., "I used what I learned from Finance Quest to build AI Caipo")
+
+- Source: [Speckyboy - Storytelling in Portfolio Design](https://speckyboy.com/tell-story-portfolio/)
+- Source: [Dribbble - Mastering Storytelling in Your Design Portfolio](https://dribbble.com/stories/2024/03/18/crafting-a-narrative-mastering-storytelling-in-your-design-portfolio/)
 
 ---
 
-### 4. Performance Optimization
+### Finding 3: Performance - 3D Without Compromise
 
-**Golden Rules:**
-- Target under 100 draw calls per frame for 60fps
-- Draco compression reduces geometry by 90-95%
-- KTX2 textures reduce GPU memory by ~10x
-- A 200KB PNG can occupy 20MB+ VRAM; KTX2 stays compressed
+**The performance imperative:** A 50MB GLTF file will destroy load times regardless of rendering optimization.
 
-**React Three Fiber Configuration:**
-```jsx
-<Canvas
-  gl={{
-    powerPreference: "high-performance",
-    alpha: false,
-    antialias: false,  // Disable if using post-processing
-    stencil: false,
-    depth: false
-  }}
-  frameloop="demand"  // Only render when needed
-  dpr={[1, 2]}  // Limit device pixel ratio
-/>
-```
+**Critical optimizations:**
 
-**Critical Optimizations:**
-1. **InstancedMesh** - Reduces 1,000 draw calls to 1 for repeated objects
-2. **Level of Detail (LOD)** - Drei's `<Detailed />` improves frame rates 30-40%
-3. **On-demand rendering** - `frameloop="demand"` for static scenes
-4. **Lazy loading** - Load assets only when needed
-5. **Memory cleanup** - Explicitly dispose geometries, materials, textures
+| Technique | Impact |
+|-----------|--------|
+| Draco compression | 90-95% geometry size reduction |
+| KTX2 with Basis Universal | 10x VRAM reduction vs PNG/JPEG |
+| Draw call batching/instancing | 90%+ draw call reduction |
+| LOD (Level of Detail) | 40% rendering time reduction in complex scenes |
+| Device pixel ratio capping | Limit to 2-3 on high-DPI mobile |
 
-**Avoid These Mistakes:**
-- Creating new Vector3 objects every frame (use useMemo)
-- Using setState in useFrame (use useRef for direct mutations)
-- Over-detailed models for distant objects
-- Simultaneous antialiasing and post-processing
-- Dynamic lights without environment map fallbacks
+**Monitoring and tools:**
+- **r3f-perf panel** for development builds
+- **Chrome DevTools Performance tab** for production profiling
+- **Vite's visualizer plugin** for bundle analysis
+- Keep draw calls **under 100 per frame**
 
-**WebGPU (2025+):**
-- Safari 26 shipped WebGPU support (September 2025)
-- Three.js r171+ has production-ready WebGPU with automatic WebGL 2 fallback
-- Delivers 2-10x improvements for draw-call-heavy scenes
+**Memory management critical:**
+- Three.js does NOT garbage collect GPU resources automatically
+- You MUST explicitly dispose geometries, materials, and textures
 
-**Source:** [Codrops Three.js Optimization](https://tympanus.net/codrops/2025/02/11/building-efficient-three-js-scenes-optimize-performance-while-maintaining-quality/), [100 Three.js Best Practices](https://www.utsubo.com/blog/threejs-best-practices-100-tips)
+**Specific actionable recommendations for your galaxy portfolio:**
+1. Your GalaxyScene already uses PerformanceMonitor from drei - **leverage its dpr callback** to dynamically adjust quality
+2. Implement **LOD for project stars** - distant stars can be simple points, nearby ones get detailed geometry
+3. **Pre-load adjacent galaxy assets** when user selects a category (predictive loading)
+4. Add **loading priority** - load visible galaxies first, lazy-load others
+5. Consider **WebGPU renderer** for supported browsers (20-30% performance boost)
+
+- Source: [Codrops - Building Efficient Three.js Scenes](https://tympanus.net/codrops/2025/02/11/building-efficient-three-js-scenes-optimize-performance-while-maintaining-quality/)
+- Source: [Utsubo - 100 Three.js Tips](https://www.utsubo.com/blog/threejs-best-practices-100-tips)
 
 ---
 
-### 5. UX for 3D Portfolios - Visual Appeal vs Usability
+### Finding 4: Accessibility - Inclusive Immersive Experiences
 
-**Balance Principles:**
-- "Phase it - start with high-impact hero that ships fast and stays fast"
-- Expand complexity only after gathering real engagement data
-- Static screenshots rarely capture range; real-time 3D creates product-demo feel
+**WCAG 3.0 explicitly addresses immersive technologies** including VR, AR, and 3D web experiences. The new guidelines use an **outcome-based model** rather than strict pass/fail.
 
-**Loading Experience:**
-- Bounce rates jump 32% when load time increases from 1s to 3s
-- 46% of mobile users leave if site takes >4 seconds to load
-- Show meaningful loading progress, not just spinners
-- Consider skeleton states or progressive reveal
+**Required implementations:**
 
-**Animation Guidelines:**
-- If animations make experience "sluggish, time-taking, pointless" - remove them
-- Decorative animations should enhance, not delay interaction
-- Ensure core content is accessible without waiting for animations
-- Test with prefers-reduced-motion enabled
+1. **prefers-reduced-motion respect:**
+   - Detect with `window.matchMedia('(prefers-reduced-motion: reduce)')`
+   - Provide static alternatives for all animations
+   - Keep status animations (loading) but replace motion with static text
+   - Your existing `usePrefersReducedMotion` hook is correctly implemented
 
-**Navigation Clarity:**
-- Cluttered navigation is a major mistake
-- Users get confused with too many items on single page
-- Content overload negatively impacts design
-- Keep primary actions obvious and accessible
+2. **Fallback strategies by animation type:**
+   - **Status animations** -> Static text ("Loading...")
+   - **Reveal animations** -> Content visible by default
+   - **Decorative motion** -> Simply disable
+   - **Essential animations** -> Keep but reduce intensity
 
-**Source:** [BrowserStack Web Design Mistakes](https://www.browserstack.com/guide/common-web-design-mistakes), [Toptal UX Mistakes](https://www.toptal.com/designers/ux/top-5-common-ux-mistakes)
+3. **Manual toggle option:**
+   - Always provide a user-controllable toggle independent of OS settings
+   - Some users want reduced motion only on certain sites
+
+**Specific actionable recommendations for your galaxy portfolio:**
+1. Add a **motion toggle button** in the UI (gear icon or settings panel)
+2. When reduced-motion: render galaxy as **static star map** with labeled categories
+3. Ensure all project information is **accessible without 3D interaction**
+4. Add **skip links** to bypass 3D scene for keyboard users
+5. Implement **ARIA live regions** for dynamic content updates (your ScreenReaderAnnouncer component is a good start)
+
+- Source: [Pope Tech - Accessible Animation and Movement](https://blog.pope.tech/2025/12/08/design-accessible-animation-and-movement/)
+- Source: [web.dev - Accessibility Motion](https://web.dev/learn/accessibility/motion)
 
 ---
 
-### 6. Accessibility - Making 3D Content Accessible
+### Finding 5: Mobile Experience - Thumb-Friendly 3D
 
-**The Core Challenge:**
-WebGL is a "black box" to assistive technology - screen readers cannot interpret canvas pixels.
+**54-64% of web traffic is mobile.** 3D portfolios must prioritize mobile performance.
 
-**React Three A11y Solution:**
-```jsx
-import { A11y } from '@react-three/a11y'
+**Mobile-specific optimizations:**
 
-// Make 3D elements keyboard navigable
-<A11y
-  role="button"
-  description="View project details"
-  activationMsg="Opening project"
-  actionCall={() => openProject()}
-  tabIndex={0}
->
-  <Planet3DComponent />
-</A11y>
-
-// Links with navigation
-<A11y
-  role="link"
-  href="/projects"
-  actionCall={() => router.push('/projects')}
->
-  <NavigationElement />
-</A11y>
-```
-
-**Required Accessibility Features:**
-1. **Skip links** - Allow users to bypass 3D content entirely
-2. **Keyboard navigation** - All interactive elements must be focusable
-3. **Screen reader descriptions** - aria-labels on canvas and key elements
-4. **Focus indicators** - Visual feedback for keyboard users
-5. **Alternative content** - Static fallback for users who can't use 3D
-
-**Reduced Motion Support:**
-```css
-@media (prefers-reduced-motion: reduce) {
-  .animated-element {
-    animation: none;
-    transition: none;
-  }
-}
-```
-
+1. **Detect device and adjust quality:**
 ```javascript
-// In Three.js/R3F
-const prefersReducedMotion = window.matchMedia(
-  '(prefers-reduced-motion: reduce)'
-).matches;
-
-if (prefersReducedMotion) {
-  // Disable or simplify animations
-  // Show static alternative
-}
+const isMobile = /Mobi|Android/i.test(navigator.userAgent)
+// Load simplified textures, reduced particle counts
 ```
 
-**WCAG Compliance:**
-- WCAG 2.2 is current standard (October 2023)
-- WCAG 3.0 expected 2026+
-- Motion animation must be disableable unless essential
+2. **Limit pixel ratio:**
+   - Modern phones have pixel ratios up to 5
+   - Cap at 2-3 for major performance gains with minimal visual loss
 
-**Source:** [Bridging WebGL and Accessibility](https://javascript.plainenglish.io/bridging-webgl-and-accessibility-55e6d7802403), [React Three A11y](https://github.com/pmndrs/react-three-a11y), [prefers-reduced-motion](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/prefers-reduced-motion)
+3. **Touch gesture design:**
+   - Implement **thumb-friendly interactions** (bottom 40% of screen)
+   - Use **native swipe gestures** for navigation
+   - Replace hover states with **tap states**
+   - Add **pinch-to-zoom** for exploration
+
+4. **Asset optimization:**
+   - Use `srcset` for texture resolution variants
+   - Prefer WebP/AVIF formats
+   - Implement **aggressive LOD** on mobile
+
+**Specific actionable recommendations for your galaxy portfolio:**
+1. Your TouchGestures component is present - ensure it handles **all navigation** on mobile
+2. **Move category selection to bottom of screen** for thumb reach
+3. Implement **simplified galaxy rendering** on mobile (fewer particles, simpler shaders)
+4. Add **swipe between galaxies** as a primary navigation method
+5. Consider **portrait-optimized layout** that stacks tour mode controls vertically
+
+- Source: [MoldStud - Optimizing Three.js for Mobile](https://moldstud.com/articles/p-optimizing-three-js-for-mobile-platforms-tips-and-tricks)
+- Source: [Adicator - Responsive Design Best Practices](https://www.adicator.com/post/responsive-design-best-practices)
 
 ---
 
-### 7. Mobile Considerations - Touch & Responsive Design
+### Finding 6: Case Studies - Show Impact, Not Just Screenshots
 
-**Touch Gesture Implementation:**
-- Use native touch events: touchstart, touchmove, touchend
-- Integrate Hammer.js for tap, swipe, pinch, rotate gestures
-- Natural patterns: pinch-to-zoom, two-finger rotation
+**The best case studies tell a story of impact:**
 
-**Mobile Performance Optimizations:**
-```javascript
-// Optimize WebGL context for mobile
-const renderer = new THREE.WebGLRenderer({
-  powerPreference: 'high-performance',
-  antialias: false  // Disable on mobile
-});
+**Structure that works (800-1,500 words optimal):**
 
-// Use mediump precision on mobile (2x faster than highp)
-// Reduce polygon count
-// Use compressed textures (2048x2048 max)
-// Employ geometry instancing
-```
+1. **Problem/Context** (1-2 paragraphs)
+   - What was broken or missing?
+   - Who was affected?
+   - What were the constraints?
 
-**Responsive Strategies:**
-- Narrower field of view on mobile
-- Adaptive aspect ratios to prevent clipping
-- Simplify scenes for mobile (fewer particles, lower LOD)
-- Consider entirely different experience for mobile vs desktop
+2. **Process** (visual-heavy)
+   - Sketches, wireframes, prototypes
+   - Key decision moments
+   - Iterations and pivots
 
-**Progressive Enhancement Approach:**
-1. Start with basic HTML that works everywhere
-2. Detect WebGL/WebGPU support
-3. Progressively add 3D features for capable devices
-4. Fallback to static images/videos if 3D unavailable
+3. **Solution** (technical depth)
+   - Architecture decisions with rationale
+   - Code snippets showing approach (not just stack listing)
+   - Explain WHY each technology was chosen
 
-**R3F Mobile Fallback:**
-```jsx
-<Canvas fallback={<StaticImage src="/portfolio-preview.jpg" />}>
-  {/* 3D content */}
-</Canvas>
-```
+4. **Impact** (quantifiable)
+   - Before/after metrics
+   - User feedback
+   - Business outcomes
+   - Performance improvements
 
-**Source:** [Three.js Mobile Touch Guide](https://moldstud.com/articles/p-implementing-touch-and-gestures-in-threejs-applications), [Responsive Three.js Scenes](https://moldstud.com/articles/p-creating-responsive-threejs-scenes-for-mobile-devices-a-complete-guide)
+**Anti-patterns to avoid:**
+- Generic READMEs ("This is a todo app built with React")
+- Screenshot galleries with no context
+- Missing "View Live" / "View Code" buttons
+- Hiding technical decisions
+
+**Specific actionable recommendations for your ProjectCaseStudy component:**
+1. Your current Challenge/Solution cards are a good start - add **"Impact" card with metrics**
+2. Add **"Technical Decision" section** explaining why you chose your tech stack
+3. Include **before/after comparisons** (performance metrics, UX improvements)
+4. Add **interactive code snippets** for key implementations
+5. Create **"Lessons Learned"** section for each project
+6. Ensure **prominent "View Live" and "View Code" buttons** above the fold
+
+- Source: [UXFol.io - UX Case Study Template 2026](https://blog.uxfol.io/ux-case-study-template/)
+- Source: [Elementor - Inspiring Web Developer Portfolio Examples](https://elementor.com/blog/inspiring-web-developer-portfolio-examples/)
 
 ---
 
-## Practical Implementation Checklist
+## Notable Award-Winning Examples to Study
 
-### Before Building
-- [ ] Define clear fallback for non-WebGL users
-- [ ] Plan content-first, 3D-second approach
-- [ ] Set performance budgets (load time, draw calls, asset size)
-- [ ] Design for reduced-motion users from the start
+1. **Bruno Simon** (bruno-simon.com) - Gamified 3D portfolio with driving experience
+2. **Lynn Fisher** - Annual redesigns with responsive character illustrations
+3. **Clement Grellier** - Pixel-perfect micro-interactions
+4. **Jordan Cruz-Correa** - Windows 98 nostalgia with working applications
+5. **Henri Heymans** - Development + artistic flair fusion
 
-### During Development
-- [ ] Use React Three Fiber + Drei for simpler development
-- [ ] Implement React Three A11y for accessibility
-- [ ] Use Draco/KTX2 compression for all assets
-- [ ] Test on low-end mobile devices regularly
-- [ ] Monitor with r3f-perf or stats-gl
+---
 
-### UI/Navigation
-- [ ] Keep navigation visible and accessible
-- [ ] Use Drei Html component for overlays (not WebGL text)
-- [ ] Implement skip links to bypass 3D content
-- [ ] Test keyboard navigation thoroughly
+## Codebase Analysis
 
-### Performance
-- [ ] Target <100 draw calls
-- [ ] Use InstancedMesh for repeated objects
-- [ ] Implement LOD with Drei's Detailed component
-- [ ] Use frameloop="demand" for static scenes
-- [ ] Dispose resources explicitly
+Your portfolio already implements many best practices:
 
-### Accessibility
-- [ ] Add aria-labels to canvas
-- [ ] Support prefers-reduced-motion
-- [ ] Ensure all interactions work with keyboard
-- [ ] Provide text alternatives for key content
-- [ ] Test with screen readers
+**Strengths (keep and enhance):**
+- `usePrefersReducedMotion` hook properly implemented
+- `PerformanceMonitor` from drei integrated
+- `TouchGestures` component for mobile
+- `ScreenReaderAnnouncer` for accessibility
+- `GalaxyNavigation` and `MinimapNavigator` for orientation
+- `JourneyMode` with guided tour
+- Galaxy metaphor with 6 organized categories
 
-### Mobile
-- [ ] Implement touch gestures
-- [ ] Reduce visual complexity on mobile
-- [ ] Test on actual devices (not just emulators)
-- [ ] Consider simplified mobile-specific view
+**Gaps to address:**
+1. No manual motion toggle (relies only on OS preference)
+2. Case studies could be more impact-focused
+3. Mobile-specific rendering optimizations could be stronger
+4. No WebGPU fallback detection
+5. Project connections/relationships not visualized
+
+---
+
+## Recommendations (Priority Ordered)
+
+### High Priority (User Experience)
+1. **Add motion toggle button** - Respect user preferences beyond OS settings
+2. **Enhance mobile navigation** - Move controls to thumb-friendly zones
+3. **Add "Impact" metrics to case studies** - Quantifiable outcomes
+
+### Medium Priority (Engagement)
+4. **Implement kinetic typography** - Project titles respond to interaction
+5. **Add project relationship visualization** - Show learning/skill connections
+6. **Create guided narrative tours** - "My AI Journey", "Full-Stack Evolution"
+
+### Lower Priority (Polish)
+7. **Add LOD for distant project stars** - Performance optimization
+8. **Consider WebGPU renderer** - Future-proofing
+9. **Add AR exploration mode** - Cutting-edge differentiation
 
 ---
 
 ## Sources
 
-### Documentation & Guides
-- [React Three Fiber Documentation](https://r3f.docs.pmnd.rs/)
-- [Drei GitHub](https://github.com/pmndrs/drei)
-- [React Three A11y](https://github.com/pmndrs/react-three-a11y)
-- [Three.js Journey Performance Tips](https://threejs-journey.com/lessons/performance-tips)
-
-### Best Practices Articles
-- [Codrops: Building Efficient Three.js Scenes](https://tympanus.net/codrops/2025/02/11/building-efficient-three-js-scenes-optimize-performance-while-maintaining-quality/)
-- [100 Three.js Best Practices (2026)](https://www.utsubo.com/blog/threejs-best-practices-100-tips)
-- [Bridging WebGL and Accessibility](https://javascript.plainenglish.io/bridging-webgl-and-accessibility-55e6d7802403)
-
-### Inspiration
-- [Awwwards 3D Websites](https://www.awwwards.com/websites/3d/)
-- [Awwwards Portfolio Category](https://www.awwwards.com/websites/portfolio/)
-- [Muzli Top 100 Portfolios 2025](https://muz.li/blog/top-100-most-creative-and-unique-portfolio-websites-of-2025/)
-- [99designs Space Website Inspiration](https://99designs.com/inspiration/websites/space)
-
-### Accessibility
-- [WCAG 2.2 Complete Guide](https://www.allaccessible.org/blog/wcag-22-complete-guide-2025)
-- [MDN prefers-reduced-motion](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/prefers-reduced-motion)
-- [Pope Tech Accessible Animation](https://blog.pope.tech/2025/12/08/design-accessible-animation-and-movement/)
-
-### Mobile & Responsive
-- [Three.js Mobile Touch Implementation](https://moldstud.com/articles/p-implementing-touch-and-gestures-in-threejs-applications)
-- [Responsive Three.js Scenes Guide](https://moldstud.com/articles/p-creating-responsive-threejs-scenes-for-mobile-devices-a-complete-guide)
-
----
-
-## Recommendations
-
-1. **Start Simple, Add Complexity** - Launch with a performant hero section first, then expand based on analytics
-
-2. **Content-First Architecture** - Design the portfolio to work without JavaScript/WebGL, then enhance
-
-3. **Use the Modern Stack** - React Three Fiber + Drei + React Three A11y provides the best developer experience and accessibility support
-
-4. **Performance Budget** - Set hard limits: <3s load, <100 draw calls, <5MB total assets
-
-5. **Test Real Devices** - Mobile emulators miss real performance issues; test on actual low-end phones
-
-6. **Respect User Preferences** - Always honor prefers-reduced-motion and provide skip links
+- [Muzli - Top 100 Most Creative and Unique Portfolio Websites of 2025](https://muz.li/blog/top-100-most-creative-and-unique-portfolio-websites-of-2025/)
+- [Figma - Web Design Trends 2026](https://www.figma.com/resource-library/web-design-trends/)
+- [Codrops - Building Efficient Three.js Scenes](https://tympanus.net/codrops/2025/02/11/building-efficient-three-js-scenes-optimize-performance-while-maintaining-quality/)
+- [Utsubo - 100 Three.js Tips](https://www.utsubo.com/blog/threejs-best-practices-100-tips)
+- [Pope Tech - Accessible Animation and Movement](https://blog.pope.tech/2025/12/08/design-accessible-animation-and-movement/)
+- [web.dev - Accessibility Motion](https://web.dev/learn/accessibility/motion)
+- [MoldStud - Optimizing Three.js for Mobile](https://moldstud.com/articles/p-optimizing-three-js-for-mobile-platforms-tips-and-tricks)
+- [UXFol.io - UX Case Study Template 2026](https://blog.uxfol.io/ux-case-study-template/)
+- [Elementor - Inspiring Web Developer Portfolio Examples](https://elementor.com/blog/inspiring-web-developer-portfolio-examples/)
+- [Speckyboy - Storytelling in Portfolio Design](https://speckyboy.com/tell-story-portfolio/)
+- [Dribbble - Mastering Storytelling in Design Portfolio](https://dribbble.com/stories/2024/03/18/crafting-a-narrative-mastering-storytelling-in-your-design-portfolio/)
+- [Adicator - Responsive Design Best Practices](https://www.adicator.com/post/responsive-design-best-practices)
+- [Awwwards - Best Portfolio Websites](https://www.awwwards.com/websites/portfolio/)
 
 ---
 
 ## Open Questions
 
-- **WebGPU Adoption Timeline** - While Safari 26 added support, what percentage of users have capable hardware?
-- **SEO Impact** - How do search engines handle 3D-heavy portfolios with minimal static content?
-- **Analytics in 3D** - Best practices for tracking user interaction with 3D elements?
-- **VR/AR Future** - Should portfolios be designed with WebXR in mind for future-proofing?
+1. **WebGPU adoption timeline** - Worth implementing now or wait for broader Safari support verification?
+2. **AR mode ROI** - Is the development effort worth the differentiation for a dev portfolio?
+3. **Narrative depth vs. scanability** - How much story is too much for recruiters scanning quickly?
+4. **Performance budget** - What's the acceptable load time threshold for 3D portfolios in 2026?
