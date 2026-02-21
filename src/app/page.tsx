@@ -145,10 +145,10 @@ export default function HomePage() {
       </header>
 
       {/* Quick Actions - Bottom Left (offset on lg to avoid GalaxyNavigation, hidden during tour) */}
-      <FadeIn delay={1.2} direction="up" className={`absolute bottom-4 left-4 right-4 md:bottom-10 md:left-10 lg:left-[240px] md:right-auto z-10 flex flex-col md:flex-row flex-wrap gap-3 md:gap-4 items-stretch md:items-center transition-opacity duration-500 ${isJourneyMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+      <FadeIn delay={0.5} direction="up" className={`absolute bottom-4 left-4 right-4 md:bottom-10 md:left-10 lg:left-[240px] md:right-auto z-20 flex flex-col md:flex-row flex-wrap gap-3 md:gap-4 items-stretch md:items-center transition-opacity duration-500 ${isJourneyMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         <Link
           href="/work"
-          className="ripple-button group w-full md:w-auto md:min-w-[200px] rounded-xl bg-white/15 backdrop-blur-xl border border-white/30 text-white font-semibold hover:bg-white/25 hover:border-white/40 transition-all duration-300 shadow-2xl hover:shadow-white/20 hover:scale-105 pointer-events-auto flex items-center justify-center gap-3 px-6 py-4 md:px-8"
+          className="ripple-button group w-full md:w-auto md:min-w-[200px] rounded-xl bg-white/25 backdrop-blur-xl border-2 border-white/50 text-white font-bold hover:bg-white/35 hover:border-white/70 transition-all duration-300 shadow-2xl hover:shadow-white/30 hover:scale-105 pointer-events-auto flex items-center justify-center gap-3 px-6 py-4 md:px-8"
         >
           <span className="whitespace-nowrap leading-none">View all work</span>
           <span className="inline-block transition-transform group-hover:translate-x-1 leading-none">→</span>
