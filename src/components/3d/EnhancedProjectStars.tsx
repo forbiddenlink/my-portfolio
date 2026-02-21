@@ -33,7 +33,8 @@ export function EnhancedProjectStars() {
 function GalaxyCluster({ galaxy, galaxyIndex }: { galaxy: any; galaxyIndex: number }) {
   const groupRef = useRef<THREE.Group>(null)
   const zoomToProject = useViewStore((state) => state.zoomToProject)
-  const scannedPlanets = useViewStore((state) => state.scannedPlanets)
+  // Removed scannedPlanets check - all planets are now clickable by default
+  // const scannedPlanets = useViewStore((state) => state.scannedPlanets)
 
   return (
     <group ref={groupRef}>
@@ -48,7 +49,8 @@ function GalaxyCluster({ galaxy, galaxyIndex }: { galaxy: any; galaxyIndex: numb
 
         const sizeMultiplier = getSizeMultiplier(project.size)
         const isSupernova = project.id === 'coulson-one'
-        const isScanned = scannedPlanets.has(project.id)
+        // All planets are now clickable - removed scan requirement
+        const isScanned = true // scannedPlanets.has(project.id)
 
         return (
           <RealisticPlanet
