@@ -260,7 +260,7 @@ export const galaxies: Galaxy[] = [
         brightness: 2.0,
         size: 'large',
         galaxy: 'ai',
-        links: { live: 'https://mcp-server-studio.vercel.app', github: 'https://github.com/forbiddenlink/mcp-server-studio' },
+        links: { live: 'https://mcp-server-studio.vercel.app' },
         featured: true,
         dateRange: '2026',
         challenge: 'Model Context Protocol (Anthropic\'s new AI protocol) requires boilerplate code and manual testing. No visual tools exist for rapid prototyping.',
