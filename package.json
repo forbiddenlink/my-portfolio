@@ -5,7 +5,7 @@
   "description": "Elizabeth Stein's portfolio: an editorial index of shipped production work, with an optional 3D galaxy view at /explore.",
   "author": "Elizabeth Stein",
   "license": "MIT",
-  "packageManager": "pnpm@10.26.2",
+  "packageManager": "pnpm@10.34.5",
   "scripts": {
     "dev": "next dev --webpack",
     "build": "next build",
