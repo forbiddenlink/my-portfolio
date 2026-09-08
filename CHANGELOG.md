@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.3](https://github.com/forbiddenlink/elizabethannstein/compare/v1.4.2...v1.4.3) (2026-09-08)
+
+
+### Bug Fixes
+
+* **deps:** override @humanfs/node past its advisory floor ([#87](https://github.com/forbiddenlink/elizabethannstein/issues/87)) ([dd1b750](https://github.com/forbiddenlink/elizabethannstein/commit/dd1b750e09690ad7abacc168696aeee386d0fe7f))
+
 ## [1.4.2](https://github.com/forbiddenlink/elizabethannstein/compare/v1.4.1...v1.4.2) (2026-09-03)
 
 
